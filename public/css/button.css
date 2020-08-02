@@ -1,0 +1,33 @@
+.btn{
+    border-radius: .15rem !important;
+}
+
+.dropdown-item{
+    font-size: 14px !important;
+}
+
+.actions-dropdown-btn{
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    font-size: 15px;
+    padding-top: 0rem;
+    padding-bottom: 0rem;
+}
+
+.actions-dropdown-btn::after{
+    content: none !important;
+}
+
+.btn-label{
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    color: var(--selected-color);
+}
+
+.menu-toggler>div{
+    width: 20px;
+    height: 2px;
+    background-color: black;
+    margin: 4px 0;
+}

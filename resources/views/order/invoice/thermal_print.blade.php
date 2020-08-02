@@ -1,0 +1,177 @@
+@php $data = json_decode($data); @endphp
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Order #{{ $data->order_number }}</title>
+    </head>
+    <body >
+        <div class='center border-bottom-dashed pb-1rem'>
+            <div class='bold display-block'>{{ $data->store->name }}</div>
+            <div>
+                {{ $data->store->address }}
+                @if ($data->store->pincode != '')
+                    {{ $data->store->pincode }}
+                @endif
+            </div>
+            @if ($data->store->tax_number != '')
+                <div>GST: {{ $data->store->tax_number }}</div>
+            @endif
+            @if ($data->store->primary_contact != '')
+                <div>Contact No: {{ $data->store->primary_contact }}</div>
+            @endif
+        </div>
+        <div class='border-bottom-dashed pt-1rem mb-1rem'>
+            <table class='w-100'>
+                <tr>
+                    <td class='bold w-50'>Order #{{ $data->order_number }}</td>
+                    <td class='right' >Date: {{ $data->created_at_label  }}</td>
+                </tr>
+                <tr>
+                    <td class='w-50'>Billed By: {{ $data->created_by->user_code }}</td>
+                    <td class='right'>{{ count($data->products) }} Items ({{ $data->total_quantity }} Qty)</td>
+                </tr>
+                <tr>
+                    <td colspan='2'>Payment Method: {{ $data->payment_method }}</td>
+                </tr>
+            </table>
+        </div>
+
+        <table class='border-bottom-dashed mb-1rem w-100'>
+            <tr>
+                <td class='bold w-45'>Description</td>
+                <td class='bold right'>Qty</td>
+                <td class='bold right'>Rate</td>
+                <td class='bold right'>Amount</td>
+            </tr>
+            @foreach ($data->products as $order_products)
+            @php 
+                $spacing = '';            
+                if($order_products->tax_percentage>0 || $order_products->discount_percentage >0){
+                    $spacing = 'pb-0';
+                }
+            @endphp
+            <tr>
+                <td class='{{ $spacing }}'>{{ $order_products->product_code.'-'.$order_products->name }}</td>
+                <td class='{{ $spacing }} right'>{{ $order_products->quantity }}</td>
+                <td class='{{ $spacing }} right'>{{ $order_products->price }}</td>
+                <td class='{{ $spacing }} right'>{{ $order_products->sub_total }}</td>
+            </tr>
+
+            @if($order_products->tax_percentage>0 || $order_products->discount_percentage >0){
+                
+                @php 
+                $spacing = '';            
+                if($order_products->tax_percentage > 0 || $order_products->discount_percentage > 0){
+                    $spacing = 'pb-0';
+                }
+                @endphp
+                
+                @if($order_products->discount_percentage >0)
+                <tr>
+                    <td class='{{ $spacing }} small' colspan='4'>Discount ({{ $order_products->discount_percentage }}%): {{ $order_products->discount_amount }}</td>
+                </tr>
+                @endif
+
+                @if($order_products->tax_percentage>0)
+                <tr>
+                    <td class='small' colspan='4'>
+                        @if(count($order_products->tax_components)>0)
+                            @foreach ($order_products->tax_components as $tax_component)
+                                {{ strtoupper($tax_component->tax_type) }}({{ $tax_component->tax_percentage }}%): {{ $tax_component->tax_amount }}|
+                            @endforeach
+                        @endif  
+                        Tax Amount: {{ $order_products->tax_amount }}
+                    </td>
+                </tr>
+                @endif
+
+            @endif
+            @endforeach
+        </table>
+
+        <table class='border-bottom-dashed mb-1rem w-100'>
+            <tr>
+                <td class='w-50'>Sub Total</td>
+                <td class='right'>{{ $data->sale_amount_subtotal_excluding_tax }}</td>
+            </tr>
+            
+            @php 
+                $spacing = '';            
+                if($data->order_level_discount_percentage > 0 || $data->product_level_total_discount > 0){
+                    $spacing = 'pb-0';
+                }
+            @endphp
+
+            <tr>
+                <td class='{{ $spacing }} w-50'>Discount</td>
+                <td class='{{ $spacing }} right'>{{ $data->total_discount_amount }}</td>
+            </tr>
+            @if($data->order_level_discount_percentage > 0)
+            <tr>
+                <td class='{{ $spacing }} small' colspan='2'>
+                    [Order Level Discount {{ ($data->order_level_discount_percentage >0 )?'('.$data->order_level_discount_percentage.'%)':'' }}: {{ $data->order_level_discount_amount }}]
+                </td>
+            </tr>
+            @endif
+            @if($data->product_level_total_discount > 0)
+            <tr>
+                <td class='small' colspan='2'>
+                    [Product Level Discount: {{ $data->product_level_total_discount }}]
+                </td>
+            </tr>
+            @endif
+
+            <tr>
+                <td class='w-50'>Total Amount After Discount</td>
+                <td class='right'>{{ $data->total_after_discount }}</td>
+            </tr>
+
+            @php 
+                $spacing = '';            
+                if($data->order_level_tax_percentage > 0 || $data->order_level_tax_amount > 0){
+                    $spacing = 'pb-0';
+                }
+            @endphp
+            <tr>
+                <td class='{{ $spacing }} w-50'>Tax</td>
+                <td class='{{ $spacing }} right'>{{ $data->total_tax_amount }}</td>
+            </tr>
+            @if($data->order_level_tax_percentage >0)
+            <tr>
+                <td class='{{ $spacing }} small' colspan='2'>
+                    @if(count($data->order_level_tax_components)>0)
+                        [Order Level Tax: 
+                        @foreach ($data->order_level_tax_components as $tax_component)
+                            {{ strtoupper($tax_component->tax_type) }}({{ $tax_component->tax_percentage }}%) : {{ $tax_component->tax_amount }}|
+                        @endforeach
+                        Tax Amount: {{ $data->order_level_tax_amount }}]
+                    @endif
+                </td>
+            </tr>
+            @endif
+
+            @if($data->product_level_total_tax > 0)
+            <tr>
+                <td class='small' colspan='2'>
+                    [Product Level Tax: {{ $data->product_level_total_tax }}]
+                </td>
+            </tr>
+            @endif
+
+            <tr>
+                <td class='bold w-50'>Bill Total</td>
+                <td class='bold right'>{{ $data->total_order_amount }}</td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <small>All prices are in {{ $data->store->currency_name }} ({{ $data->store->currency_code }})</small>
+                </td>
+            </tr>
+        </table>
+
+        <div class='center'>
+            <div class='display-block'>Thank You!</div>
+        </div>
+
+    </body>
+</html>
