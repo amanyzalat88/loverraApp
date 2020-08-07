@@ -35,8 +35,8 @@ class ProductController extends Controller
                         $in.=$catss[$i]->id.',';
                     }
                     $in= rtrim($in, ',');
-                    
-            $product= Product::whereIn('category_id',[$in])->where('status',1)->paginate($count);
+                    $in=explode(',' ,$in);
+            $product= Product::whereIn('category_id',$in)->where('status',1)->paginate($count);
             }else{
 
 		     $product= Product::where('category_id',$request->catId)->where('status',1)->paginate($count);  

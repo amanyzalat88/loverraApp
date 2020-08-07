@@ -112,8 +112,8 @@ class CartController extends Controller
          where('orders.id',$request->order_id)->where('orders.customer_id',$request->user()->id)
 			->where('order_products.order_id',$request->order_id) 
 			 ->get();
-if($products->count()>0)
-{
+    if($products->count()>0)
+    {
        
          foreach($products as $product)
          {

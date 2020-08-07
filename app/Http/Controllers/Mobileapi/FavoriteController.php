@@ -48,7 +48,21 @@ class FavoriteController extends Controller
     public function store(Request $request)
     {
             $itemObj=null;
-		    $mess=null;
+            $mess=null;
+            $validator = Validator::make($request->all(), [
+                'product_id' => ['required'],
+                 
+                ]);
+           if ($validator->fails()) {
+              
+                $bb = $validator->errors()->toArray();
+               foreach ($bb as $k => $v) {
+                   $mess[$k]=$v;
+               }
+              //  $ErrorMess= json_encode($mess);
+                
+               return response()->json(['status'=>false,'msg' => $mess,'data'=>$itemObj], 503);
+           }
            
         $item =Favorite::where('customer_id',$request->user()->id)->where('product_id',$request->product_id)->count();
         if ($item==0) {
@@ -75,6 +89,20 @@ public function delete(Request $request)
 {
         $itemObj=null;
         $mess=null;
+        $validator = Validator::make($request->all(), [
+            'product_id' => ['required'],
+             
+            ]);
+       if ($validator->fails()) {
+          
+            $bb = $validator->errors()->toArray();
+           foreach ($bb as $k => $v) {
+               $mess[$k]=$v;
+           }
+          //  $ErrorMess= json_encode($mess);
+            
+           return response()->json(['status'=>false,'msg' => $mess,'data'=>$itemObj], 503);
+       }
        
     $item =Favorite::where('customer_id',$request->user()->id)->where('product_id',$request->product_id)->first();
     if ($item) {

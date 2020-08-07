@@ -69,8 +69,8 @@ class CategoryController extends Controller
                         $in.=$items[$i]->id.',';
                     }
                     $in= rtrim($in, ',');
-                    
-            $product= Product::whereIn('category_id',[$in])->where('status',1)->paginate($count);
+                    $in=explode(',' ,$in);
+            $product= Product::whereIn('category_id',$in)->where('status',1)->paginate($count);
             $product=ApiProductResource::collection($product);
             $dataP= [
                 'total' => $product->total(),

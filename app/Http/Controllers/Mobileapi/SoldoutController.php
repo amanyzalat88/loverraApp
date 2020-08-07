@@ -18,7 +18,8 @@ class SoldoutController extends Controller
         $itemObj=null;
         $mess=null;
         $validator = Validator::make($request->all(), 
-        ['email' => 'email']);
+        ['email' => 'email','required'],
+        ['product_id'=>'required']);
         if ($validator->fails()) {
             // $bb = array_values($validator->errors()->toArray());
              $bb = $validator->errors()->toArray();
