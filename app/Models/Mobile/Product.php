@@ -31,14 +31,15 @@ class Product extends Model
     }
 
     public function supplier($supplier_id){
-		 
-        return Supplier::find($supplier_id)->name;
+		 if($sup=Supplier::find($supplier_id))
+        return $sup->name;
 	    
     }
 
     public function  Category($category_id,$lang){
         $label= $lang=='ar'? "label_ar": "label_en";
-         return  Category::find($category_id)->$label;
+		if($cat=Category::find($category_id))
+         return  $cat->$label;
     }
 
    
