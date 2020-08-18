@@ -6,7 +6,7 @@ use App\Models\MasterStatus;
 use Illuminate\Http\Request;
 use App\Models\Category as CategoryModel;
 use Illuminate\Support\Facades\DB;
-
+use App\Models\Discountcode as DiscountcodeModel;
 use App\Http\Resources\CategoryResource;
 
 class Category extends Controller
@@ -32,8 +32,8 @@ class Category extends Controller
         $data['statuses'] = MasterStatus::select('value', 'label')->filterByKey('CATEGORY_STATUS')->active()->sortValueAsc()->get();
 
         
-        $data['categories'] = CategoryModel::select('id as value', 'label_en')->sortLabelAsc()->active()->get();
-
+        $data['categories'] = CategoryModel::select('id as value', 'label_en')->where('parent',0)->sortLabelAsc()->active()->get();
+        $data['discount_codes'] = DiscountcodeModel::select('slack', 'discount_code', 'label')->where('discount_type',2)->sortLabelAsc()->active()->get();
         $data['category_data'] = null;
         if(isset($slack)){
             $category = CategoryModel::where('slack', '=', $slack)->first();

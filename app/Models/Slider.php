@@ -24,25 +24,25 @@ class Slider extends Model
     }
 
     public function scopeSortLabelAsc($query){
-        return $query->orderBy('category.label_en', 'asc');
+        return $query->orderBy('slider.label_en', 'asc');
     }
 
     public function scopeStatusJoin($query){
         return $query->leftJoin('master_status', function ($join) {
-            $join->on('master_status.value', '=', 'category.status');
+            $join->on('master_status.value', '=', 'slider.status');
             $join->where('master_status.key', '=', 'CATEGORY_STATUS');
         });
     }
 
     public function scopeCreatedUser($query){
         return $query->leftJoin('users AS user_created', function ($join) {
-            $join->on('user_created.id', '=', 'category.created_by');
+            $join->on('user_created.id', '=', 'slider.created_by');
         });
     }
 
     public function scopeUpdatedUser($query){
         return $query->leftJoin('users AS user_updated', function ($join) {
-            $join->on('user_created.id', '=', 'category.updated_by');
+            $join->on('user_created.id', '=', 'slider.updated_by');
         });
     }
 

@@ -22,6 +22,7 @@
                         <th>Category Name</th>
                         <th>Category Code</th>
                         <th>Status</th>
+                        <th>Discount Code</th>
                         <th>Created On</th>
                         <th>Updated On</th>
                         <th>Created By</th>

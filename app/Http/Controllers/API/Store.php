@@ -157,6 +157,8 @@ class Store extends Controller
                 "currency_code" => $currency_data->currency_code,
                 "currency_name" => $currency_data->currency_name,
                 "status" => $request->status,
+                "shipping" => $request->shipping,
+                "free_shipping" => $request->free_shipping,
                 "created_by" => $request->logged_user_id
             ];
             
@@ -292,6 +294,8 @@ class Store extends Controller
                 "currency_code" => $currency_data->currency_code,
                 "currency_name" => $currency_data->currency_name,
                 "status" => $request->status,
+                "shipping" => $request->shipping,
+                "free_shipping" => $request->free_shipping,
                 "updated_by" => $request->logged_user_id
             ];
 
@@ -342,6 +346,8 @@ class Store extends Controller
             'secondary_email' => $this->get_validation_rules("email", false),
             'invoice_type' => 'max:50|required',
             'status' => $this->get_validation_rules("status", true),
+            "shipping" =>'required',
+            "free_shipping" =>'required',
         ]);
         $validation_status = $validator->fails();
         if($validation_status){

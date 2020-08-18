@@ -50,6 +50,35 @@
                         <textarea name="description" v-model="description" v-validate="'max:65535'" class="form-control form-control-custom" rows="5" placeholder="Enter description"></textarea>
                         <span v-bind:class="{ 'error' : errors.has('description') }">{{ errors.first('description') }}</span>
                     </div>
+                    <div class="form-group col-md-3">
+                        <label for="discount_type">Discount Type</label>
+                        <select name="discount_type"    v-model="discount_type"  class="form-control form-control-custom">
+                            <option value="" disabled >Choose Discount Type..</option>
+                            <option value="1">منتج</option>
+                            <option value="2">قسم</option>
+                            <option value="3">اجمالى الفاتورة</option>
+                        </select>
+                      
+                        <span v-bind:class="{ 'error' : errors.has('discount_type') }">{{ errors.first('discount_type') }}</span> 
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="discount_num">Discount Number</label>
+                        <input type="number" name="discount_num" min="1" v-model="discount_num" v-validate="'required'" class="form-control form-control-custom" placeholder="Please enter discount code"  autocomplete="off">
+                       
+                    </div>
+                    </div>
+                    <div class="form-row mb-2">
+                    <div class="form-group col-md-3">
+                        <label for="discount_from">Discount From</label>
+                         <date-picker :lang='date.lang' :format="date.format"  v-model="discount_from"  input-class="form-control bg-white" placeholder="Select Discount From Date"></date-picker>
+                       
+                      
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="discount_to">Discount To</label>
+                        <date-picker :lang='date.lang' :format="date.format"  v-model="discount_to"  input-class="form-control bg-white" placeholder="Select Discount To Date"></date-picker>
+                       
+                    </div>
                 </div>
             </form>
                 
@@ -73,10 +102,15 @@
 
 <script>
     'use strict';
-    
+    import DatePicker from 'vue2-datepicker';
+     import moment from "moment";
     export default {
         data(){
             return{
+                  date:{
+                    lang : 'en',
+                    format : "YYYY-MM-DD",
+                },
                 server_errors   : '',
                 error_class     : '',
                 processing      : false,
@@ -90,7 +124,14 @@
                 discount_percentage  : (this.discount_code_data == null)?'':this.discount_code_data.discount_percentage,
                 status               : (this.discount_code_data == null)?'':(this.discount_code_data.status == null)?'':this.discount_code_data.status.value,
                 description          : (this.discount_code_data == null)?[]:this.discount_code_data.description,
+                discount_type  : (this.discount_code_data == null)?'':this.discount_code_data.discount_type,
+                discount_num  : (this.discount_code_data == null)?'':this.discount_code_data.discount_num,
+                discount_from  : (this.discount_code_data == null)?'':this.discount_code_data.discount_from,
+                discount_to  : (this.discount_code_data == null)?'':this.discount_code_data.discount_to,
             }
+        },
+        components: {
+            DatePicker
         },
         props: {
             statuses: Array,
@@ -100,6 +141,10 @@
             console.log('Add Discount Code page loaded');
         },
         methods: {
+             convert_date_format(date){
+                return (date != '')?moment(date).format("YYYY-MM-DD"):'';
+                
+            },
             submit_form(){
 
                 this.$off("submit");
@@ -119,6 +164,10 @@
                             formData.append("discount_percentage", (this.discount_percentage == null)?'':this.discount_percentage);
                             formData.append("description", (this.description == null)?'': this.description);
                             formData.append("status", (this.status == null)?'':this.status);
+                            formData.append("discount_type", (this.discount_type == null)?'':this.discount_type);
+                            formData.append("discount_num", (this.discount_num == null)?'':this.discount_num);
+                            formData.append("discount_from", (this.discount_from == null)?'':this.convert_date_format(this.discount_from));
+                            formData.append("discount_to", (this.discount_to == null)?'':this.convert_date_format(this.discount_to));
 
                             axios.post(this.api_link, formData).then((response) => {
                                 if(response.data.status_code == 200) {

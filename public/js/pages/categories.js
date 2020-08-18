@@ -13,13 +13,14 @@ class Categories{
                 { name: 'category.label' },
                 { name: 'category.category_code' },
                 { name: 'master_status.label' },
+                { name: 'discount_codes.label' },
                 { name: 'category.created_at' },
                 { name: 'category.updated_at' },
                 { name: 'user_created.fullname' }
             ],
-            order: [[ 4, "desc" ]],
+            order: [[ 6, "desc" ]],
             columnDefs: [
-                { "orderable": false, "targets": [6] }
+                { "orderable": false, "targets": [7] }
             ]
         });
 

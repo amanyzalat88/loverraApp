@@ -35,7 +35,7 @@ class Slider extends Controller
       
         $data['slider_data'] = null;
         if(isset($slack)){
-            $slider = sliderModel::where('slack', '=', $slack)->first();
+            $slider = SliderModel::where('slack', '=', $slack)->first();
             if (empty($slider)) {
                 abort(404);
             }
@@ -61,7 +61,7 @@ class Slider extends Controller
             abort(404);
         }
 
-        $slider_data = new SliderResource($category);
+        $slider_data = new SliderResource($slider);
         
         $data['slider_data'] = $slider_data;
 

@@ -23,6 +23,7 @@ class CategoryResource extends Resource
             'label_en' => $this->label_en,
             'description_ar' => $this->description_ar,
             'description_en' => $this->description_en,
+            'discount_code' => new DiscountcodeResource($this->discount_code),
             'status' => new MasterStatusResource($this->status_data),
             'detail_link' => (check_access(['A_DETAIL_CATEGORY'], true))?route('category', ['slack' => $this->slack]):'',
             'created_at_label' => $this->parseDate($this->created_at),

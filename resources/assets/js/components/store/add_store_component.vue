@@ -44,7 +44,17 @@
                 </div>
 
                 <div class="form-row mb-2">
+                <div class="form-group col-md-3">
+                        <label for="shipping">Shipping fees</label>
+                        <input type="text" name="shipping" v-model="shipping" v-validate="required" class="form-control form-control-custom" placeholder="Please enter Shipping" autocomplete="off">
+                        <span v-bind:class="{ 'error' : errors.has('primary_contact') }">{{ errors.first('primary_contact') }}</span> 
+                    </div>
                     <div class="form-group col-md-3">
+                        <label for="free_shipping">Free Shipping</label>
+                        <input type="text" name="free_shipping" v-model="free_shipping" v-validate="required" class="form-control form-control-custom" placeholder="Please enter Free Shipping" autocomplete="off">
+                        <span v-bind:class="{ 'error' : errors.has('free_shipping') }">{{ errors.first('free_shipping') }}</span> 
+                    </div>
+                  <!--  <div class="form-group col-md-3">
                         <label for="primary_contact">Primary Contact No.</label>
                         <input type="text" name="primary_contact" v-model="primary_contact" v-validate="'min:10|max:15'" class="form-control form-control-custom" placeholder="Please enter primary contact number" autocomplete="off">
                         <span v-bind:class="{ 'error' : errors.has('primary_contact') }">{{ errors.first('primary_contact') }}</span> 
@@ -73,7 +83,7 @@
                         <label for="pincode">Pincode</label>
                         <input type="text" name="pincode" v-model="pincode" v-validate="'max:15'" class="form-control form-control-custom" placeholder="Enter Pincode">
                         <span v-bind:class="{ 'error' : errors.has('pincode') }">{{ errors.first('pincode') }}</span>
-                    </div>
+                    </div>-->
                 </div>
 
                 <div v-if="store_slack != ''">
@@ -212,6 +222,8 @@
                 print_type      : (this.store_data == null)?'':(this.store_data.invoice_type == null)?'':this.store_data.invoice_type.print_type_value,
                 currency_code   : (this.store_data == null)?'':(this.store_data.currency_code == null)?'':this.store_data.currency_code,
                 status          : (this.store_data == null)?'':this.store_data.status.value,
+                shipping        : (this.store_data == null)?'':this.store_data.shipping,
+                free_shipping   : (this.store_data == null)?'':this.store_data.free_shipping,
             }
         },
         props: {
@@ -254,6 +266,8 @@
                             formData.append("invoice_type", (this.print_type == null)?'':this.print_type);
                             formData.append("currency_code", (this.currency_code == null)?'':this.currency_code);
                             formData.append("status", (this.status == null)?'':this.status);
+                            formData.append("free_shipping", (this.free_shipping == null)?'':this.free_shipping);
+                            formData.append("shipping", (this.shipping == null)?'':this.shipping);
 
                             axios.post(this.api_link, formData).then((response) => {
                                 if(response.data.status_code == 200) {

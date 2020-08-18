@@ -21,6 +21,7 @@ class SliderResource extends Resource
            
             'created_at_label' => $this->parseDate($this->created_at),
             'updated_at_label' => $this->parseDate($this->updated_at),
+            'detail_link' => (check_access(['A_DETAIL_SLIDER'], true))?route('slider', ['slack' => $this->slack]):'',
             'created_by' => new UserResource($this->createdUser),
             'updated_by' => new UserResource($this->updatedUser)
         ];

@@ -11,10 +11,10 @@ class Products{
             },
             columns: [
                 { name: 'products.product_code' },
-                { name: 'products.name' },
+                { name: 'products.name_en' },
                 { name: 'suppliers.name' },
-                { name: 'category.label' },
-                { name: 'tax_codes.label' },
+                { name: 'category.label_en' },
+                
                 { name: 'discount_codes.label' },
                 { name: 'products.quantity' },
                 { name: 'products.sale_amount_excluding_tax' },
@@ -23,9 +23,9 @@ class Products{
                 { name: 'products.updated_at' },
                 { name: 'user_created.fullname' },
             ],
-            order: [[ 9, "desc" ]],
+            order: [[ 10, "desc" ]],
             columnDefs: [
-                { "orderable": false, "targets": [12] }
+                { "orderable": false, "targets": [11] }
             ]
         });
 

@@ -11,7 +11,7 @@ class Category extends Model
 {
     protected $table = 'category';
     protected $hidden = ['id', 'store_id'];
-    protected $fillable = ['slack','parent', 'store_id', 'category_code', 'label_ar', 'description_ar','label_en', 'description_en','photo', 'status', 'created_by', 'updated_by'];
+    protected $fillable = ['slack','parent','discount_code_id', 'store_id', 'category_code', 'label_ar', 'description_ar','label_en', 'description_en','photo', 'status', 'created_by', 'updated_by'];
 
     protected static function boot()
     {
@@ -19,8 +19,21 @@ class Category extends Model
         static::addGlobalScope(new StoreScope);
     }
 
+    public function discount_code(){
+        return $this->hasOne('App\Models\Discountcode', 'id', 'discount_code_id');
+    }
+
+    public function scopeDiscountcodeJoin($query){
+        return $query->leftJoin('discount_codes', function ($join) {
+            $join->on('discount_codes.id', '=', 'category.discount_code_id');
+        });
+    }
+
     public function scopeActive($query){
         return $query->where('status', 1);
+    }
+    public function subcategory(){
+        return $this->hasMany('App\Models\Category', 'parent');
     }
 
     public function scopeSortLabelAsc($query){

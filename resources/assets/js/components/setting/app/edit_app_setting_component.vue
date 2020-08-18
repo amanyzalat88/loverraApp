@@ -43,7 +43,46 @@
                     </div>
                 </div>
 
+               <div class="form-row mb-2">
+                    <div class="form-group col-md-3">
+                        <label for="address_ar">Address <span style="color:red">Ar</span></label>
+                        <input type="text" name="address_ar" v-model="address_ar" v-validate="'required|max:250'" class="form-control form-control-custom" placeholder="Please enter Company Name"  autocomplete="off">
+                        <span v-bind:class="{ 'error' : errors.has('address_ar') }">{{ errors.first('address_ar') }}</span> 
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="address_en">Address <span style="color:red">En</span></label>
+                        <input type="text" name="address_en" v-model="address_en" v-validate="'required|max:250'" class="form-control form-control-custom" placeholder="Please enter Company Name"  autocomplete="off">
+                        <span v-bind:class="{ 'error' : errors.has('address_en') }">{{ errors.first('address_en') }}</span> 
+                       
+                    </div>
+                     <div class="form-group col-md-3">
+                        <label for="twitter">Twitter </label>
+                        <input type="text" name="twitter" v-model="twitter" v-validate="'required|max:250'" class="form-control form-control-custom" placeholder="Please enter Company Name"  autocomplete="off">
+                        <span v-bind:class="{ 'error' : errors.has('twitter') }">{{ errors.first('twitter') }}</span> 
+                       
+                    </div>
+                     <div class="form-group col-md-3">
+                        <label for="insta">Instagram </label>
+                        <input type="text" name="insta" v-model="insta" v-validate="'required|max:250'" class="form-control form-control-custom" placeholder="Please enter Company Name"  autocomplete="off">
+                        <span v-bind:class="{ 'error' : errors.has('insta') }">{{ errors.first('insta') }}</span> 
+                       
+                    </div>
+                </div>
                 <div class="form-row mb-2">
+                    <div class="form-group col-md-3">
+                        <label for="about_ar">About <span style="color:red">Ar</span></label>
+                        <input type="text" name="about_ar" v-model="about_ar" v-validate="'required|max:250'" class="form-control form-control-custom" placeholder="Please enter Company Name"  autocomplete="off">
+                        <span v-bind:class="{ 'error' : errors.has('about_ar') }">{{ errors.first('about_ar') }}</span> 
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="about_en">About <span style="color:red">En</span></label>
+                        <input type="text" name="about_en" v-model="about_en" v-validate="'required|max:250'" class="form-control form-control-custom" placeholder="Please enter Company Name"  autocomplete="off">
+                        <span v-bind:class="{ 'error' : errors.has('about_en') }">{{ errors.first('about_en') }}</span> 
+                       
+                    </div>
+                    
+               
+               
                     <div class="form-group col-md-3">
                         <label for="company_logo">Company Logo (jpeg, jpg, png)</label>
                         <input type="file" class="form-control-file form-control form-control-custom file-input" name="company_logo" ref="company_logo" accept="image/x-png,image/jpeg" v-validate="'ext:jpg,jpeg,png'">
@@ -56,7 +95,7 @@
                             <span class="btn-label ml-3" v-show="company_logo_exists == true" @click="remove_company_logo()">Remove</span>
                         </div>
                     </div>
-                </div>
+                 </div>
             </form>
                 
         </div>

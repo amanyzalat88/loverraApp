@@ -30,7 +30,7 @@ class Slider extends Controller
             $draw = $request->draw;
             $limit = $request->length;
             $offset = $request->start;
-            
+           
             $order_by = $request->order[0]["column"];
             $order_direction = $request->order[0]["dir"];
             $order_by_column =  $request->columns[$order_by]['name'];
@@ -43,38 +43,38 @@ class Slider extends Controller
             ->skip($offset)
            // ->statusJoin()
             ->createdUser()
-
-            ->when($order_by_column, function ($query, $order_by_column) use ($order_direction) {
+           
+           ->when($order_by_column, function ($query, $order_by_column) use ($order_direction) {
                 $query->orderBy($order_by_column, $order_direction);
             }, function ($query) {
                 $query->orderBy('created_at', 'desc');
             })
-
             ->when($filter_string, function ($query, $filter_string) use ($filter_columns) {
                 $query->where(function ($query) use ($filter_string, $filter_columns){
                     foreach($filter_columns as $filter_column){
                         $query->orWhere($filter_column, 'like', '%'.$filter_string.'%');
                     }
                 });
-            })
+            }) 
 
-            ->get();
+          ->get();
 
-            $slider = SliderModel::collection($query);
+            $sliders = SliderResource::collection($query);
            
             $total_count = SliderModel::select("id")->get()->count();
-
+ 
             $item_array = [];
-            foreach($slider as $key => $photo){
+            foreach($sliders as $key => $slider){
                 
-                $photo = $photo->toArray($request);
+                $slider = $slider->toArray($request);
                 
-                $item_array[$key][] = $photo['photo_ar'];
-                $item_array[$key][] = $photo['photo_en'];
+                $item_array[$key][] = $slider['photo_ar'];
+                $item_array[$key][] = $slider['photo_en'];
                 
-                $item_array[$key][] = $photo['created_at_label'];
-                $item_array[$key][] = $photo['updated_at_label'];
-                $item_array[$key][] = $photo['created_by']['fullname'];
+                $item_array[$key][] = $slider['created_at_label'];
+                $item_array[$key][] = $slider['updated_at_label'];
+                $item_array[$key][] =(isset($slider['created_by']) && $slider['created_by']['fullname'] != '')?$slider['created_by']['fullname']:'-';
+                
                 $item_array[$key][] = view('slider.layouts.slider_actions', ['slider' => $slider])->render();
             }
 

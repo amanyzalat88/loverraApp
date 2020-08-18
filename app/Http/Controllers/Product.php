@@ -38,11 +38,11 @@ class Product extends Controller
 
         $data['suppliers'] = SupplierModel::select('slack', 'supplier_code', 'name')->sortNameAsc()->active()->get();
 
-        $data['categories'] = CategoryModel::select('slack', 'category_code', 'label_en')->sortLabelAsc()->active()->get();
+        $data['categories'] = CategoryModel::select('slack', 'category_code', 'label_en')->where('parent',0)->active()->get();
 
         $data['taxcodes'] = TaxcodeModel::select('slack', 'tax_code', 'label')->sortLabelAsc()->active()->get();
 
-        $data['discount_codes'] = DiscountcodeModel::select('slack', 'discount_code', 'label')->sortLabelAsc()->active()->get();
+        $data['discount_codes'] = DiscountcodeModel::select('slack', 'discount_code', 'label')->where('discount_type',1)->sortLabelAsc()->active()->get();
 
         $data['product_data'] = null;
         if(isset($slack)){

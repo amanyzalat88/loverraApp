@@ -42,24 +42,24 @@ class Product extends Controller
             $draw = $request->draw;
             $limit = $request->length;
             $offset = $request->start;
-            
+    
             $order_by = $request->order[0]["column"];
             $order_direction = $request->order[0]["dir"];
-            $order_by_column =  $request->columns[$order_by]['name'];
+            $order_by_column = $request->columns[$order_by]['name'];
 
-            $filter_string = $request->search['value'];
+            $filter_string =null;// $request->search['value'];
             $filter_columns = array_filter(data_get($request->columns, '*.name'));
-            
-            $query = ProductModel::select('products.*', 'master_status.label as status_label', 'master_status.color as status_color', 'suppliers.name as supplier_name', 'suppliers.status as supplier_status', 'category.label_en as category_label', 'category.status as category_status', 'tax_codes.tax_code as tax_code_label', 'tax_codes.status as tax_code_status', 'discount_codes.discount_code as discount_code_label', 'discount_codes.status as discount_code_status', 'user_created.fullname')
+           
+            $query = ProductModel::select('products.*', 'master_status.label as status_label', 'master_status.color as status_color', 'suppliers.name as supplier_name', 'suppliers.status as supplier_status', 'category.label_en', 'category.status as category_status', 'discount_codes.discount_code as discount_code_label', 'discount_codes.status as discount_code_status', 'user_created.fullname')
             ->take($limit)
             ->skip($offset)
             ->statusJoin()
             ->categoryJoin()
             ->supplierJoin()
-            ->taxcodeJoin()
+            
             ->discountcodeJoin()
             ->createdUser()
-
+           
             ->when($order_by_column, function ($query, $order_by_column) use ($order_direction) {
                 $query->orderBy($order_by_column, $order_direction);
             }, function ($query) {
@@ -75,21 +75,21 @@ class Product extends Controller
             })
 
             ->get();
-
+            
             $products = ProductResource::collection($query);
            
             $total_count = ProductModel::select("id")->get()->count();
-
+             
             $item_array = [];
             foreach($products as $key => $product){
                 
                 $product = $product->toArray($request);
 
                 $item_array[$key][] = $product['product_code'];
-                $item_array[$key][] = Str::limit($product['name'], 50);
+                $item_array[$key][] = Str::limit($product['name_en'], 50);
                 $item_array[$key][] = view('common.status_indicators', ['status' => $product['supplier']['status']])->render().Str::limit($product['supplier']['name'], 50)." (".$product['supplier']['supplier_code'].")";
-                $item_array[$key][] = view('common.status_indicators', ['status' => $product['category']['status']])->render().Str::limit($product['category']['label'], 50)." (".$product['category']['category_code'].")";
-                $item_array[$key][] = view('common.status_indicators', ['status' => $product['tax_code']['status']])->render().Str::limit($product['tax_code']['label'], 50)." (".$product['tax_code']['tax_code'].")";
+                $item_array[$key][] = view('common.status_indicators', ['status' => $product['category']['status']])->render().Str::limit($product['category']['label_en'], 50)." (".$product['category']['category_code'].")";
+               
                 $item_array[$key][] = ($product['discount_code']['status'] != null)?(view('common.status_indicators', ['status' => $product['discount_code']['status']])->render().Str::limit($product['discount_code']['label'], 50))." (".$product['discount_code']['discount_code'].")":'-';
                 $item_array[$key][] = $product['quantity'];
                 $item_array[$key][] = $product['sale_amount_excluding_tax'];
@@ -97,6 +97,7 @@ class Product extends Controller
                 $item_array[$key][] = $product['created_at_label'];
                 $item_array[$key][] = $product['updated_at_label'];
                 $item_array[$key][] = (isset($product['created_by']) && $product['created_by']['fullname'] != '')?$product['created_by']['fullname']:'-';
+              
                 $item_array[$key][] = view('product.layouts.product_actions', array('product' => $product))->render();
             }
 

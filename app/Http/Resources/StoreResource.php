@@ -34,6 +34,8 @@ class StoreResource extends Resource
             'invoice_type' => $this->invoice_print_type,
             'currency_code' => $this->currency_code,
             'currency_name' => $this->currency_name,
+            'shipping' => $this->shipping,
+            'free_shipping' => $this->free_shipping,
             'created_at_label' => $this->parseDate($this->created_at),
             'updated_at_label' => $this->parseDate($this->updated_at),
             'created_by' => new UserResource($this->createdUser),

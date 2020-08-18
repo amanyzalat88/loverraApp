@@ -48,6 +48,16 @@
                         </select>
                         <span v-bind:class="{ 'error' : errors.has('parent') }">{{ errors.first('parent') }}</span> 
                     </div>
+                     <div class="form-group col-md-3">
+                        <label for="discount_code">Discount Code</label>
+                        <select name="discount_code" v-model="discount_code" v-validate="''" class="form-control form-control-custom custom-select">
+                            <option value="">Choose Discount Code..</option>
+                            <option v-for="(discount_code, index) in discount_codes" v-bind:value="discount_code.slack" v-bind:key="index">
+                                {{ discount_code.label }}
+                            </option>
+                        </select>
+                        <span v-bind:class="{ 'error' : errors.has('discount_code') }">{{ errors.first('discount_code') }}</span> 
+                    </div>
                 </div>
 
                 <div class="form-row mb-2">
@@ -105,7 +115,7 @@
                 modal           : false,
                 show_modal      : false,
                 api_link        : (this.category_data == null)?'/api/add_category':'/api/update_category/'+this.category_data.slack,
-
+                discount_code   : (this.category_data == null)?'':(this.category_data.discount_code == null)?'':this.category_data.discount_code.slack,
                 category_slack  : (this.category_data == null)?'':this.category_data.slack,
                 category_name_ar   : (this.category_data == null)?'':this.category_data.label_ar,
                 category_name_en   : (this.category_data == null)?'':this.category_data.label_en,
@@ -119,6 +129,7 @@
         props: {
             statuses: Array,
             categories: Array,
+            discount_codes: Array,
             category_data: [Array, Object]
         },
         mounted() {
@@ -146,7 +157,7 @@
                             
                             this.processing = true;
                             var formData = new FormData();
-
+                             formData.append("discount_code", (this.discount_code == null)?'':this.discount_code);
                             formData.append("access_token", window.settings.access_token);
                             formData.append("category_name_en", (this.category_name_en == null)?'':this.category_name_en);
                             formData.append("description_en", (this.description_en == null)?'':this.description_en);

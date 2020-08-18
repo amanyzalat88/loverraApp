@@ -54,6 +54,22 @@
                     <label for="description">Description</label>
                     <p>{{ discount_code.description }}</p>
                 </div>
+                 <div class="form-group col-md-6">
+                    <label for="type">Discount Type</label>
+                    <p>{{ discount_code.discount_type }}</p>
+                </div>
+                 <div class="form-group col-md-6">
+                    <label for="discount_num">Discount Number</label>
+                    <p>{{ discount_code.discount_num }}</p>
+                </div>
+                 <div class="form-group col-md-6">
+                    <label for="discount_from">Discount From</label>
+                    <p>{{ discount_code.discount_from }}</p>
+                </div>
+                 <div class="form-group col-md-6">
+                    <label for="discount_to">Discount To</label>
+                    <p>{{ discount_code.discount_to }}</p>
+                </div>
             </div>
 
         </div>

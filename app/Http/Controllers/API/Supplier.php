@@ -130,7 +130,12 @@ class Supplier extends Controller
             }
 
             DB::beginTransaction();
-            
+            if ($request->hasFile('photo')) {
+                $image = $request->file('photo');
+                $name = time().'.'.$image->getClientOriginalExtension();
+                $destinationPath = public_path('/uploads/supplier');
+                $image->move($destinationPath, $name);
+            }
             $supplier = [
                 "slack" => $this->generate_slack("suppliers"),
                 "store_id" => $request->logged_user_store_id,
@@ -141,6 +146,7 @@ class Supplier extends Controller
                 "email" => $request->email,
                 "pincode" => $request->pincode,
                 "status" => $request->status,
+                "photo"=> "uploads/supplier/".$name,
                 "created_by" => $request->logged_user_id
             ];
             
@@ -224,7 +230,12 @@ class Supplier extends Controller
             }
 
             DB::beginTransaction();
-
+            if ($request->hasFile('photo')) {
+                $image = $request->file('photo');
+                $name = time().'.'.$image->getClientOriginalExtension();
+                $destinationPath = public_path('/uploads/supplier');
+                $image->move($destinationPath, $name);
+            }
             $supplier = [
                 "name" => Str::title($request->supplier_name),
                 "address" => $request->address,
@@ -232,6 +243,7 @@ class Supplier extends Controller
                 "email" => $request->email,
                 "pincode" => $request->pincode,
                 "status" => $request->status,
+                "photo"=> "uploads/supplier/".$name,
                 "updated_by" => $request->logged_user_id
             ];
 

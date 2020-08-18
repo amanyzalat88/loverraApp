@@ -11,7 +11,7 @@ class Discountcode extends Model
 {
     protected $table = 'discount_codes';
     protected $hidden = ['id', 'store_id'];
-    protected $fillable = ['slack', 'store_id', 'label', 'discount_code', 'discount_percentage', 'description', 'status', 'created_by', 'updated_by', 'created_at', 'updated_at'];
+    protected $fillable = ['slack', 'store_id', 'label', 'discount_code', 'discount_percentage', 'description', 'status','discount_type','discount_num','discount_from','discount_to', 'created_by', 'updated_by', 'created_at', 'updated_at'];
 
     protected static function boot()
     {

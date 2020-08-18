@@ -26,7 +26,7 @@
                         <th>Name</th>
                         <th>Supplier</th>
                         <th>Category</th>
-                        <th>Tax Code</th>
+                       
                         <th>Discount Code</th>
                         <th>Quantity</th>
                         <th>Amount</th>

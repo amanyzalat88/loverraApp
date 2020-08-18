@@ -61,6 +61,8 @@ Vue.component('customerdetailcomponent', require('./components/customer/customer
 Vue.component('addcategorycomponent', require('./components/category/add_category_component.vue'));
 Vue.component('categorydetailcomponent', require('./components/category/category_detail_component.vue'));
 
+ 
+
 Vue.component('addproductcomponent', require('./components/product/add_product_component.vue'));
 Vue.component('productdetailcomponent', require('./components/product/product_detail_component.vue'));
 Vue.component('productbarcodecomponent', require('./components/product/product_barcode_component.vue'));
@@ -83,6 +85,22 @@ Vue.component('discountcodedetailcomponent', require('./components/discount_code
 
 Vue.component('addslidercomponent', require('./components/slider/add_slider_component.vue'));
 //Vue.component('discountcodedetailcomponent', require('./components/discount_code/discount_code_detail_component.vue'));
+
+Vue.component('addboxescomponent', require('./components/boxes/add_boxes_component.vue'));
+Vue.component('boxesdetailcomponent', require('./components/boxes/boxes_detail_component.vue'));
+
+Vue.component('addboxescolorcomponent', require('./components/boxes_color/add_boxescolor_component.vue'));
+Vue.component('boxescolordetailcomponent', require('./components/boxes_color/boxescolor_detail_component.vue'));
+
+Vue.component('addboxescardcomponent', require('./components/boxes_card/add_boxescard_component.vue'));
+Vue.component('boxescarddetailcomponent', require('./components/boxes_card/boxescard_detail_component.vue'));
+
+
+Vue.component('addadscomponent', require('./components/ads/add_ads_component.vue'));
+Vue.component('adsdetailcomponent', require('./components/ads/ads_detail_component.vue'));
+
+Vue.component('addcontactcomponent', require('./components/contact/add_contact_component.vue'));
+Vue.component('contactdetailcomponent', require('./components/contact/contact_detail_component.vue'));
 
 Vue.component('importcomponent', require('./components/import/import_component.vue'));
 Vue.component('updatedatacomponent', require('./components/import/update_data_component.vue'));

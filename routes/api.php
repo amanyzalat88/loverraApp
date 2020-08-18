@@ -66,6 +66,36 @@ Route::group(['middleware' => ['token_auth']], function () {
     Route::post('/add_slider', 'API\Slider@store');
     Route::post('/update_slider/{slack}', 'API\Slider@update');
 
+    //ads
+    Route::post('/ads', 'API\Ads@index');
+    Route::post('/add_ads', 'API\Ads@store');
+    Route::post('/update_ads/{slack}', 'API\Ads@update');
+    Route::post('/load_ads', 'API\Ads@load_supplier_list');
+
+    //boxes
+    Route::post('/boxes', 'API\Boxes@index');
+    Route::post('/add_boxes', 'API\Boxes@store');
+    Route::post('/update_boxes/{slack}', 'API\Boxes@update');
+    Route::post('/load_boxes', 'API\Ads@load_boxes_list');
+     
+    //boxes color
+    Route::post('/boxescolor', 'API\BoxesColor@index');
+    Route::post('/add_boxescolor', 'API\BoxesColor@store');
+    Route::post('/update_boxescolor/{slack}', 'API\BoxesColor@update');
+    Route::post('/load_boxescolor', 'API\Ads@load_BoxesColor_list');
+
+    //boxes card
+    Route::post('/boxescard', 'API\BoxesCard@index');
+    Route::post('/add_boxescard', 'API\BoxesCard@store');
+    Route::post('/update_boxescard/{slack}', 'API\BoxesCard@update');
+    Route::post('/load_boxescard', 'API\Ads@load_BoxesCard_list');
+
+     //contact
+     Route::get('/contact', 'API\Contact@index');
+     Route::post('/add_contact', 'API\Contact@store');
+     Route::post('/update_contact/{slack}', 'API\Contact@update');
+     Route::post('/load_contact', 'API\Contact@load_supplier_list');
+
     //supplier
     Route::post('/suppliers', 'API\Supplier@index');
     Route::post('/add_supplier', 'API\Supplier@store');
@@ -132,7 +162,6 @@ Route::group(['middleware' => ['token_auth']], function () {
     //setting
     Route::post('/add_setting_email', 'API\Setting@add_setting_email');
     Route::post('/update_setting_email/{slack}', 'API\Setting@update_setting_email');
-
     Route::post('/update_setting_app', 'API\Setting@update_setting_app');
     Route::post('/remove_company_logo', 'API\Setting@remove_company_image');
 

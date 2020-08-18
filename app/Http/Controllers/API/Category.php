@@ -9,7 +9,7 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-
+use App\Models\Discountcode as DiscountcodeModel;
 use Illuminate\Support\Facades\Config;
 
 use App\Http\Resources\CategoryResource;
@@ -38,11 +38,12 @@ class Category extends Controller
             $filter_string = $request->search['value'];
             $filter_columns = array_filter(data_get($request->columns, '*.name'));
             
-            $query = CategoryModel::select('category.*', 'master_status.label as status_label', 'master_status.color as status_color', 'user_created.fullname')
+            $query = CategoryModel::select('category.*', 'master_status.label as status_label', 'master_status.color as status_color', 'user_created.fullname' , 'discount_codes.discount_code as discount_code_label', 'discount_codes.status as discount_code_status')
             ->take($limit)
             ->skip($offset)
             ->statusJoin()
             ->createdUser()
+            ->discountcodeJoin()
 
             ->when($order_by_column, function ($query, $order_by_column) use ($order_direction) {
                 $query->orderBy($order_by_column, $order_direction);
@@ -72,6 +73,7 @@ class Category extends Controller
                 $item_array[$key][] = $category['label_en'];
                 $item_array[$key][] = $category['category_code'];
                 $item_array[$key][] = view('common.status', ['status_data' => ['label' => $category['status']['label'], "color" => $category['status']['color']]])->render();
+                $item_array[$key][] = ($category['discount_code']['status'] != null)?(view('common.status_indicators', ['status' => $category['discount_code']['status']])->render().Str::limit($category['discount_code']['label'], 50))." (".$category['discount_code']['discount_code'].")":'-';
                 $item_array[$key][] = $category['created_at_label'];
                 $item_array[$key][] = $category['updated_at_label'];
                 $item_array[$key][] = $category['created_by']['fullname'];
@@ -134,13 +136,24 @@ class Category extends Controller
                 $destinationPath = public_path('/uploads/category');
                 $image->move($destinationPath, $name);
             }
-           
+            $discount_code_id = NULL;
+            if(isset($request->discount_code)){
+                $discount_code_data = DiscountcodeModel::select('id')
+                ->where('slack', '=', trim($request->discount_code))
+                ->active()
+                ->first();
+                if (empty($discount_code_data)) {
+                    throw new Exception("Discount code not found or inactive in the system", 400);
+                }
+                $discount_code_id = $discount_code_data->id;
+            }
             DB::beginTransaction();
           
             $category = [
                 "slack" => $this->generate_slack("category"),
                 "store_id" => $request->logged_user_store_id,
                 "category_code" => Str::random(6),
+                "discount_code_id" => $discount_code_id,
                 "parent" =>  $request->parent,
                 "label_en" => Str::title($request->category_name_en),
                 "label_ar" => Str::title($request->category_name_ar),
@@ -235,6 +248,17 @@ class Category extends Controller
                 $destinationPath = public_path('/uploads/category');
                 $image->move($destinationPath, $name);
             }
+            $discount_code_id = NULL;
+            if(isset($request->discount_code)){
+                $discount_code_data = DiscountcodeModel::select('id')
+                ->where('slack', '=', trim($request->discount_code))
+                ->active()
+                ->first();
+                if (empty($discount_code_data)) {
+                    throw new Exception("Discount code not found or inactive in the system", 400);
+                }
+                $discount_code_id = $discount_code_data->id;
+            }
             DB::beginTransaction();
 
             $category = [
@@ -244,6 +268,7 @@ class Category extends Controller
                 "description_ar" => $request->description_ar,
                 "status" => $request->status,
                 "photo"=> "uploads/category/".$name,
+                "discount_code_id" => $discount_code_id,
                 "parent" =>  $request->parent,
                 'updated_by' => $request->logged_user_id
             ];

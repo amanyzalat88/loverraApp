@@ -74,10 +74,10 @@ class Order extends Controller
             $data['store_discount_percentage'] = (isset($discountcode_data->discount_percentage))?$discountcode_data->discount_percentage:0.00;
         }
 
-        $categories = CategoryModel::select('slack', 'category_code', 'label')->sortLabelAsc()->get();
+        $categories = CategoryModel::select('slack', 'category_code', 'label_en')->sortLabelAsc()->get();
         $data['categories'] = (!empty($categories))?$categories:[];
 
-        $payment_methods = PaymentMethodModel::select('slack', 'label')
+        $payment_methods = PaymentMethodModel::select('slack', 'label_en')
         ->active()
         ->get();
         $data['payment_methods'] = (!empty($payment_methods))?$payment_methods:[];

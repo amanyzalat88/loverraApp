@@ -3,9 +3,7 @@
         <i class="fas fa-ellipsis-h actions-dropdown"></i>
     </button>
     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown">
-        @if (check_access(array('A_DETAIL_SLIDER'), true))
-            <a href="{{ $slider['detail_link'] }}" class="dropdown-item">View</a>
-        @endif
+       
         @if (check_access(array('A_EDIT_SLIDER'), true))
             <a href="edit_slider/{{ $slider['slack'] }}" class="dropdown-item">Edit</a>
         @endif

@@ -22,6 +22,15 @@
                         <input type="text" name="supplier_name" v-model="supplier_name" v-validate="'required|max:250'" class="form-control form-control-custom" placeholder="Please enter supplier name"  autocomplete="off">
                         <span v-bind:class="{ 'error' : errors.has('supplier_name') }">{{ errors.first('supplier_name') }}</span> 
                     </div>
+                     <div class="form-group col-md-3">
+                        <label for="photo">Photo</label>
+                        <input type="file" id="photo" ref="file" v-validate="'required|max:250'" v-on:change="handleFileUpload()" class="form-control form-control-custom" />
+                        <span v-bind:class="{ 'error' : errors.has('photo') }">{{ errors.first('photo') }}</span>
+                       
+                    </div>
+                    <div class="form-group col-md-3">
+                          <img :src="getPhoto(photo)"  height="150px" width="250px"/> 
+                      </div>
                 </div>
 
                 <div class="d-flex flex-wrap mb-1">
@@ -103,7 +112,7 @@
 
 <script>
     'use strict';
-    
+     let base_url= "/public/";
     export default {
         data(){
             return{
@@ -121,6 +130,7 @@
                 phone           : (this.supplier_data == null)?[]:this.supplier_data.phone,
                 email           : (this.supplier_data == null)?[]:this.supplier_data.email,
                 pincode         : (this.supplier_data == null)?[]:this.supplier_data.pincode,
+                photo           : (this.supplier_data == null)?'':(this.supplier_data.photo == null)?'':this.supplier_data.photo,
             }
         },
         props: {
@@ -131,6 +141,17 @@
             console.log('Add supplier page loaded');
         },
         methods: {
+              getPhoto(photo){
+                
+                if(photo)
+                    return base_url+photo;
+                    else
+                    return base_url+"images/4.jpg";
+                },
+                handleFileUpload () {
+                // get the input
+                  this.file = this.$refs.file.files[0];
+                },
             submit_form(){
                 this.$validator.validateAll().then((result) => {
                     if (result) {
@@ -147,8 +168,12 @@
                             formData.append("email", (this.email == null)?'':this.email);
                             formData.append("pincode", (this.pincode == null)?'':this.pincode);
                             formData.append("status", (this.status == null)?'':this.status);
-
-                            axios.post(this.api_link, formData).then((response) => {
+                            formData.append('photo', (this.file == null)?'':this.file);
+                            axios.post(this.api_link, formData,{
+                                            headers: {
+                                                'Content-Type': 'multipart/form-data'
+                                            }
+                                             }).then((response) => {
 
                                 if(response.data.status_code == 200) {
                                     this.show_response_message(response.data.msg, 'SUCCESS');

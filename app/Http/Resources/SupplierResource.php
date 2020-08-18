@@ -20,6 +20,7 @@ class SupplierResource extends Resource
             'name' => $this->name,
             'email' => $this->email,
             'phone' => $this->phone,
+            'photo' => $this->photo,
             'address' => $this->address,
             'pincode' => $this->pincode,
             'status' => new MasterStatusResource($this->status_data),

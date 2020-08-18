@@ -62,6 +62,7 @@
                             <option v-for="(category, index) in categories" v-bind:value="category.slack" v-bind:key="index">
                                 {{ category.label_en }}
                             </option>
+                           
                         </select>
                         <span v-bind:class="{ 'error' : errors.has('category') }">{{ errors.first('category') }}</span> 
                     </div>
@@ -243,7 +244,7 @@
          uploadFiles () {
         // get the input
         this.files = this.$refs.file_input.files
-            console.log(this.files);
+            //console.log(this.files);
         },
          handleFileUpload(){
                 this.file = this.$refs.file.files[0];

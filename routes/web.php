@@ -125,4 +125,35 @@ Route::group(['middleware' => ['token_auth', 'user_menu']], function () {
     Route::get('/add_purchase_order', "PurchaseOrder@add_purchase_order")->name('add_purchase_order');
     Route::get('/edit_purchase_order/{slack?}', "PurchaseOrder@add_purchase_order")->name('edit_purchase_order');
     Route::get('/print_purchase_order/{slack}', "PurchaseOrder@print_purchase_order")->name('print_purchase_order');
+
+    //Ads
+    Route::get('/ads', "Ads@index")->name('ads');
+    Route::get('/ads/{slack}', "Ads@detail")->name('ads_detail');
+    Route::get('/add_ads', "Ads@add_ads")->name('add_ads');
+    Route::get('/edit_ads/{slack?}', "Ads@add_ads")->name('edit_ads');
+
+    //boxes
+    Route::get('/boxes', "Boxes@index")->name('boxes');
+    Route::get('/boxes/{slack}', "Boxes@detail")->name('boxes_detail');
+    Route::get('/add_boxes', "Boxes@add_boxes")->name('add_boxes');
+    Route::get('/edit_boxes/{slack?}', "Boxes@add_boxes")->name('edit_boxes');
+
+    //boxes color
+    Route::get('/boxescolor', "BoxesColor@index")->name('boxescolor');
+    Route::get('/boxescolor/{slack}', "BoxesColor@detail")->name('boxescolor_detail');
+    Route::get('/add_boxescolor', "BoxesColor@add_boxes")->name('add_boxescolor');
+    Route::get('/edit_boxescolor/{slack?}', "BoxesColor@add_boxes")->name('edit_boxescolor');
+
+    //boxes card
+    Route::get('/boxescard1', "BoxesCards@index")->name('boxescard1');
+    Route::get('/boxescards/{slack}', "BoxesCards@detail")->name('boxescard_detail');
+    Route::get('/add_boxescards', "BoxesCards@add_boxes")->name('add_boxescard');
+    Route::get('/edit_boxescards/{slack?}', "BoxesCards@add_boxes")->name('edit_boxescard');
+ 
+
+     //Contact
+     Route::get('/contact', "Contact@index")->name('contact');
+     Route::get('/contact/{slack}', "Contact@detail")->name('contact_detail');
+     Route::get('/add_contact', "Contact@add_contact")->name('add_contact');
+     Route::get('/edit_contact/{slack?}', "Contact@add_contact")->name('edit_contact');
 });

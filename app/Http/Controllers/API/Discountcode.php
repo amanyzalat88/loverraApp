@@ -140,6 +140,10 @@ class Discountcode extends Controller
                 "discount_percentage" => $request->discount_percentage,
                 "description" => $request->description,
                 "status" => $request->status,
+                "discount_type" => $request->discount_type,
+                "discount_num" => $request->discount_num,
+                "discount_from" => $request->discount_from,
+                "discount_to" => $request->discount_to,
                 "created_by" => $request->logged_user_id
             ];
             
@@ -221,6 +225,10 @@ class Discountcode extends Controller
                 "discount_percentage" => $request->discount_percentage,
                 "description" => $request->description,
                 "status" => $request->status,
+                "discount_type" => $request->discount_type,
+                "discount_num" => $request->discount_num,
+                "discount_from" => $request->discount_from,
+                "discount_to" => $request->discount_to,
                 "updated_by" => $request->logged_user_id
             ];
             

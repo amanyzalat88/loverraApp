@@ -25,13 +25,14 @@ class Supplier extends Controller
     //This is the function that loads the add/edit page
     public function add_supplier($slack = null){
         //check access
+       
         $data['menu_key'] = 'MM_SUPPLIER';
         $data['sub_menu_key'] = 'SM_SUPPLIERS';
         $data['action_key'] = ($slack == null)?'A_ADD_SUPPLIER':'A_EDIT_SUPPLIER';
         check_access(array($data['action_key']));
 
         $data['statuses'] = MasterStatus::select('value', 'label')->filterByKey('SUPPLIER_STATUS')->active()->sortValueAsc()->get();
-
+       
         $data['supplier_data'] = null;
         if(isset($slack)){
             
@@ -39,7 +40,7 @@ class Supplier extends Controller
             if (empty($supplier)) {
                 abort(404);
             }
-
+            
             $supplier_data = new SupplierResource($supplier);
             $data['supplier_data'] = $supplier_data;
         }

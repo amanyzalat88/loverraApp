@@ -11,7 +11,7 @@ class Supplier extends Model
 {
     protected $table = 'suppliers';
     protected $hidden = ['id'];
-    protected $fillable = ['slack', 'store_id', 'supplier_code', 'name', 'email', 'phone', 'address', 'pincode', 'status', 'created_by', 'updated_by'];
+    protected $fillable = ['slack', 'store_id','photo', 'supplier_code', 'name', 'email', 'phone', 'address', 'pincode', 'status', 'created_by', 'updated_by'];
 
     protected static function boot()
     {

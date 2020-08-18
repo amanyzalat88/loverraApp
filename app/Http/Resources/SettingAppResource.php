@@ -16,6 +16,12 @@ class SettingAppResource extends Resource
     {
         return [
             'company_name' => $this->company_name,
+            'address_ar' => $this->address_ar,
+            'address_en' => $this->address_en,
+            'about_ar' => $this->about_ar,
+            'about_en' => $this->about_en,
+            'twitter' => $this->twitter,
+            'insta' => $this->insta,
             'app_date_time_format' => $this->app_date_time_format,
             'app_date_format' => $this->app_date_format,
             'company_logo' => $this->company_logo,

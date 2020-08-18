@@ -182,6 +182,12 @@ class Setting extends Controller
 
             $app_setting = [
                 "company_name" => $request->company_name,
+                "address_ar" => $request->address_ar,
+                "address_en" => $request->address_en,
+                "about_ar" => $request->about_ar,
+                "about_en" => $request->about_en,
+                "twitter" => $request->twitter,
+                "insta" => $request->insta,
                 "app_date_time_format" => $request->date_time_format,
                 "app_date_format" => $request->date_format,
                 "company_logo" => $file_name,

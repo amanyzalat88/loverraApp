@@ -12,14 +12,27 @@ class Slider{
             columns: [
                 { name: 'slider.photo_ar' },
                 { name: 'slider.photo_en' },
-                
-                { name: 'category.created_at' },
-                { name: 'category.updated_at' },
+                { name: 'slider.created_at' },
+                { name: 'slider.updated_at' },
                 { name: 'user_created.fullname' }
             ],
-            order: [[ 3, "desc" ]],
+            order: [[ 4, "desc" ]],
             columnDefs: [
-                { "orderable": false, "targets": [5] }
+                { "orderable": false, "targets": [5] },
+                {
+                    "targets" :0 ,
+                    "data": "img",
+                    "render" : function ( url, type, full) {
+                    return '<img height="75%" width="75%" src="public/'+full[0]+'"/>';
+                    }
+                },
+                {
+                    "targets" :1 ,
+                    "data": "img",
+                    "render" : function ( url, type, full) {
+                    return '<img height="75%" width="75%" src="public/'+full[1]+'"/>';
+                    }
+                }
             ]
         });
 

@@ -31,7 +31,7 @@ class Report extends Controller
 
         $data['suppliers'] = SupplierModel::select('slack', 'supplier_code', 'name')->sortNameAsc()->get();
 
-        $data['categories'] = CategoryModel::select('slack', 'category_code', 'label')->sortLabelAsc()->get();
+        $data['categories'] = CategoryModel::select('slack', 'category_code', 'label_en')->sortLabelAsc()->get();
 
         $data['taxcodes'] = TaxcodeModel::select('slack', 'tax_code', 'label')->sortLabelAsc()->get();
 

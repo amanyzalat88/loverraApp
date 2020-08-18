@@ -8,7 +8,7 @@ use App\Http\Resources\ApiBoxesColorResource;
 
 class Soldout extends Model {
      
-    protected $table = 'souldout';
+    protected $table = 'soldout';
 	protected $hidden = ['updated_at','created_at'];
     protected $fillable = [ 'id','product_id','customer_id','email'];
 
