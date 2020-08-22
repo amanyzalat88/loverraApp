@@ -22,6 +22,8 @@ class SettingAppResource extends Resource
             'about_en' => $this->about_en,
             'twitter' => $this->twitter,
             'insta' => $this->insta,
+            'phone'=>$this->phone,
+            'email'=>$this->email,
             'app_date_time_format' => $this->app_date_time_format,
             'app_date_format' => $this->app_date_format,
             'company_logo' => $this->company_logo,

@@ -33,7 +33,7 @@
                       </div>
                 </div>
 
-                <div class="d-flex flex-wrap mb-1">
+           <!--        <div class="d-flex flex-wrap mb-1">
                     <div class="mr-auto">
                         <span class="text-subhead">Contact Information</span>
                     </div>
@@ -42,7 +42,7 @@
                     </div>
                 </div>
 
-                <div class="form-row mb-2">
+             <div class="form-row mb-2">
                     <div class="form-group col-md-3">
                         <label for="phone">Contact No.</label>
                         <input type="text" name="phone" v-model="phone" v-validate="'min:10|max:15'" class="form-control form-control-custom" placeholder="Please enter contact number" autocomplete="off">
@@ -65,7 +65,7 @@
                         <input type="text" name="pincode" v-model="pincode" v-validate="'max:15'" class="form-control form-control-custom" placeholder="Enter Pincode">
                         <span v-bind:class="{ 'error' : errors.has('pincode') }">{{ errors.first('pincode') }}</span>
                     </div>
-                </div>
+                </div>-->
 
                 <div class="d-flex flex-wrap mb-1">
                     <div class="mr-auto">

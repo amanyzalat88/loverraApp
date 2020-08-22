@@ -35,7 +35,16 @@
                         <input type="number" nim="1" name="price" v-model="price" v-validate="'required|max:250'" class="form-control form-control-custom" placeholder="Please enter description ar"  autocomplete="off">
                         <span v-bind:class="{ 'error' : errors.has('price') }">{{ errors.first('price') }}</span> 
                     </div>
-                     
+                     <div class="form-group col-md-3">
+                        <label for="status">Status</label>
+                        <select name="status" v-model="status" v-validate="'required|numeric'" class="form-control form-control-custom custom-select">
+                            <option value="">Choose Status..</option>
+                            <option v-for="(status, index) in statuses" v-bind:value="status.value" v-bind:key="index">
+                                {{ status.label }}
+                            </option>
+                        </select>
+                        <span v-bind:class="{ 'error' : errors.has('status') }">{{ errors.first('status') }}</span> 
+                    </div>
                     
                 </div>
                 
@@ -49,16 +58,7 @@
                       <div class="form-group col-md-3">
                           <img :src="getPhoto(photo)"  height="150px" width="250px"/> 
                       </div>
-                     <div class="form-group col-md-3">
-                        <label for="status">Status</label>
-                        <select name="status" v-model="status" v-validate="'required|numeric'" class="form-control form-control-custom custom-select">
-                            <option value="">Choose Status..</option>
-                            <option v-for="(status, index) in statuses" v-bind:value="status.value" v-bind:key="index">
-                                {{ status.label }}
-                            </option>
-                        </select>
-                        <span v-bind:class="{ 'error' : errors.has('status') }">{{ errors.first('status') }}</span> 
-                    </div>
+                     
                 </div>
 
                

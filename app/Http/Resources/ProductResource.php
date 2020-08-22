@@ -28,6 +28,7 @@ class ProductResource extends Resource
             'sale_amount_excluding_tax' => $this->sale_amount_excluding_tax,
             'category' => new CategoryResource($this->category),
             'supplier' => new SupplierResource($this->supplier),
+            'discount_code_id'=>$this->discount_code_id,
             'tax_code' => new TaxcodeResource($this->tax_code),
             'discount_code' => new DiscountcodeResource($this->discount_code),
             'status' => new MasterStatusResource($this->status_data),

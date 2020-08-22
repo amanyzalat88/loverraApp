@@ -65,7 +65,7 @@ Route::group(['middleware' => ['token_auth', 'user_menu']], function () {
      Route::get('/slider/{slack}', "Slider@detail")->name('slider');
      Route::get('/add_slider', "Slider@add_slider")->name('add_slider');
      Route::get('/edit_slider/{slack?}', "Slider@add_slider")->name('edit_slider');
-
+     Route::get('/delete_slider/{slack}', 'Slider@destroy');
     //supplier
     Route::get('/suppliers', "Supplier@index")->name('suppliers');
     Route::get('/supplier/{slack}', "Supplier@detail")->name('supplier');
@@ -152,7 +152,7 @@ Route::group(['middleware' => ['token_auth', 'user_menu']], function () {
  
 
      //Contact
-     Route::get('/contact', "Contact@index")->name('contact');
+     Route::get('/contacts', "Contact@index")->name('contact');
      Route::get('/contact/{slack}', "Contact@detail")->name('contact_detail');
      Route::get('/add_contact', "Contact@add_contact")->name('add_contact');
      Route::get('/edit_contact/{slack?}', "Contact@add_contact")->name('edit_contact');

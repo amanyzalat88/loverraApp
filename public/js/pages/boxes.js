@@ -4,7 +4,7 @@ class Boxes{
         var listing_table = $('#listing-table').DataTable({
             ajax: {
                 url  : '/api/boxes',
-                type : 'GET',
+                type : 'POST',
                 data : {
                     access_token : window.settings.access_token
                 }

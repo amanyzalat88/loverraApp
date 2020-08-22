@@ -16,14 +16,14 @@
                     <label for="company_name">Company Name</label>
                     <p>{{ company_name }}</p>
                 </div>
-                <div class="form-group col-md-3">
+             <!--   <div class="form-group col-md-3">
                     <label for="app_date_format">App Date Time Format</label>
                     <p>{{ app_date_time_format }}</p>
                 </div>
                 <div class="form-group col-md-3">
                     <label for="app_date_format">App Date Format</label>
                     <p>{{ app_date_format }}</p>
-                </div>
+                </div>-->
                  <div class="form-group col-md-3">
                     <label for="app_date_format">Address Ar</label>
                     <p>{{ address_ar }}</p>
@@ -47,6 +47,14 @@
                 <div class="form-group col-md-3">
                     <label for="app_date_format">Instagram</label>
                     <p>{{ insta }}</p>
+                </div>
+                 <div class="form-group col-md-3">
+                    <label for="app_date_format">Phone</label>
+                    <p>{{ phone }}</p>
+                </div>
+                <div class="form-group col-md-3">
+                    <label for="app_date_format">Email</label>
+                    <p>{{ email }}</p>
                 </div>
                 <div class="form-group col-md-3">
                     <label for="updated_by">Updated By</label>

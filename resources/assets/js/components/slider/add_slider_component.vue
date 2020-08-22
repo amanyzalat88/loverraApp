@@ -96,10 +96,13 @@
              return base_url+"images/4.jpg";
          },
            FileUpload(){
+              
                 this.file_ar = this.$refs.file_ar.files[0];
+               
             },
              handleFileUpload(){
                 this.file_en = this.$refs.file_en.files[0];
+               
             },
             submit_form(){
 

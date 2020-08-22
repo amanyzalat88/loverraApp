@@ -27,16 +27,26 @@
                         <input type="text" name="store_code" v-model="store_code" v-validate="'required|alpha_dash|max:30'" class="form-control form-control-custom" placeholder="Please enter store code"  autocomplete="off">
                         <span v-bind:class="{ 'error' : errors.has('store_code') }">{{ errors.first('store_code') }}</span> 
                     </div>
-                    <div class="form-group col-md-3">
+                      <div class="form-group col-md-3">
+                        <label for="status">Status</label>
+                        <select name="status" v-model="status" v-validate="'required|numeric'" class="form-control form-control-custom custom-select">
+                            <option value="">Choose Status..</option>
+                            <option v-for="(status, index) in statuses" v-bind:value="status.value" v-bind:key="index">
+                                {{ status.label }}
+                            </option>
+                        </select>
+                        <span v-bind:class="{ 'error' : errors.has('status') }">{{ errors.first('status') }}</span> 
+                    </div>
+                  <!--  <div class="form-group col-md-3">
                         <label for="tax_number">Tax Number or GST number</label>
                         <input type="text" name="tax_number" v-model="tax_number" v-validate="'max:50'" class="form-control form-control-custom" placeholder="Please enter tax number or GST number"  autocomplete="off">
                         <span v-bind:class="{ 'error' : errors.has('tax_number') }">{{ errors.first('tax_number') }}</span> 
-                    </div>
+                    </div>-->
                 </div>
 
                 <div class="d-flex flex-wrap mb-1">
                     <div class="mr-auto">
-                        <span class="text-subhead">Contact Information</span>
+                        <span class="text-subhead">Shipping Information</span>
                     </div>
                     <div class="">
                         
@@ -120,7 +130,7 @@
                     </div>
                 </div>
 
-                <div class="d-flex flex-wrap mb-1">
+               <!--    <div class="d-flex flex-wrap mb-1">
                     <div class="mr-auto">
                         <span class="text-subhead">Status Information</span>
                     </div>
@@ -130,18 +140,10 @@
                 </div>
 
                 <div class="form-row mb-2">
-                    <div class="form-group col-md-3">
-                        <label for="status">Status</label>
-                        <select name="status" v-model="status" v-validate="'required|numeric'" class="form-control form-control-custom custom-select">
-                            <option value="">Choose Status..</option>
-                            <option v-for="(status, index) in statuses" v-bind:value="status.value" v-bind:key="index">
-                                {{ status.label }}
-                            </option>
-                        </select>
-                        <span v-bind:class="{ 'error' : errors.has('status') }">{{ errors.first('status') }}</span> 
-                    </div>
+                  
                 </div>
 
+             <div class="form-row mb-2">
                 <div class="d-flex flex-wrap mb-1">
                     <div class="mr-auto">
                         <span class="text-subhead">Invoice Print & Currency Details</span>
@@ -151,7 +153,6 @@
                     </div>
                 </div>
 
-                <div class="form-row mb-2">
                     <div class="form-group col-md-3">
                         <label for="print_type">Invoice Print Type</label>
                         <select name="print_type" v-model="print_type" v-validate="'required'" class="form-control form-control-custom custom-select">
@@ -172,7 +173,7 @@
                         </select>
                         <span v-bind:class="{ 'error' : errors.has('currency_code') }">{{ errors.first('currency_code') }}</span> 
                     </div>
-                </div>
+                </div>-->
             </form>
                 
         </div>

@@ -65,7 +65,7 @@ Route::group(['middleware' => ['token_auth']], function () {
     Route::post('/slider', 'API\Slider@index');
     Route::post('/add_slider', 'API\Slider@store');
     Route::post('/update_slider/{slack}', 'API\Slider@update');
-
+    Route::post('/delete_slider/{slack}', 'API\Slider@delete');
     //ads
     Route::post('/ads', 'API\Ads@index');
     Route::post('/add_ads', 'API\Ads@store');
@@ -91,7 +91,7 @@ Route::group(['middleware' => ['token_auth']], function () {
     Route::post('/load_boxescard', 'API\Ads@load_BoxesCard_list');
 
      //contact
-     Route::get('/contact', 'API\Contact@index');
+     Route::post('/contact', 'API\Contact@index');
      Route::post('/add_contact', 'API\Contact@store');
      Route::post('/update_contact/{slack}', 'API\Contact@update');
      Route::post('/load_contact', 'API\Contact@load_supplier_list');

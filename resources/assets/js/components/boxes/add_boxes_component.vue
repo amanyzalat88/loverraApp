@@ -37,10 +37,32 @@
                     </div>
                     <div class="form-group col-md-3">
                         <label for="count">Count</label>
-                        <input type="text" name="count" v-model="count" v-validate="'required|max:250'" class="form-control form-control-custom" placeholder="Please enter description en"  autocomplete="off">
+                        <select name="count" v-model="count"  v-validate="'required'" class="form-control form-control-custom">
+                         <option  value="1">1</option>
+                           <option value="2">2</option>
+                             <option value="3">3</option>
+                               <option value="4">4</option>
+                                 <option value="5">5</option>
+                                   <option value="6">6</option>
+                                     <option value="7">7</option>
+                                       <option value="8">8</option>
+                                         <option value="9">9</option>
+                                           <option value="10">10</option>
+                        </select>
+
+                       
                         <span v-bind:class="{ 'error' : errors.has('count') }">{{ errors.first('count') }}</span> 
                     </div>
-                    
+                     <div class="form-group col-md-3">
+                        <label for="status">Status</label>
+                        <select name="status" v-model="status" v-validate="'required|numeric'" class="form-control form-control-custom custom-select">
+                            <option value="">Choose Status..</option>
+                            <option v-for="(status, index) in statuses" v-bind:value="status.value" v-bind:key="index">
+                                {{ status.label }}
+                            </option>
+                        </select>
+                        <span v-bind:class="{ 'error' : errors.has('status') }">{{ errors.first('status') }}</span> 
+                    </div>
                 </div>
                 
                 <div class="form-row mb-2">
@@ -53,16 +75,7 @@
                       <div class="form-group col-md-3">
                           <img :src="getPhoto(photo)"  height="150px" width="250px"/> 
                       </div>
-                     <div class="form-group col-md-3">
-                        <label for="status">Status</label>
-                        <select name="status" v-model="status" v-validate="'required|numeric'" class="form-control form-control-custom custom-select">
-                            <option value="">Choose Status..</option>
-                            <option v-for="(status, index) in statuses" v-bind:value="status.value" v-bind:key="index">
-                                {{ status.label }}
-                            </option>
-                        </select>
-                        <span v-bind:class="{ 'error' : errors.has('status') }">{{ errors.first('status') }}</span> 
-                    </div>
+                    
                 </div>
 
                

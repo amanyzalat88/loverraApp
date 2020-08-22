@@ -16,7 +16,8 @@ class PaymentMethodResource extends Resource
     {
         return [
             'slack' => $this->slack,
-            'label' => $this->label,
+            'label_ar' => $this->label_ar,
+            'label_en' => $this->label_en,
             'description' => $this->description,
             'status' => new MasterStatusResource($this->status_data),
             'detail_link' => (check_access(['A_DETAIL_PAYMENT_METHOD'], true))?route('payment_method', ['slack' => $this->slack]):'',

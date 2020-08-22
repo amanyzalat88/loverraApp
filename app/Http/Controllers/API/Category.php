@@ -62,7 +62,7 @@ class Category extends Controller
             ->get();
 
             $categories = CategoryResource::collection($query);
-           
+            
             $total_count = CategoryModel::select("id")->get()->count();
 
             $item_array = [];
@@ -73,7 +73,7 @@ class Category extends Controller
                 $item_array[$key][] = $category['label_en'];
                 $item_array[$key][] = $category['category_code'];
                 $item_array[$key][] = view('common.status', ['status_data' => ['label' => $category['status']['label'], "color" => $category['status']['color']]])->render();
-                $item_array[$key][] = ($category['discount_code']['status'] != null)?(view('common.status_indicators', ['status' => $category['discount_code']['status']])->render().Str::limit($category['discount_code']['label'], 50))." (".$category['discount_code']['discount_code'].")":'-';
+                $item_array[$key][] = ($category['discount_code_id']  != null)?(view('common.status_indicators', ['status' => $category['discount_code']['status']])->render().Str::limit($category['discount_code']['label'], 50))." (".$category['discount_code']['discount_code'].")":'-';
                 $item_array[$key][] = $category['created_at_label'];
                 $item_array[$key][] = $category['updated_at_label'];
                 $item_array[$key][] = $category['created_by']['fullname'];
@@ -126,6 +126,7 @@ class Category extends Controller
 
             $category_data_exists = CategoryModel::select('id')
             ->where('label_en', '=', trim($request->category_name_en))
+            ->where('parent', '=', trim($request->parent))
             ->first();
             if (!empty($category_data_exists)) {
                 throw new Exception("Category already exists", 400);
@@ -237,8 +238,10 @@ class Category extends Controller
             ->where([
                 ['slack', '!=', $slack],
                 ['label_en', '=', trim($request->category_name_en)],
+                ['parent', '=', $request->parent],
             ])
             ->first();
+            
             if (!empty($category_data_exists)) {
                 throw new Exception("Category already exists", 400);
             }

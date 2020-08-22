@@ -18,9 +18,14 @@
 
                 <div class="form-row mb-2">
                     <div class="form-group col-md-3">
-                        <label for="payment_method">Payment Method</label>
-                        <input type="text" name="payment_method" v-model="payment_method" v-validate="'required|max:250'" class="form-control form-control-custom" placeholder="Please enter payment method"  autocomplete="off">
-                        <span v-bind:class="{ 'error' : errors.has('payment_method') }">{{ errors.first('payment_method') }}</span> 
+                        <label for="payment_method_ar">Payment Method <span style="color:red">Ar</span></label>
+                        <input type="text" name="payment_method_ar" v-model="payment_method_ar" v-validate="'required|max:250'" class="form-control form-control-custom" placeholder="Please enter payment method"  autocomplete="off">
+                        <span v-bind:class="{ 'error' : errors.has('payment_method_ar') }">{{ errors.first('payment_method_ar') }}</span> 
+                    </div>
+                     <div class="form-group col-md-3">
+                        <label for="payment_method_en">Payment Method <span style="color:red">En</span></label>
+                        <input type="text" name="payment_method_en" v-model="payment_method_en" v-validate="'required|max:250'" class="form-control form-control-custom" placeholder="Please enter payment method"  autocomplete="off">
+                        <span v-bind:class="{ 'error' : errors.has('payment_method_en') }">{{ errors.first('payment_method_en') }}</span> 
                     </div>
                     <div class="form-group col-md-3">
                         <label for="status">Status</label>
@@ -77,7 +82,8 @@
                 api_link        : (this.payment_method_data == null)?'/api/add_payment_method':'/api/update_payment_method/'+this.payment_method_data.slack,
 
                 payment_method_slack  : (this.payment_method_data == null)?'':this.payment_method_data.slack,
-                payment_method   : (this.payment_method_data == null)?'':this.payment_method_data.label,
+                payment_method_en   : (this.payment_method_data == null)?'':this.payment_method_data.label_en,
+                payment_method_ar   : (this.payment_method_data == null)?'':this.payment_method_data.label_ar,
                 description     : (this.payment_method_data == null)?'':this.payment_method_data.description,
                 status          : (this.payment_method_data == null)?'':this.payment_method_data.status.value,
             }
@@ -104,7 +110,8 @@
                             var formData = new FormData();
 
                             formData.append("access_token", window.settings.access_token);
-                            formData.append("payment_method_name", (this.payment_method == null)?'':this.payment_method);
+                            formData.append("payment_method_name_en", (this.payment_method == null)?'':this.payment_method_en);
+                            formData.append("payment_method_name_ar", (this.payment_method == null)?'':this.payment_method_ar);
                             formData.append("description", (this.description == null)?'':this.description);
                             formData.append("status", (this.status == null)?'':this.status);
 

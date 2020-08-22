@@ -22,6 +22,24 @@
                         <span v-bind:class="{ 'error' : errors.has('company_name') }">{{ errors.first('company_name') }}</span> 
                     </div>
                     <div class="form-group col-md-3">
+                        <label for="twitter">Twitter </label>
+                        <input type="text" name="twitter" v-model="twitter" v-validate="'required|max:250'" class="form-control form-control-custom" placeholder="Please enter Company Name"  autocomplete="off">
+                        <span v-bind:class="{ 'error' : errors.has('twitter') }">{{ errors.first('twitter') }}</span> 
+                       
+                    </div>
+                     <div class="form-group col-md-3">
+                        <label for="insta">Instagram </label>
+                        <input type="text" name="insta" v-model="insta" v-validate="'required|max:250'" class="form-control form-control-custom" placeholder="Please enter Company Name"  autocomplete="off">
+                        <span v-bind:class="{ 'error' : errors.has('insta') }">{{ errors.first('insta') }}</span> 
+                       
+                    </div>
+                     <div class="form-group col-md-3">
+                        <label for="phone">Phone </label>
+                        <input type="text" name="phone" v-model="phone" v-validate="'required|max:250'" class="form-control form-control-custom" placeholder="Please enter Company Name"  autocomplete="off">
+                        <span v-bind:class="{ 'error' : errors.has('phone') }">{{ errors.first('phone') }}</span> 
+                       
+                    </div>
+                   <!-- <div class="form-group col-md-3">
                         <label for="app_date_time_format">Date Time format</label>
                         <select name="app_date_time_format" v-model="app_date_time_format" v-validate="'required'" class="form-control form-control-custom custom-select">
                             <option value="">Choose Date Time format..</option>
@@ -40,49 +58,48 @@
                             </option>
                         </select>
                         <span v-bind:class="{ 'error' : errors.has('app_date_format') }">{{ errors.first('app_date_format') }}</span> 
-                    </div>
+                    </div>-->
                 </div>
 
                <div class="form-row mb-2">
+               <div class="form-group col-md-3">
+                        <label for="email">Email </label>
+                        <input type="text" name="email" v-model="email" v-validate="'required|email|max:250'" class="form-control form-control-custom" placeholder="Please enter Company Name"  autocomplete="off">
+                        <span v-bind:class="{ 'error' : errors.has('email') }">{{ errors.first('email') }}</span> 
+                       
+                    </div>
                     <div class="form-group col-md-3">
                         <label for="address_ar">Address <span style="color:red">Ar</span></label>
-                        <input type="text" name="address_ar" v-model="address_ar" v-validate="'required|max:250'" class="form-control form-control-custom" placeholder="Please enter Company Name"  autocomplete="off">
+                        <textarea name="address_ar" v-model="address_ar" v-validate="'max:65535'" class="form-control form-control-custom" rows="5" placeholder="Enter Address"></textarea>
+                        
                         <span v-bind:class="{ 'error' : errors.has('address_ar') }">{{ errors.first('address_ar') }}</span> 
                     </div>
                     <div class="form-group col-md-3">
                         <label for="address_en">Address <span style="color:red">En</span></label>
-                        <input type="text" name="address_en" v-model="address_en" v-validate="'required|max:250'" class="form-control form-control-custom" placeholder="Please enter Company Name"  autocomplete="off">
+                          <textarea name="address_en" v-model="address_en" v-validate="'max:65535'" class="form-control form-control-custom" rows="5" placeholder="Enter Address"></textarea>
+                       
                         <span v-bind:class="{ 'error' : errors.has('address_en') }">{{ errors.first('address_en') }}</span> 
                        
                     </div>
-                     <div class="form-group col-md-3">
-                        <label for="twitter">Twitter </label>
-                        <input type="text" name="twitter" v-model="twitter" v-validate="'required|max:250'" class="form-control form-control-custom" placeholder="Please enter Company Name"  autocomplete="off">
-                        <span v-bind:class="{ 'error' : errors.has('twitter') }">{{ errors.first('twitter') }}</span> 
-                       
-                    </div>
-                     <div class="form-group col-md-3">
-                        <label for="insta">Instagram </label>
-                        <input type="text" name="insta" v-model="insta" v-validate="'required|max:250'" class="form-control form-control-custom" placeholder="Please enter Company Name"  autocomplete="off">
-                        <span v-bind:class="{ 'error' : errors.has('insta') }">{{ errors.first('insta') }}</span> 
-                       
-                    </div>
+                     
                 </div>
                 <div class="form-row mb-2">
                     <div class="form-group col-md-3">
                         <label for="about_ar">About <span style="color:red">Ar</span></label>
-                        <input type="text" name="about_ar" v-model="about_ar" v-validate="'required|max:250'" class="form-control form-control-custom" placeholder="Please enter Company Name"  autocomplete="off">
+                          <textarea name="about_ar" v-model="about_ar" v-validate="'max:65535'" class="form-control form-control-custom" rows="5" placeholder="Enter About"></textarea>
+                     
                         <span v-bind:class="{ 'error' : errors.has('about_ar') }">{{ errors.first('about_ar') }}</span> 
                     </div>
                     <div class="form-group col-md-3">
                         <label for="about_en">About <span style="color:red">En</span></label>
-                        <input type="text" name="about_en" v-model="about_en" v-validate="'required|max:250'" class="form-control form-control-custom" placeholder="Please enter Company Name"  autocomplete="off">
+                         <textarea name="about_en" v-model="about_en" v-validate="'max:65535'" class="form-control form-control-custom" rows="5" placeholder="Enter About"></textarea>
+                        
                         <span v-bind:class="{ 'error' : errors.has('about_en') }">{{ errors.first('about_en') }}</span> 
                        
                     </div>
-                    
+                    </div>
                
-               
+                <div class="form-row mb-2">
                     <div class="form-group col-md-3">
                         <label for="company_logo">Company Logo (jpeg, jpg, png)</label>
                         <input type="file" class="form-control-file form-control form-control-custom file-input" name="company_logo" ref="company_logo" accept="image/x-png,image/jpeg" v-validate="'ext:jpg,jpeg,png'">
@@ -128,7 +145,14 @@
                 modal           : false,
                 show_modal      : false,
                 api_link        : '/api/update_setting_app',
-
+phone:(this.setting_data.length == 0)?'':this.setting_data.phone,
+email:(this.setting_data.length == 0)?'':this.setting_data.email,
+address_ar:(this.setting_data.length == 0)?'':this.setting_data.address_ar,
+address_en:(this.setting_data.length == 0)?'':this.setting_data.address_en,
+about_ar:(this.setting_data.length == 0)?'':this.setting_data.about_ar,
+about_en:(this.setting_data.length == 0)?'':this.setting_data.about_en,
+twitter:(this.setting_data.length == 0)?'':this.setting_data.twitter,
+insta:(this.setting_data.length == 0)?'':this.setting_data.insta,
                 company_name    : (this.setting_data.length == 0)?'':this.setting_data.company_name,
                 app_date_time_format     : (this.setting_data.length == 0)?'':this.setting_data.app_date_time_format,
                 app_date_format     : (this.setting_data.length == 0)?'':this.setting_data.app_date_format,
@@ -159,6 +183,14 @@
                             formData.append("company_name", (this.company_name == null)?'':this.company_name);
                             formData.append("date_time_format", (this.app_date_time_format == null)?'':this.app_date_time_format);
                             formData.append("date_format", (this.app_date_format == null)?'':this.app_date_format);
+                            formData.append("phone", (this.phone == null)?'':this.phone);
+                            formData.append("email", (this.email == null)?'':this.email);
+                            formData.append("about_ar", (this.about_ar == null)?'':this.about_ar);
+                            formData.append("about_en", (this.about_en == null)?'':this.about_en);
+                            formData.append("address_en", (this.address_en == null)?'':this.address_en);
+                            formData.append("address_ar", (this.address_ar == null)?'':this.address_ar);
+                             formData.append("twitter", (this.twitter == null)?'':this.twitter);
+                              formData.append("insta", (this.insta == null)?'':this.insta);
                             formData.append("company_logo", file);
 
                             axios.post(this.api_link, formData).then((response) => {

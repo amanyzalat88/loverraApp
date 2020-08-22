@@ -4,7 +4,7 @@ class Contact{
         var listing_table = $('#listing-table').DataTable({
             ajax: {
                 url  : '/api/contact',
-                type : 'get',
+                type : 'post',
                 data : {
                     access_token : window.settings.access_token
                 }

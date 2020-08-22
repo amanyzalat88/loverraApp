@@ -7,5 +7,6 @@
         @if (check_access(array('A_EDIT_SLIDER'), true))
             <a href="edit_slider/{{ $slider['slack'] }}" class="dropdown-item">Edit</a>
         @endif
+        <a href="delete_slider/{{ $slider['slack'] }}" class="dropdown-item">Delete</a>
     </div>
 </div>

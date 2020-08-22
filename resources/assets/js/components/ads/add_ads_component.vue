@@ -40,6 +40,16 @@
                         <input type="text" name="description_en" v-model="description_en" v-validate="'required|max:250'" class="form-control form-control-custom" placeholder="Please enter description en"  autocomplete="off">
                         <span v-bind:class="{ 'error' : errors.has('description_en') }">{{ errors.first('description_en') }}</span> 
                     </div>
+                    <div class="form-group col-md-3">
+                        <label for="status">Status</label>
+                        <select name="status" v-model="status" v-validate="'required|numeric'" class="form-control form-control-custom custom-select">
+                            <option value="">Choose Status..</option>
+                            <option v-for="(status, index) in statuses" v-bind:value="status.value" v-bind:key="index">
+                                {{ status.label }}
+                            </option>
+                        </select>
+                        <span v-bind:class="{ 'error' : errors.has('status') }">{{ errors.first('status') }}</span> 
+                    </div>
                     <!--  <div class="form-group col-md-3">
                         <label for="category">Category</label>
                         <select name="category" v-model="category_id" v-validate="'required'" class="form-control form-control-custom custom-select">
@@ -63,16 +73,7 @@
                       <div class="form-group col-md-3">
                           <img :src="getPhoto(photo)"  height="150px" width="250px"/> 
                       </div>
-                     <div class="form-group col-md-3">
-                        <label for="status">Status</label>
-                        <select name="status" v-model="status" v-validate="'required|numeric'" class="form-control form-control-custom custom-select">
-                            <option value="">Choose Status..</option>
-                            <option v-for="(status, index) in statuses" v-bind:value="status.value" v-bind:key="index">
-                                {{ status.label }}
-                            </option>
-                        </select>
-                        <span v-bind:class="{ 'error' : errors.has('status') }">{{ errors.first('status') }}</span> 
-                    </div>
+                     
                 </div>
 
                

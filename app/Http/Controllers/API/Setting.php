@@ -182,14 +182,15 @@ class Setting extends Controller
 
             $app_setting = [
                 "company_name" => $request->company_name,
+                "phone"=>$request->phone,
+                "email"=>$request->email,
                 "address_ar" => $request->address_ar,
                 "address_en" => $request->address_en,
                 "about_ar" => $request->about_ar,
                 "about_en" => $request->about_en,
                 "twitter" => $request->twitter,
                 "insta" => $request->insta,
-                "app_date_time_format" => $request->date_time_format,
-                "app_date_format" => $request->date_format,
+                
                 "company_logo" => $file_name,
                 "updated_by" => $request->logged_user_id
             ];
@@ -277,8 +278,8 @@ class Setting extends Controller
     {
         $validator = Validator::make($request->all(), [
             'company_name' => $this->get_validation_rules("name_label", true),
-            'date_time_format' => 'max:50|required',
-            'date_format' => 'max:50|required',
+          /*  'date_time_format' => 'max:50|required',
+            'date_format' => 'max:50|required',*/
         ]);
         $validation_status = $validator->fails();
         if($validation_status){

@@ -21,6 +21,7 @@ class CategoryResource extends Resource
             'photo' => $this->photo,
             'label_ar' => $this->label_ar,
             'label_en' => $this->label_en,
+            'discount_code_id'=>$this->discount_code_id,
             'description_ar' => $this->description_ar,
             'description_en' => $this->description_en,
             'discount_code' => new DiscountcodeResource($this->discount_code),

@@ -10,7 +10,7 @@ class Payment_methods{
                 }
             },
             columns: [
-                { name: 'payment_methods.label' },
+                { name: 'payment_methods.label_ar' },
                 { name: 'master_status.label' },
                 { name: 'payment_methods.created_at' },
                 { name: 'payment_methods.updated_at' },

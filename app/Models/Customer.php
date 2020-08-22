@@ -51,7 +51,9 @@ class Customer extends Model
             $join->on('customers.id', '=', 'customers_addresses.customer_id');
         });
     }
-    
+    public function createdCustomer(){
+        return $this->hasOne('App\Models\Customer', 'id', 'customer_id')->select(['name', 'phone']);
+    }
     public function createdUser(){
         return $this->hasOne('App\Models\User', 'id', 'created_by')->select(['slack', 'fullname', 'email', 'user_code']);
     }

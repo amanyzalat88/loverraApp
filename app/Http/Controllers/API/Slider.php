@@ -125,7 +125,7 @@ class Slider extends Controller
            
             if ($request->hasFile('photo_ar')) {
                 $image = $request->file('photo_ar');
-                $photo_ar = time().'.'.$image->getClientOriginalExtension();
+                $photo_ar = time().'1.'.$image->getClientOriginalExtension();
                 $destinationPath = public_path('/uploads/slider');
                 $image->move($destinationPath, $photo_ar);
             }
@@ -200,48 +200,42 @@ class Slider extends Controller
     {
         try {
 
-            if(!check_access(['A_EDIT_CATEGORY'], true)){
+            if(!check_access(['A_EDIT_SLIDER'], true)){
                 throw new Exception("Invalid request", 400);
             }
 
             $this->validate_request($request);
 
-            $category_data_exists = CategoryModel::select('id')
-            ->where([
-                ['slack', '!=', $slack],
-                ['label_en', '=', trim($request->category_name_en)],
-            ])
-            ->first();
-            if (!empty($category_data_exists)) {
-                throw new Exception("Category already exists", 400);
+           
+            if ($request->hasFile('photo_ar')) {
+                $image = $request->file('photo_ar');
+                $photo_ar = time().'1.'.$image->getClientOriginalExtension();
+                $destinationPath = public_path('/uploads/slider');
+                $image->move($destinationPath, $photo_ar);
             }
-            if ($request->file('photo')) {
-                $image = $request->file('photo');
-                $name = time().'.'.$image->getClientOriginalExtension();
-                $destinationPath = public_path('/uploads/category');
-                $image->move($destinationPath, $name);
+            if ($request->hasFile('photo_en')) {
+                $image1 = $request->file('photo_en');
+                $photo_en = time().'.'.$image1->getClientOriginalExtension();
+                $destinationPath = public_path('/uploads/slider');
+                $image1->move($destinationPath, $photo_en);
             }
             DB::beginTransaction();
 
-            $category = [
-                "label_en" => Str::title($request->category_name_en),
-                "description_en" => $request->description_en,
-                "label_ar" => Str::title($request->category_name_ar),
-                "description_ar" => $request->description_ar,
-                "status" => $request->status,
-                "photo"=> "uploads/category/".$name,
-                "parent" =>  $request->parent,
-                'updated_by' => $request->logged_user_id
+            $slider = [
+                "slack" => $this->generate_slack("slider"),
+                "photo_ar" => 'uploads/slider/'.$photo_ar,
+                "photo_en" => 'uploads/slider/'.$photo_en,
+                "created_by" => $request->logged_user_id
             ];
 
-            $action_response = CategoryModel::where('slack', $slack)
-            ->update($category);
+            $action_response = SliderModel::where('slack', $slack)
+            ->update($slider);
 
             DB::commit();
 
             return response()->json($this->generate_response(
                 array(
-                    "message" => "Category updated successfully", 
+                    "message" => "Slider updated successfully", 
                     "data"    => $slack
                 ), 'SUCCESS'
             ));
@@ -262,9 +256,9 @@ class Slider extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($slack)
     {
-        //
+        SliderModel::where('slack', $slack)->delete();
     }
 
     public function validate_request($request)

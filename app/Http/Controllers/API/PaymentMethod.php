@@ -69,7 +69,7 @@ class PaymentMethod extends Controller
 
                 $payment_method = $payment_method->toArray($request);
 
-                $item_array[$key][] = $payment_method['label'];
+                $item_array[$key][] = $payment_method['label_ar'];
                 $item_array[$key][] = view('common.status', ['status_data' => ['label' => $payment_method['status']['label'], "color" => $payment_method['status']['color']]])->render();
                 $item_array[$key][] = $payment_method['created_at_label'];
                 $item_array[$key][] = $payment_method['updated_at_label'];
@@ -132,7 +132,8 @@ class PaymentMethod extends Controller
             
             $payment_method = [
                 "slack" => $this->generate_slack("payment_methods"),
-                "label" => Str::title($request->payment_method_name),
+                "label_ar" => Str::title($request->payment_method_name_ar),
+                "label_en" => Str::title($request->payment_method_name_en),
                 "description" => $request->description,
                 "status" => $request->status,
                 "created_by" => $request->logged_user_id
@@ -211,7 +212,8 @@ class PaymentMethod extends Controller
             DB::beginTransaction();
             
             $payment_method = [
-                "label" => Str::title($request->payment_method_name),
+                "label_ar" => Str::title($request->payment_method_name_ar),
+                "label_en" => Str::title($request->payment_method_name_en),
                 "description" => $request->description,
                 "status" => $request->status,
                 "updated_by" => $request->logged_user_id

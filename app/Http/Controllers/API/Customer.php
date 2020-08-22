@@ -37,7 +37,7 @@ class Customer extends Controller
 
             $filter_string = $request->search['value'];
             $filter_columns = array_filter(data_get($request->columns, '*.name'));
-            
+           
             $query = CustomerModel::select('customers.*', 'master_status.label as status_label', 'master_status.color as status_color', 'user_created.fullname')
             ->take($limit)
             ->skip($offset)
@@ -61,7 +61,7 @@ class Customer extends Controller
             ->get();
 
             $customers = CustomerResource::collection($query);
-           
+          
             $total_count = CustomerModel::select('id')->skipDefaultCustomer()->get()->count();
 
             $item_array = [];

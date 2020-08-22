@@ -90,7 +90,7 @@ class Product extends Controller
                 $item_array[$key][] = view('common.status_indicators', ['status' => $product['supplier']['status']])->render().Str::limit($product['supplier']['name'], 50)." (".$product['supplier']['supplier_code'].")";
                 $item_array[$key][] = view('common.status_indicators', ['status' => $product['category']['status']])->render().Str::limit($product['category']['label_en'], 50)." (".$product['category']['category_code'].")";
                
-                $item_array[$key][] = ($product['discount_code']['status'] != null)?(view('common.status_indicators', ['status' => $product['discount_code']['status']])->render().Str::limit($product['discount_code']['label'], 50))." (".$product['discount_code']['discount_code'].")":'-';
+                $item_array[$key][] = ($product['discount_code_id'] != null)?(view('common.status_indicators', ['status' => $product['discount_code']['status']])->render().Str::limit($product['discount_code']['label'], 50))." (".$product['discount_code']['discount_code'].")":'-';
                 $item_array[$key][] = $product['quantity'];
                 $item_array[$key][] = $product['sale_amount_excluding_tax'];
                 $item_array[$key][] = view('common.status', ['status_data' => ['label' => $product['status']['label'], "color" => $product['status']['color']]])->render();

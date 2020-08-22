@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 
 use Illuminate\Support\Facades\Config;
-
+use App\Models\Customer as CustomerModel;
 use App\Http\Resources\ContactResource;
 use App\Models\Contact as ContactModel;
 
@@ -42,8 +42,7 @@ class Contact extends Controller
             ->take($limit)
             ->skip($offset)
            // ->statusJoin()
-         //   ->createdUser()
-
+          
             ->when($order_by_column, function ($query, $order_by_column) use ($order_direction) {
                 $query->orderBy($order_by_column, $order_direction);
             }, function ($query) {
@@ -68,9 +67,17 @@ class Contact extends Controller
             foreach($contact as $key => $contact){
                 
                 $contact = $contact->toArray($request);
-                
-                $item_array[$key][] = $contact['name'];
-                $item_array[$key][] = $contact['phone'];
+                if($contact['customer_id'])
+                {
+
+                    $contact1=CustomerModel::select('customers.*')->where('id',$contact['customer_id'])->first();
+                    $item_array[$key][] = $contact1['name'];
+                    $item_array[$key][] = $contact1['phone'];
+                }
+                 else {
+                    $item_array[$key][] = $contact['name'];
+                    $item_array[$key][] = $contact['phone'];
+                }
                 
                 $item_array[$key][] = view('contact.layouts.contact_actions', ['contact' => $contact])->render();
             }

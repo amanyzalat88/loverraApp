@@ -47,7 +47,11 @@ class Slider extends Controller
          
         return view('slider.add_slider', $data);
     }
-
+    public function destroy($slack)
+    {
+        SliderModel::where('slack', $slack)->delete();
+        return redirect('slider');
+    }
     //This is the function that loads the detail page
     public function detail($slack){
         $data['menu_key'] = 'MM_SLIDER';
