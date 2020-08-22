@@ -76,7 +76,7 @@ class Customer extends Controller
                 $item_array[$key][] = view('common.status', ['status_data' => ['label' => $customer['status']['label'], "color" => $customer['status']['color']]])->render();
                 $item_array[$key][] = $customer['created_at_label'];
                 $item_array[$key][] = $customer['updated_at_label'];
-                $item_array[$key][] = (isset($customer['created_by']) && $customer['created_by']['fullname'] != '')?$customer['created_by']['fullname']:'-';
+                $item_array[$key][] = $item_array[$key][] = (!empty($customer['fullname']))?$customer['fullname']:'-';
                 $item_array[$key][] = view('customer.layouts.customer_actions', array('customer' => $customer))->render();
             }
 

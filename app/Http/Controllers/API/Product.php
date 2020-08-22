@@ -346,9 +346,11 @@ class Product extends Controller
             DB::beginTransaction();
             
             $product = [
-                "name" => $request->product_name,
+                "name_ar" => $request->product_name_ar,
+				"name_en" => $request->product_name_en,
                 "product_code" => strtoupper($request->product_code),
-                "description" => $request->description,
+                "description_ar" => $request->description_ar,
+                "description_en" => $request->description_en,
                 "category_id" => $category_data->id,
                 "supplier_id" => $supplier_data->id,
                 "soldout" => $request->soldout,

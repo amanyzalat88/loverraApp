@@ -52,11 +52,11 @@
                     </div>
                     <div class="form-group col-md-3">
                         <label for="discount_type">Discount Type</label>
-                        <select name="discount_type"    v-model="discount_type"  class="form-control form-control-custom">
+                        <select name="discount_type"    v-model="discount_type"  v-validate="'required'"  class="form-control form-control-custom">
                             <option value="" disabled >Choose Discount Type..</option>
-                            <option value="1">منتج</option>
-                            <option value="2">قسم</option>
-                            <option value="3">اجمالى الفاتورة</option>
+                            <option value="1">Product</option>
+                            <option value="2">Category</option>
+                            <option value="3">Invoice</option>
                         </select>
                       
                         <span v-bind:class="{ 'error' : errors.has('discount_type') }">{{ errors.first('discount_type') }}</span> 

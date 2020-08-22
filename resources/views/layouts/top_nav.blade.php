@@ -38,11 +38,11 @@
                 <li class="nav-item text-right pl-md-4 pl-lg-4 pl-xl-4">
                     <a href="/search" class="nav-link text-bold"><i class="fas fa-search search-icon"></i> Search</a>
                 </li>
-                @if (check_access(array('A_ADD_ORDER'), true))
+               <!-- @if (check_access(array('A_ADD_ORDER'), true))
                 <li class="nav-item text-right pl-md-4 pl-lg-4 pl-xl-4">
                     <a href="/add_order" class="nav-link text-bold">+ New Order</a>
                 </li>
-                @endif
+                @endif-->
                 <li class="nav-item text-right pl-md-4 pl-lg-4 pl-xl-4">
                     <div class="dropdown">
                         <a href="#" class="nav-link dropdown-toggle text-bold" id="user_menu_dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

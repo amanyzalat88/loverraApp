@@ -8,11 +8,11 @@
             <div class="mr-auto">
                 <span class="text-title">Orders</span>
             </div>
-            <div class="">
+           <!-- <div class="">
                 @if (check_access(array('A_ADD_ORDER'), true))
                     <a href="{{ route('add_order')}}" role="button" class="btn btn-primary">New Order</a>
                 @endif
-            </div>
+            </div>-->
         </div>
 
         <div class="table-responsive">

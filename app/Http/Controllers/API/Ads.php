@@ -123,11 +123,11 @@ class Ads extends Controller
             $this->validate_request($request);
 
            
-            if ($request->hasFile('photo')) {
+            if ($request->file('photo')) {
                 $image = $request->file('photo');
-                $photo = time().'.'.$image->getClientOriginalExtension();
+                $name = time().'.'.$image->getClientOriginalExtension();
                 $destinationPath = public_path('/uploads/ads');
-                $image->move($destinationPath, $photo);
+                $image->move($destinationPath, $name);
             }
            
            
@@ -135,12 +135,12 @@ class Ads extends Controller
           
             $ads = [
                 "slack" => $this->generate_slack("ads"),
-                "photo" => 'uploads/ads/'.$photo,
+                "photo" => 'uploads/ads/'.$image,
                 "title_ar"=>$request->title_ar,
                 "title_en"=>$request->title_en,
                 "description_ar"=>$request->description_ar,
                 "description_en"=>$request->description_en,
-                "category_id"=>$request->category,
+                
                 "created_by" => $request->logged_user_id
             ];
             
@@ -224,12 +224,12 @@ class Ads extends Controller
 
             $ads = [
                 "slack" => $this->generate_slack("ads"),
-                "photo" => 'uploads/ads/'.$photo,
+                "photo" => 'uploads/ads/'.$image,
                 "title_ar"=>$request->title_ar,
                 "title_en"=>$request->title_en,
                 "description_ar"=>$request->description_ar,
                 "description_en"=>$request->description_en,
-                "category_id"=>$request->category,
+                
                 "created_by" => $request->logged_user_id
             ];
 
@@ -273,7 +273,7 @@ class Ads extends Controller
             'title_en' => $this->get_validation_rules("name_title_en", true),
             'description_ar' => $this->get_validation_rules("name_description_ar", true),
             'description_en' => $this->get_validation_rules("name_description_en", true),
-            'category'=>$this->get_validation_rules("name_category", true),
+            
         ]);
         $validation_status = $validator->fails();
         if($validation_status){

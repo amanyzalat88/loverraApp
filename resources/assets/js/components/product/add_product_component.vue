@@ -89,14 +89,14 @@
                 </div>
                 <div class="form-row mb-2">
                     <div class="form-group col-md-3">
-                        <label for="purchase_price">Purchase Price Excluding Tax</label>
+                        <label for="purchase_price">Purchase Price  </label>
                         <input type="number" name='purchase_price' v-model="purchase_price" v-validate="'required|decimal'" class="form-control form-control-custom" placeholder="Please enter purchase price excluding tax"  autocomplete="off" step="0.01" min="0">
                         <span v-bind:class="{ 'error' : errors.has('purchase_price') }">{{ errors.first('purchase_price') }}</span> 
                     </div>
                     <div class="form-group col-md-3">
-                        <label for="sale_price">Sale Price Excluding Tax</label>
-                        <input type="number" name='sale_price' v-model="sale_price" v-validate="'required|decimal'" class="form-control form-control-custom" placeholder="Please enter sale price excluding tax"  autocomplete="off" step="0.01" min="0">
-                        <span v-bind:class="{ 'error' : errors.has('sale_price') }">{{ errors.first('sale_price') }}</span> 
+                        <label for="sale_price">Sale Price </label>
+                        <input type="number" name='sale_price' v-model="sale_price" v-validate="'decimal'" class="form-control form-control-custom" placeholder="Please enter sale price excluding tax"  autocomplete="off" step="0.01" min="0">
+                       
                     </div>
                     <div class="form-group col-md-3">
                         <label for="status">Quantity</label>
@@ -107,7 +107,7 @@
                 <div class="form-row mb-2">
                     <div class="form-group col-md-3">
                         <label for="tax_code">Tax Code</label>
-                        <select name="tax_code" v-model="tax_code" v-validate="'required'" class="form-control form-control-custom custom-select">
+                        <select name="tax_code" v-model="tax_code"  class="form-control form-control-custom custom-select">
                             <option value="">Choose Tax Code..</option>
                             <option v-for="(taxcode, index) in taxcodes" v-bind:value="taxcode.slack" v-bind:key="index">
                                 {{ taxcode.label }}
