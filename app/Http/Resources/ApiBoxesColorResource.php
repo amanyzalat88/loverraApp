@@ -36,7 +36,9 @@ class ApiBoxesColorResource extends Resource
             if($customer=Customer::where('api_token',$token)->first())
             {
             
-           $country= Country::find($customer->country);
+                $countryCust=$customer->country?$customer->country:'115';
+            
+                $country= Country::find($countryCust);
             if($country)
                     {
                             $currency= $lang=='ar'?$country->currency_symbol:$country->currency_code;

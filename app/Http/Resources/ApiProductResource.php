@@ -44,7 +44,9 @@ class ApiProductResource extends Resource
            {
               $is_favorite="1";
            }
-           $country= Country::find($customer->country);
+           $countryCust=$customer->country?$customer->country:'115';
+            
+           $country= Country::find($countryCust);
             if($country)
                     {
                             $currency= $lang=='ar'?$country->currency_symbol:$country->currency_code;

@@ -32,8 +32,9 @@ class ApiCartResource extends Resource
         {
             if($customer=Customer::where('api_token',$token)->first())
             {
+            $countryCust=$customer->country?$customer->country:'115';
             
-           $country= Country::find($customer->country);
+           $country= Country::find($countryCust);
             if($country)
                     {
                             $currency= $lang=='ar'?$country->currency_symbol:$country->currency_code;
@@ -42,6 +43,7 @@ class ApiCartResource extends Resource
                             $sale = number_format($country->currency_rate_to_dinar * $product->sale_amount_excluding_tax,2) ;
                         
                         }
+
             }
         }else{
             $country= Country::find($Hcountry);

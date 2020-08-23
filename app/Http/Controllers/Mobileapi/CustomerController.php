@@ -25,10 +25,11 @@ class CustomerController extends Controller
     {
             $itemObj=null;
 		    $mess=null;
-            $validator = Validator::make($request->all(), [
+           /* $validator = Validator::make($request->all(), [
               'name' => ['string', 'max:255'],
               'phone' => 'numeric',
               'email' => 'email',
+              'country' => 'string',
 			 
              //'image' => 'image|Mimes:jpeg,jpg,png',
              ]);
@@ -41,7 +42,7 @@ class CustomerController extends Controller
             }
             // $ErrorMess= json_encode($mess);
             return response()->json(['status'=>false,'msg' => $mess,'data'=>$itemObj], 503);
-        }
+        }*/
         
         if($request->input('email'))
         {
@@ -60,13 +61,17 @@ class CustomerController extends Controller
 
         if ($item) {
             //$item->id = $request->user()->id;
+            if($request->input('name'))
             $item->name = $request->input('name');
+            if($request->input('phone'))
             $item->phone = $request->input('phone');
+            if($request->input('country'))
             $item->country = $request->input('country');
         //If the password is not given in the request, do not change it then.
             if ($request->input('password')) {
                 $item->password =Hash::make($request->password);
             }
+            if($request->input('email'))
             $item->email = $request->input('email');
             }
             if ($item->save()) {
@@ -90,7 +95,7 @@ class CustomerController extends Controller
              'phone' => 'numeric',
              'password' => 'required',
              'email' => 'email|unique:customers|required',
-             //'image' => 'image|Mimes:jpeg,jpg,png',
+             'country' => 'required',
              ]);
         if ($validator->fails()) {
            
