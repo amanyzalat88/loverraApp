@@ -56,6 +56,9 @@ Route::group(['namespace' => 'Mobileapi'], function () {
 
 	//soldout
 	Route::POST('/soldout', 'SoldoutController@store');
+
+	//country
+	Route::GET('/country', 'CountryController@index');
 });
 
 Route::group(['middleware' => 'auth:customerapi', 'namespace' => 'Mobileapi'], function () {

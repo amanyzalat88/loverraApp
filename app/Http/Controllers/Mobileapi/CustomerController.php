@@ -26,9 +26,9 @@ class CustomerController extends Controller
             $itemObj=null;
 		    $mess=null;
             $validator = Validator::make($request->all(), [
-             'name' => ['string', 'max:255'],
+              'name' => ['string', 'max:255'],
               'phone' => 'numeric',
-             'email' => 'email',
+              'email' => 'email',
 			 
              //'image' => 'image|Mimes:jpeg,jpg,png',
              ]);
@@ -62,6 +62,7 @@ class CustomerController extends Controller
             //$item->id = $request->user()->id;
             $item->name = $request->input('name');
             $item->phone = $request->input('phone');
+            $item->country = $request->input('country');
         //If the password is not given in the request, do not change it then.
             if ($request->input('password')) {
                 $item->password =Hash::make($request->password);
@@ -108,7 +109,8 @@ class CustomerController extends Controller
             $item->slack=$this->generate_slack("customers");
             $item->api_token= Str::random(60);
              $item->customer_type="Mobile-Api";
-		     $item->gender = $request->input('gender');
+             $item->gender = $request->input('gender');
+             $item->country = $request->input('country');
              // $item->uuid = $request->input('uuid');
             $item->email = $request->input('email');
             if ($item->save()) {

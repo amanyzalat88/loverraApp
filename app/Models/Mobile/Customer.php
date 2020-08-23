@@ -10,7 +10,7 @@ class Customer extends Authenticatable  {
      
     protected $table = 'customers';
     protected $hidden = ['customer_type','id','address', 'status','created_at','updated_at','slack','created_by','updated_by'];
-    protected $fillable = ['name', 'email','password','phone','gender','api_token'];
+    protected $fillable = ['name', 'email','password','phone','gender','api_token','country'];
 
    public function getAuthIdentifier() {
 		return $this->getKey();

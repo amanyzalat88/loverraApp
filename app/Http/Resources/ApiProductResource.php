@@ -5,6 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Resources\Json\Resource;
 use App\Models\Mobile\Customer;
 use App\Models\Mobile\Favorite;
+use App\Models\Mobile\Country;
 class ApiProductResource extends Resource
 {
     /**
@@ -23,19 +24,49 @@ class ApiProductResource extends Resource
     {
         
         $lang=  $request->header('lang');
+        $Hcountry=  $request->header('country');
         if(!$lang)
         $lang='ar';
+        if(!$Hcountry)
+        $Hcountry=115;
         $name= $lang=='ar'? $this->name_ar: $this->name_en;
 
         $description=$lang=='ar'? $this->description_ar: $this->description_en;
         $is_favorite="0";
+        
+    
         $token = $request->bearerToken();
 		if($token)
         {
-            $customer_id=Customer::where('api_token',$token)->first()->id;
-           if(Favorite::where('customer_id', $customer_id)->where('product_id',$this->id)->count()>0)
+            if($customer=Customer::where('api_token',$token)->first())
+            {
+           if(Favorite::where('customer_id', $customer->id)->where('product_id',$this->id)->count()>0)
+           {
               $is_favorite="1";
+           }
+           $country= Country::find($customer->country);
+            if($country)
+                    {
+                            $currency= $lang=='ar'?$country->currency_symbol:$country->currency_code;
+                            $country1=$lang=='ar'?$country->name_ar:$country->name;
+                            $price= number_format($country->currency_rate_to_dinar * $this->purchase_amount_excluding_tax,2);
+                            $sale = number_format($country->currency_rate_to_dinar * $this->sale_amount_excluding_tax,2) ;
+                        
+                        }
+            }
+        }else{
+            $country= Country::find($Hcountry);
+            if($country)
+                    {
+                            $currency= $lang=='ar'?$country->currency_symbol:$country->currency_code;
+                            $country1=$lang=='ar'?$country->name_ar:$country->name;
+                            $price= number_format($country->currency_rate_to_dinar * $this->purchase_amount_excluding_tax,2);
+                            $sale = number_format($country->currency_rate_to_dinar * $this->sale_amount_excluding_tax,2) ;
+                        
+                        }
+
         }
+        
         
         return [
 			'id'=>$this->id,
@@ -43,8 +74,10 @@ class ApiProductResource extends Resource
             'name' => $name,
             'description' => $this->Nullable($description),
             'quantity' => (int)$this->quantity,
-            'price' => (double)$this->purchase_amount_excluding_tax,
-            'sale' => (double)$this->sale_amount_excluding_tax,
+            'currency'=>$currency,
+            'country'=>$country1,
+            'price' => (double)$price,
+            'sale' => (double)$sale,
             'category' =>$this->Category($this->category_id,$lang),
             'supplier' => $this->supplier($this->supplier_id),
             'photo'=>$this->NullablePhoto($this->photo),
