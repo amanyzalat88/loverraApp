@@ -25,7 +25,7 @@ class CartController extends Controller
         
 
             $total['count'] =Cart::where('customer_id',$request->user()->id)->count();  
-            $total['count']+= BoxesOrder::where('customer_id',$request->user()->id)->count();
+            $total['count']+= BoxesOrder::where('customer_id',$request->user()->id)->where('order_customer_id',0)->count();
             if($total['count']>0){
            return response()->json(['status'=>true,'msg' => $message,'data'=>$total], $this->successStatus);
        } else {
@@ -41,6 +41,8 @@ class CartController extends Controller
          $data=null;
          $message='';
          $prod= Product::find($request->product_id);
+         if($prod)
+         {
         if($prod->quantity<$request->quantity)
         {
            $lang=  $request->header('lang');
@@ -75,7 +77,7 @@ class CartController extends Controller
             }
            else {
                 if($request->quantity>=1)
-                    $quantity = $request->quantity;
+                    $quantity =$request->quantity;
                 if(!$request->quantity)
                     $quantity= $items->quantity+1;
                 DB::table('carts')
@@ -90,13 +92,18 @@ class CartController extends Controller
         if ($rows>0) {
 
             $total['count'] =Cart::where('customer_id',$request->user()->id)->count();  
-            $total['count']+= BoxesOrder::where('customer_id',$request->user()->id)->count();
+            $total['count']+= BoxesOrder::where('customer_id',$request->user()->id)->where('order_customer_id',0)->count();
            return response()->json(['status'=>true,'msg' => $message,'data'=>$total], $this->successStatus);
        } else {
            $message = "Not cart empty  ";
            
            return response()->json(['status'=>false,'msg' => $message,'data'=>$data], $this->successStatus);
        }
+    }
+    }else{
+        $message = "Not Product not found  ";
+           
+        return response()->json(['status'=>false,'msg' => $message,'data'=>$data], $this->successStatus);
     }
     }
     public function reorder(Request $request)
@@ -167,14 +174,51 @@ class CartController extends Controller
     {
          $data=null;
          $message='';
+         $total=0;
+         $totals=0;
          $item =Cart::where('customer_id',$request->user()->id)->get();  
-         $gifts =BoxesOrder::where('customer_id',$request->user()->id)->get(); 
-        if ($item->count()>0) {
-            $result["products"]=ApiCartResource::collection($item);
-            $result["gifts"]=ApiBoxesOrderResource::collection($gifts);
-                          
-           return response()->json(['status'=>true,'msg' => $message,'data'=>$result], $this->successStatus);
-       } else {
+         $gifts =BoxesOrder::where('customer_id',$request->user()->id)->where('order_customer_id',0)->get(); 
+        
+         $j=0;
+        if ($item->count()>0 ) {
+            $j=1;
+            $products=ApiCartResource::collection($item);
+            $Finalproducts=json_decode((json_encode($products)));
+            foreach($Finalproducts as $i)
+            {
+                if($i->sale)
+                $total+=$i->quantity*$i->sale;
+                else
+                $total+=$i->quantity*$i->price;
+            }
+
+           
+          
+            $result["products"]=$products;
+            
+         
+       }
+       if ($gifts->count()>0 ) {
+        $j=2;
+        
+        $ggifts=ApiBoxesOrderResource::collection($gifts);
+        $Finalgifts=json_decode((json_encode($ggifts)));
+        
+        foreach($Finalgifts as $g)
+        {
+           
+             $totals+=(double)$g->price;
+        }
+      
+        $result["gifts"]=$ggifts;
+                      
+      
+   }if($j>0)
+   {
+    $result["total"]=$total+$totals;
+    return response()->json(['status'=>true,'msg' => $message,'data'=>$result], $this->successStatus);
+   }
+       else {
            $message = "cart empty ";
            
            return response()->json(['status'=>false,'msg' => $message,'data'=>$data], $this->successStatus);

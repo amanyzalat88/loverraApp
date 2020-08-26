@@ -3,7 +3,7 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\Resource;
-
+use App\Models\Mobile\Country;
 class ApiOrderProductResource extends Resource
 {
     /**
@@ -25,28 +25,54 @@ class ApiOrderProductResource extends Resource
         $lang='ar';
         $name= $lang=='ar'? $this->name_ar: $this->name_en;
         $description=$lang=='ar'? $this->description_ar: $this->description_en;
+        $Hcountry=  $request->header('country');
+        if(!$Hcountry)
+        $Hcountry=115;
+        $token = $request->bearerToken();
+		if($token)
+        {
+            if($customer=Customer::where('api_token',$token)->first())
+            {
+            
+                $countryCust=$customer->country?$customer->country:'115';
+            
+                $country= Country::find($countryCust);
+            if($country)
+                    {
+                            $currency= $lang=='ar'?$country->currency_symbol:$country->currency_code;
+                            $country1=$lang=='ar'?$country->name_ar:$country->name;
+                            $price= number_format($country->currency_rate_to_dinar * $this->purchase_amount_excluding_tax,2);
+                            $sale = number_format($country->currency_rate_to_dinar * $this->sale_amount_excluding_tax,2) ;
+                            $total= number_format($country->currency_rate_to_dinar *  $this->total_after_discount,2) ;
+                        }
+            }
+        }else{
+            $country= Country::find($Hcountry);
+            if($country)
+                    {
+                            $currency= $lang=='ar'?$country->currency_symbol:$country->currency_code;
+                            $country1=$lang=='ar'?$country->name_ar:$country->name;
+                            $price= number_format($country->currency_rate_to_dinar * $this->purchase_amount_excluding_tax,2);
+                            $sale = number_format($country->currency_rate_to_dinar * $this->sale_amount_excluding_tax,2) ;
+                            $total= number_format($country->currency_rate_to_dinar *  $this->total_after_discount,2) ;
+                        }
 
+        }
         return [
             'id'=>$this->id,
             'product_code' => $this->product_code,
             'name' => $name,
             'quantity' => (int)$this->quantity,
-            'price' => (double)$this->purchase_amount_excluding_tax,
-            'sale' => (double)$this->sale_amount_excluding_tax,
+            'price' => (double)$price,
+            'sale' => (double)$sale,
             'photo'=>$this->NullablePhoto($this->photo),
-            'purchase_amount_excluding_tax' => $this->purchase_amount_excluding_tax,
-            'price' =>(double) $this->sale_amount_excluding_tax,
+            'currency'=>$currency,
+            'country'=>$country1,            
             'discount_code' => $this->discount_code,
             'discount_percentage' => $this->discount_percentage,
-            'tax_code' => $this->tax_code,
-            'tax_percentage' => $this->tax_percentage,
-            'sub_total_purchase_price_excluding_tax' => (double)$this->sub_total_purchase_price_excluding_tax,
-            'sub_total' =>(double) $this->sub_total_sale_price_excluding_tax,
             'discount_amount' => (double)$this->discount_amount,
-            'total_after_discount' =>(double) $this->total_after_discount,
-            'tax_amount' =>(double) $this->tax_amount,
-            
-
+            'total' =>(double) $total,
+           
         ];
     }
 }

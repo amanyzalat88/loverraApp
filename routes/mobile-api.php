@@ -71,7 +71,8 @@ Route::group(['middleware' => 'auth:customerapi', 'namespace' => 'Mobileapi'], f
 	//order
 	    Route::POST('/order', 'OrderController@index');
 		Route::POST('/order/detail', 'OrderController@show');
-
+		Route::POST('/order/add', 'OrderController@add');
+		Route::POST('/order/invoice', 'OrderController@details');
 	//favorite
 		Route::GET('/favorite', 'FavoriteController@index');
 		Route::POST('/favorite', 'FavoriteController@store');
@@ -94,6 +95,9 @@ Route::group(['middleware' => 'auth:customerapi', 'namespace' => 'Mobileapi'], f
 
 	 //gifts
 	 Route::POST('/gifts', 'BoxesController@create');
+
+	 
+	 
 	 
 });
 

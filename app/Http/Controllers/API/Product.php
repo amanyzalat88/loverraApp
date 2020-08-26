@@ -405,11 +405,11 @@ class Product extends Controller
             'product_name_ar' => $this->get_validation_rules("name_label_ar", true),
             'product_code' => $this->get_validation_rules("codes", true),
             'purchase_price' => $this->get_validation_rules("numeric", true),
-            'sale_price' => $this->get_validation_rules("numeric", true),
+           // 'sale_price' => $this->get_validation_rules("numeric", true),
             'quantity' => $this->get_validation_rules("numeric", true),
             'supplier' => $this->get_validation_rules("slack", true),
             'category' => $this->get_validation_rules("slack", true),
-            'tax_code' => $this->get_validation_rules("slack", true),
+           // 'tax_code' => $this->get_validation_rules("slack", true),
             'description' => $this->get_validation_rules("text", false),
             'status' => $this->get_validation_rules("status", true),
         ]);
