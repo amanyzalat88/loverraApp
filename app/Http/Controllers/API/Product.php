@@ -195,7 +195,10 @@ class Product extends Controller
             }
             
             DB::beginTransaction();
-            
+			$sale=0.00;
+            if($request->sale_price)
+				$sale=$request->sale_price;
+				
             $product = [
                 "slack" => $this->generate_slack("products"),
                 "store_id" => $request->logged_user_store_id,
@@ -212,7 +215,7 @@ class Product extends Controller
                 "quantity" => $request->quantity,
                 "photo"=> "uploads/product/".$name,
                 "purchase_amount_excluding_tax" => $request->purchase_price,
-                "sale_amount_excluding_tax" => $request->sale_price,
+                "sale_amount_excluding_tax" => $sale,
                 "status" => $request->status,
                 "created_by" => $request->logged_user_id
             ];
@@ -344,7 +347,9 @@ class Product extends Controller
                 $image->move($destinationPath, $name);
             }
             DB::beginTransaction();
-            
+            $sale=0.00;
+            if($request->sale_price)
+				$sale=$request->sale_price;
             $product = [
                 "name_ar" => $request->product_name_ar,
 				"name_en" => $request->product_name_en,
@@ -359,7 +364,7 @@ class Product extends Controller
                 "quantity" => $request->quantity,
                 "photo"=> "uploads/product/".$name,
                 "purchase_amount_excluding_tax" => $request->purchase_price,
-                "sale_amount_excluding_tax" => $request->sale_price,
+                "sale_amount_excluding_tax" => $sale,
                 "status" => $request->status,
                 "updated_by" => $request->logged_user_id
             ];

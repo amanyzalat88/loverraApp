@@ -11,7 +11,7 @@ class OrderProduct extends Model
     protected $hidden = ['id', 'order_id','slack', 'product_slack', 'status','created_at_label','status', 'created_by', 'updated_by', 'created_at', 'updated_at'];
     protected $fillable = ['product_code', 'name', 'quantity', 'purchase_amount_excluding_tax', 'sale_amount_excluding_tax', 'sub_total_purchase_price_excluding_tax', 'sub_total_sale_price_excluding_tax', 'tax_code_id', 'tax_code', 'tax_percentage', 'tax_amount',   'discount_code_id', 'discount_code', 'discount_percentage', 'discount_amount', 'total_after_discount', 'total_amount'];
 
-    public function scopeProduct($query){
+    public function  Product($query){
         return $query->leftJoin('products', function ($join) {
             $join->on('products.id', '=', 'order_products.product_id');
         });
@@ -19,7 +19,15 @@ class OrderProduct extends Model
 
     public function  Category($category_id,$lang){
         $label= $lang=='ar'? "label_ar": "label_en";
-         return  Category::find($category_id)->$label;
+           if($cat=Category::find($category_id))
+         return  $cat->$label;
+    }
+	 public function products($id){
+        $products=OrderProduct::select('products.*')
+        ->join('products', 'products.id', '=', 'order_products.product_id')->where('order_products.order_id',$id)->get();
+        return    ApiProductResource::Collection($products); 
+
+       // return $this->hasMany('App\Models\Mobile\Product', 'product_id', 'id');
     }
     public function scopeActive($query){
         return $query->where('order_products.status', 1);

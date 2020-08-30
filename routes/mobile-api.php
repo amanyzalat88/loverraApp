@@ -73,6 +73,13 @@ Route::group(['middleware' => 'auth:customerapi', 'namespace' => 'Mobileapi'], f
 		Route::POST('/order/detail', 'OrderController@show');
 		Route::POST('/order/add', 'OrderController@add');
 		Route::POST('/order/invoice', 'OrderController@details');
+
+
+	//discount
+		Route::POST('/discount', 'DiscountCodeController@check');
+		Route::POST('/discount/remove', 'DiscountCodeController@removeCode');
+
+
 	//favorite
 		Route::GET('/favorite', 'FavoriteController@index');
 		Route::POST('/favorite', 'FavoriteController@store');

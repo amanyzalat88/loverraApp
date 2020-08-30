@@ -12,9 +12,10 @@ use App\Models\Mobile\Product;
 use App\Http\Resources\ApiOrderResource;
 use App\Http\Resources\ApiCartResource;
 use App\Http\Resources\ApiBoxesOrderResource;
+use App\Models\Mobile\Discountcode as DiscountcodeModel;
 use Illuminate\Support\Str;
 use Validator;
-use App\Models\Mobile\store;
+use App\Models\Mobile\Store;
 use DB;
 use Illuminate\Support\Facades\Auth;
 class OrderController extends Controller
@@ -82,6 +83,7 @@ class OrderController extends Controller
         $message='';
         $total=0;
         $totals=0;
+        $tot_discount=0;
         $item =Cart::where('customer_id',$request->user()->id)->get();  
         $gifts =BoxesOrder::where('customer_id',$request->user()->id)->where('order_customer_id',0)->get(); 
        
@@ -92,10 +94,19 @@ class OrderController extends Controller
            $Finalproducts=json_decode((json_encode($products)));
            foreach($Finalproducts as $i)
            {
+               if($i->discount!='0.00'){
+                $total+=$i->quantity*$i->discount; 
+                if($i->sale)
+                $tot_discount+=number_format($i->sale-$i->discount,2);
+                else
+                $tot_discount+=number_format($i->price-$i->discount,2);
+               }
+                else{
                if($i->sale)
                $total+=$i->quantity*$i->sale;
                else
                $total+=$i->quantity*$i->price;
+                }
            }
 
           
@@ -121,15 +132,41 @@ class OrderController extends Controller
      
   }if($j>0)
   {
-      $tot=$total+$totals;
-      $shipping=store::select('shipping','free_shipping')->first();
+    $tot=$total+$totals;
+    $dicount_id= 0;
+    $discount_discount_code=0;
+    $discount_discount_percentage=0;
+      if($request->discount_id)
+      {
+        $discount= DiscountcodeModel::where('id',$request->discount_id)->where('status',1)->first();
+      
+        if($discount->discount_type==3)
+        {
+            $totInvoce= $tot-($tot*$discount->discount_percentage);
+            $tot_discount=number_format($tot-$totInvoce,2);
+            $tot=$totInvoce;
+        }
+       $dicount_id= $discount->id;
+       $discount_discount_code=$discount->discount_code;
+       $discount_discount_percentage=$discount->discount_percentage;
+    }
+     
+      $shipping=Store::select('shipping','free_shipping')->first();
       if($tot>$shipping->free_shipping)
       $shipping=0;
       else
       $shipping=$shipping->shipping;
-   $result["total"]=$tot;
-   $result["shipping"]=$shipping;
-   $result["all"]=$tot+$shipping;
+
+      $result["total"]=$tot+$tot_discount;
+      $result["total_after_discount"]=$tot;
+      $result["total_discount"]=$tot_discount;
+      $result["shipping"]=$shipping;
+      $result["all"]=$tot+$shipping;
+      $result['discount_id']=$dicount_id;  
+      $result['discount_code']=$discount_discount_code;
+      $result['discount_percentage']=$discount_discount_percentage;
+
+
    return response()->json(['status'=>true,'msg' => $message,'data'=>$result], $this->successStatus);
   }
       else {
@@ -169,6 +206,7 @@ class OrderController extends Controller
             $item->store_level_discount_code_id= $request->discount_id;
             $item->payment_method_id=$request->payment_id;
             $item->total_order_amount=$request->total;
+            $item->country_id= $request->header('country');
             if ($item->save()) {
                 $itemObj = $item;
                  foreach($products as $product)

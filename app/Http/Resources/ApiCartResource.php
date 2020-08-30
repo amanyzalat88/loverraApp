@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\Resource;
 use App\Models\Mobile\Country;
+use App\Models\Mobile\Customer;
 class ApiCartResource extends Resource
 {
     /**
@@ -41,7 +42,7 @@ class ApiCartResource extends Resource
                             $country1=$lang=='ar'?$country->name_ar:$country->name;
                             $price= number_format($country->currency_rate_to_dinar * $product->purchase_amount_excluding_tax,2);
                             $sale = number_format($country->currency_rate_to_dinar * $product->sale_amount_excluding_tax,2) ;
-                        
+                            $discount=number_format($country->currency_rate_to_dinar * $this->discount,2) ;
                         }
 
             }
@@ -53,7 +54,7 @@ class ApiCartResource extends Resource
                             $country1=$lang=='ar'?$country->name_ar:$country->name;
                             $price= number_format($country->currency_rate_to_dinar * $product->purchase_amount_excluding_tax,2);
                             $sale = number_format($country->currency_rate_to_dinar * $product->sale_amount_excluding_tax,2) ;
-                        
+                            $discount=number_format($country->currency_rate_to_dinar * $this->discount,2) ;
                         }
 
         }
@@ -62,6 +63,7 @@ class ApiCartResource extends Resource
             'name'=>$product->$name,
             'price'=>(double)$price,
             'sale'=>(double)$sale,
+            'discount'=>(double)$discount,
             'country'=>$country1,
             'currency'=>$currency,
             'photo'=>$this->NullablePhoto($product->photo),

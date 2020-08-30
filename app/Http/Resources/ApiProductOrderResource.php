@@ -3,9 +3,10 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\Resource;
-use App\Models\Mobile\Country;
 use App\Models\Mobile\Customer;
-class ApiOrderProductResource extends Resource
+use App\Models\Mobile\Favorite;
+use App\Models\Mobile\Country;
+class ApiProductOrderResource extends Resource
 {
     /**
      * Transform the resource into an array.
@@ -13,7 +14,7 @@ class ApiOrderProductResource extends Resource
      * @param  \Illuminate\Http\Request  $request
      * @return array
      */
-    public function Nullable($value){
+	public function Nullable($value){
         return $value  == NULL ? "" : $value;
     }
     public function NullablePhoto($value){
@@ -21,30 +22,38 @@ class ApiOrderProductResource extends Resource
     }
     public function toArray($request)
     {
+        
         $lang=  $request->header('lang');
+        $Hcountry=  $request->header('country');
         if(!$lang)
         $lang='ar';
-        $name= $lang=='ar'? $this->name_ar: $this->name_en;
-        $description=$lang=='ar'? $this->description_ar: $this->description_en;
-        $Hcountry=  $request->header('country');
         if(!$Hcountry)
         $Hcountry=115;
+        $name= $lang=='ar'? $this->name_ar: $this->name_en;
+
+        $description=$lang=='ar'? $this->description_ar: $this->description_en;
+        $is_favorite="0";
+        
+    
         $token = $request->bearerToken();
 		if($token)
         {
             if($customer=Customer::where('api_token',$token)->first())
             {
+           if(Favorite::where('customer_id', $customer->id)->where('product_id',$this->id)->count()>0)
+           {
+              $is_favorite="1";
+           }
+           $countryCust=$customer->country?$customer->country:'115';
             
-                $countryCust=$customer->country?$customer->country:'115';
-            
-                $country= Country::find($countryCust);
+           $country= Country::find($countryCust);
             if($country)
                     {
                             $currency= $lang=='ar'?$country->currency_symbol:$country->currency_code;
                             $country1=$lang=='ar'?$country->name_ar:$country->name;
                             $price= number_format($country->currency_rate_to_dinar * $this->purchase_amount_excluding_tax,2);
                             $sale = number_format($country->currency_rate_to_dinar * $this->sale_amount_excluding_tax,2) ;
-                            $total= number_format($country->currency_rate_to_dinar *  $this->total_after_discount,2) ;
+                        
                         }
             }
         }else{
@@ -55,25 +64,27 @@ class ApiOrderProductResource extends Resource
                             $country1=$lang=='ar'?$country->name_ar:$country->name;
                             $price= number_format($country->currency_rate_to_dinar * $this->purchase_amount_excluding_tax,2);
                             $sale = number_format($country->currency_rate_to_dinar * $this->sale_amount_excluding_tax,2) ;
-                            $total= number_format($country->currency_rate_to_dinar *  $this->total_after_discount,2) ;
+                        
                         }
 
         }
+        
+        
         return [
-           // 'id'=>$this->id,
+			'id'=>$this->id,
             'product_code' => $this->product_code,
             'name' => $name,
+           // 'description' => $this->Nullable($description),
             'quantity' => (int)$this->quantity,
+            'currency'=>$currency,
+            'country'=>$country1,
             'price' => (double)$price,
             'sale' => (double)$sale,
             'photo'=>$this->NullablePhoto($this->photo),
-            'currency'=>$currency,
-            'country'=>$country1,            
-            'discount_code' => $this->discount_code,
-            'discount_percentage' => $this->discount_percentage,
-            'discount_amount' => (double)$this->discount_amount,
-            'total' =>(double) $total,
-           
+			'soldout'=>$this->soldout,
+            'available'=>$this->available,
+            'is_favorite'=>$is_favorite,
+			
         ];
     }
 }

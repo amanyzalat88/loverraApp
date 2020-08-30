@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\Resource;
 use App\Models\Mobile\Country;
+use App\Models\Mobile\Customer;
 class ApiOrderResource extends Resource
 {
     /**
@@ -68,8 +69,8 @@ class ApiOrderResource extends Resource
                 'status' =>$this->Status($this->order_status_id,$lang),
                 'total_order_amount' => $price,
                 'currency'=>$currency,
-                 'country'=>$country1,
-                'products' => ApiOrderProductResource::collection($this->products)   
+                'country'=>$country1,
+                'products' => $this->products($this->id) //ApiOrderProductResource::collection($this->products)   
             ];  
         //}
     }

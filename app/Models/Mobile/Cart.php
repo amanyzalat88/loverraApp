@@ -11,7 +11,7 @@ class Cart extends Model
 {
     protected $table = 'carts';
     protected $hidden =  [];
-    protected $fillable = ['id', 'product_id', 'customer_id','quantity'];
+    protected $fillable = ['id', 'product_id', 'customer_id','quantity','discount'];
     public function product($value)
    {
        return Product::find($value);

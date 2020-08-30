@@ -4,7 +4,7 @@ namespace App\Models\Mobile;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
- 
+use App\Http\Resources\ApiProductOrderResource;
 
 class Order extends Model {
      
@@ -14,11 +14,14 @@ class Order extends Model {
    
     public function  Status($order_status_id,$lang){
         $name= $lang=='ar'? "name_ar": "name_en";
-         return  OrderStatus::find($order_status_id)->$name;
+		if($orderstatus=OrderStatus::find($order_status_id))
+         return  $orderstatus->$name;
     }
     
-    public function products(){
-        return $this->hasMany('App\Models\Mobile\OrderProduct', 'order_id', 'id');
+    public function products($id){
+        $products=OrderProduct::select('products.*')
+        ->join('products', 'products.id', '=', 'order_products.product_id')->where('order_products.order_id',$id)->get();
+        return    ApiProductOrderResource::Collection($products); 
     }
     
    
