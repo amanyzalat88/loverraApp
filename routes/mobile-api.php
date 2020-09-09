@@ -13,6 +13,14 @@ use Illuminate\Http\Request;
 |
 */
 Route::group(['namespace' => 'Mobileapi'], function () {
+
+	//carts guest
+		Route::POST('/gcarts', 'CartGuestController@index');
+		Route::POST('/gshowcart', 'CartGuestController@show');
+		Route::DELETE('/gcarts', 'CartGuestController@delete');
+		Route::POST('/gcarts/count', 'CartGuestController@count');
+
+
 	// Users 
 		Route::POST('/login', 'CustomerController@login');
 		Route::POST('/register', 'CustomerController@create');
@@ -32,6 +40,7 @@ Route::group(['namespace' => 'Mobileapi'], function () {
 	    Route::GET('/latest', 'ProductController@latest');
 	    Route::GET('/offers', 'ProductController@offers');
 		Route::GET('/soldout', 'ProductController@soldout');
+	    Route::GET('/bestsale', 'ProductController@best_sales');
 		
 	// Slider
 	    Route::GET('/slider', 'SliderController@index');
@@ -49,16 +58,16 @@ Route::group(['namespace' => 'Mobileapi'], function () {
 		Route::GET('/setting', 'SettingController@index');
 		
 	//Gifts 
-	Route::GET('/boxes', 'BoxesController@boxes');
-	Route::GET('/color', 'BoxesController@color');
-	Route::GET('/cards', 'BoxesController@cards');
-	Route::DELETE('/gifts/delete', 'BoxesController@delete');
+		Route::GET('/boxes', 'BoxesController@boxes');
+		Route::GET('/color', 'BoxesController@color');
+		Route::GET('/cards', 'BoxesController@cards');
+		Route::DELETE('/gifts/delete', 'BoxesController@delete');
 
 	//soldout
-	Route::POST('/soldout', 'SoldoutController@store');
+	   Route::POST('/soldout', 'SoldoutController@store');
 
 	//country
-	Route::GET('/country', 'CountryController@index');
+	   Route::GET('/country', 'CountryController@index');
 });
 
 Route::group(['middleware' => 'auth:customerapi', 'namespace' => 'Mobileapi'], function () {
@@ -103,7 +112,10 @@ Route::group(['middleware' => 'auth:customerapi', 'namespace' => 'Mobileapi'], f
 	 //gifts
 	 Route::POST('/gifts', 'BoxesController@create');
 
-	 
+	 //Payment
+	 Route::POST('/payment', 'PaymentController@index');
+	 Route::POST('/paymentFail', 'PaymentController@paymentFail');
+	 Route::POST('/paymentSuccess', 'PaymentController@paymentSuccess');
 	 
 	 
 });

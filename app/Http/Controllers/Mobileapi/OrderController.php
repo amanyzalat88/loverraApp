@@ -13,6 +13,7 @@ use App\Http\Resources\ApiOrderResource;
 use App\Http\Resources\ApiCartResource;
 use App\Http\Resources\ApiBoxesOrderResource;
 use App\Models\Mobile\Discountcode as DiscountcodeModel;
+use App\Models\Mobile\Customer;
 use Illuminate\Support\Str;
 use Validator;
 use App\Models\Mobile\Store;
@@ -182,8 +183,7 @@ class OrderController extends Controller
             $validator = Validator::make($request->all(), [
             'customer_address_id' => ['required'],
             'discount_id' => 'required',
-            'payment_id' => 'required',
-            'total'=>'required'
+            'payment_id' => 'required'
             ]);
         if ($validator->fails()) {
         
@@ -197,7 +197,10 @@ class OrderController extends Controller
         }
         
             $products =Cart::where('customer_id',$request->user()->id)->get();  
+            if($products->count()>0)
+            {
             $gifts =BoxesOrder::where('customer_id',$request->user()->id)->where('order_customer_id',0)->get(); 
+            $Customer =Customer::find($request->user()->id);
             $item =new Order();
             $item->slack = $this->generate_slack("orders");
             $item->order_number = Str::random(6);
@@ -205,7 +208,8 @@ class OrderController extends Controller
             $item->customer_address=$request->customer_address_id;
             $item->store_level_discount_code_id= $request->discount_id;
             $item->payment_method_id=$request->payment_id;
-            $item->total_order_amount=$request->total;
+            $item->customer_email=$Customer->email;
+            $item->customer_phone=$Customer->phone;
             $item->country_id= $request->header('country');
             if ($item->save()) {
                 $itemObj = $item;
@@ -213,27 +217,76 @@ class OrderController extends Controller
                  {
                     $iproduct=Product::find($product->product_id);
                     if($iproduct){
-                    $item =new OrderProduct();
-                    $item->slack = $this->generate_slack("order_products");
-                    $item->order_id = $itemObj->id;
-                    $item->product_id =$iproduct->id;
-                    $item->product_slack=$iproduct->slack;
-                    $item->product_code= $iproduct->product_code;
-                    $item->name=$iproduct->name_en;
-                    $item->quantity=$product->quantity;
-                    $item->purchase_amount_excluding_tax=$iproduct->purchase_amount_excluding_tax;
-                    $item->sale_amount_excluding_tax=$iproduct->sale_amount_excluding_tax;
-                    $item->discount_code_id=$iproduct->discount_code_id;
-                    $item->sub_total_purchase_price_excluding_tax=$iproduct->purchase_amount_excluding_tax;
-                    $item->sub_total_sale_price_excluding_tax=$iproduct->sale_amount_excluding_tax;
+                    $OrderProduct =new OrderProduct();
+                    $OrderProduct->slack = $this->generate_slack("order_products");
+                    $OrderProduct->order_id = $itemObj->id;
+                    $OrderProduct->product_id =$iproduct->id;
+                    $OrderProduct->product_slack=$iproduct->slack;
+                    $OrderProduct->product_code= $iproduct->product_code;
+                    $OrderProduct->name=$iproduct->name_en;
+                    $OrderProduct->quantity=$product->quantity;
+                    $OrderProduct->purchase_amount_excluding_tax=$iproduct->purchase_amount_excluding_tax;
+                    $OrderProduct->sale_amount_excluding_tax=$iproduct->sale_amount_excluding_tax;
+                    if($product->discount!=='0.00')
+                    {
+                        
+                        $discount= DiscountcodeModel::find($iproduct->discount_code_id);
+                        $OrderProduct->discount_code_id=$discount->id;
+                        $OrderProduct->discount_code=$discount->discount_code;
+                        $OrderProduct->discount_percentage=$discount->discount_percentage;
+                        $OrderProduct->discount_amount=$product->discount;
+                        $OrderProduct->total_after_discount=$product->quantity*$product->discount;
+                        $OrderProduct->total_amount=$product->quantity*$product->discount;
+                    }else{
+                    $OrderProduct->sub_total_purchase_price_excluding_tax=$iproduct->purchase_amount_excluding_tax;
+                    $OrderProduct->sub_total_sale_price_excluding_tax=$iproduct->sale_amount_excluding_tax;
                     if($iproduct->sale_amount_excluding_tax!='0.00')
-                    $total1=$product->quantity*$iproduct->sale_amount_excluding_tax;
+                    $OrderProduct->total_amount=$product->quantity*$iproduct->sale_amount_excluding_tax;
                     else
-                    $total1=$product->quantity*$iproduct->purchase_amount_excluding_tax;
-                    $item->total_amount=$total1;
+                    $OrderProduct->total_amount=$product->quantity*$iproduct->purchase_amount_excluding_tax;
+                    }
+                    $total=0;
                     $iproduct->quantity=($iproduct->quantity)-($product->quantity);
                     $iproduct->save();
-                    $item->save();
+                    $OrderProduct->save();
+                    $discountTotal= DiscountcodeModel::find($request->discount_id);
+                    if($discountTotal->discount_type==3)
+                    {
+                        $updateTotal =Order::find($item->id);
+                        $updateTotal->store_level_discount_code_id=$discountTotal->id;
+                        $updateTotal->store_level_discount_code=$discountTotal->discount_code;
+                        $updateTotal->store_level_total_discount_percentage=$discountTotal->discount_percentage;
+                        $total=DB::table('order_products')->where('order_id',$item->id)->sum('total_amount');
+                        $tot=$total-($total*$discountTotal->discount_percentage);
+                        $updateTotal->total_discount_amount=number_format($total-$tot,2);
+                        $updateTotal->total_after_discount=$tot;
+                        $updateTotal->total_order_amount=$tot;
+                        $updateTotal->save();
+                        $itemObj["total"]=$tot;
+                        $itemObj["total_after_discount"]=$tot;
+                        $itemObj["total_discount"]=number_format($total-$tot,2);
+                        $total=$tot;
+                    }
+                    else{
+                       
+                        $updateTotal =Order::find($item->id);
+                        $updateTotal->store_level_discount_code_id=$discountTotal->id;
+                        $updateTotal->store_level_discount_code=$discountTotal->discount_code;
+                        $updateTotal->store_level_total_discount_percentage=$discountTotal->discount_percentage;
+                        $total_after_discount=DB::table('order_products')->where('order_id',$item->id)->sum('total_amount');
+                        $total_discount=DB::table('order_products')->where('order_id',$item->id)->sum('discount_amount');
+                        $updateTotal->total_discount_amount=$total_discount;
+                        $updateTotal->total_after_discount=$total_after_discount;
+                        $updateTotal->total_order_amount=$total_after_discount;
+                        $updateTotal->save();
+                        $total=$total_after_discount;
+                        $itemObj["total"]=$total_after_discount;
+                        $itemObj["total_after_discount"]=$total_after_discount;
+                        $itemObj["total_discount"]=$total_discount;
+                    }
+                    
+                   
+                     
                 }
                  }
                  if($gifts->count()>0)
@@ -253,7 +306,19 @@ class OrderController extends Controller
                  }
                  DB::table('carts')->where('customer_id',$request->user()->id)->delete();
  
-                
+            $shipping=Store::select('shipping','free_shipping')->first();
+           
+          if($total>$shipping->free_shipping)
+          $shipping=0;
+          else
+          $shipping=$shipping->shipping;
+            
+            $itemObj["shipping"]=$shipping;
+            $itemObj["all"]=$total+$shipping;
+            $itemObj['discount_id']=$discountTotal->id;  
+            $itemObj['discount_code']=$discountTotal->discount_code;
+            $itemObj['discount_percentage']=$discountTotal->discount_percentage;
+
                 return response()->json(['status'=>true,'msg' => $mess,'data'=>$itemObj], $this->successStatus);
             
         } else {
@@ -261,5 +326,10 @@ class OrderController extends Controller
             $this->status = '504';
         return response()->json(['status'=>false,'msg' => $message,'data'=>$itemObj],  $this->status);
         }
+    }else{
+        $message = "Cart empty";
+        $this->status = '504';
+    return response()->json(['status'=>false,'msg' => $message,'data'=>$itemObj],  $this->status);
+    }
     }
 }

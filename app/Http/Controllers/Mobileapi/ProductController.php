@@ -122,6 +122,35 @@ class ProductController extends Controller
             return response()->json(['status'=>false,'msg' => $message,'data'=>$data], $this->successStatus);
         }
     }
+    public function best_sales(Request $request)
+    {
+         $data=null;
+		 $message='';
+		  $count=20;
+			if($request->items_num)
+			{
+				$count=$request->items_num; 
+			}
+		  $product= Product::Join('order_products', 'order_products.product_id', '=', 'products.id')
+          ->selectRaw('products.*, count(order_products.product_id) as Total')
+          ->groupBy('order_products.product_id')
+          ->orderBy('Total', 'DESC')
+          ->take(10)->get(); 
+          
+        if ($product->count()>0) {
+			 $result=ApiProductResource::collection($product);
+             $data= [
+                   
+                    'items' =>$result,
+            ];
+       			  
+            return response()->json(['status'=>true,'msg' => $message,'data'=>$data], $this->successStatus);
+        } else {
+            $message = "Not Products yet ";
+			
+            return response()->json(['status'=>false,'msg' => $message,'data'=>$data], $this->successStatus);
+        }
+    }
     public function offers(Request $request)
     {
          $data=null;

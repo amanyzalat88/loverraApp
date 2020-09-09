@@ -13,7 +13,7 @@ use App\Models\Mobile\OrderProduct;
 use App\Http\Resources\ApiCartResource;
 use App\Http\Resources\ApiBoxesOrderResource;
 use DB;
-class CartController extends Controller
+class CartGuestController extends Controller
 {
     public $successStatus = 200;
 
@@ -22,10 +22,23 @@ class CartController extends Controller
         
          $data=null;
          $message='';
-        
+         $validator = Validator::make($request->all(), [
+            'guest_id' => ['required', 'numeric'],
+             
+            ]);
+       if ($validator->fails()) {
+          
+            $bb = $validator->errors()->toArray();
+           foreach ($bb as $k => $v) {
+               $mess[$k]=$v;
+           }
+          //  $ErrorMess= json_encode($mess);
+            
+           return response()->json(['status'=>false,'msg' => $mess,'data'=>$data], 503);
+       }
 
-            $total['count'] =Cart::where('customer_id',$request->user()->id)->count();  
-            $total['count']+= BoxesOrder::where('customer_id',$request->user()->id)->where('order_customer_id',0)->count();
+            $total['count'] =Cart::where('customer_id',$request->guest_id)->count();  
+            $total['count']+= BoxesOrder::where('customer_id',$request->guest_id)->where('order_customer_id',0)->count();
             if($total['count']>0){
            return response()->json(['status'=>true,'msg' => $message,'data'=>$total], $this->successStatus);
        } else {
@@ -35,6 +48,7 @@ class CartController extends Controller
        }
     
     }
+    //add 
     public function index(Request $request)
     {
         
@@ -42,7 +56,7 @@ class CartController extends Controller
          $message='';
          $validator = Validator::make($request->all(), [
             'product_id' => ['required', 'numeric'],
-            'quantity'=>['required']
+             'quantity'=>['required']
             ]);
        if ($validator->fails()) {
           
@@ -66,15 +80,19 @@ class CartController extends Controller
            return response()->json(['status'=>false,'msg' => $message,'data'=>$data], $this->successStatus);
         }
         else{
-         $items =Cart::where('customer_id',$request->user()->id)->where('product_id',$request->product_id)->first();  
-         $rows=0;
+            $rows=0;
+            if($request->guest_id)
+            {
+                $guest_id=$request->guest_id;
+         $items =Cart::where('customer_id',$guest_id)->where('product_id',$request->product_id)->first();  
+         
         
          
          if(!$items)
          { 
             $item =new Cart();
             $item->product_id = $request->product_id;
-            $item->customer_id = $request->user()->id;
+            $item->customer_id = $guest_id;
             if($request->quantity)
               $item->quantity = $request->quantity;
             else
@@ -95,18 +113,31 @@ class CartController extends Controller
                 if(!$request->quantity)
                     $quantity= $items->quantity+1;
                 DB::table('carts')
-                ->where('customer_id', $request->user()->id)
+                ->where('customer_id', $guest_id)
                 ->where('product_id',$request->product_id)
                 ->update(['quantity' =>  $quantity]);
                 $rows++;
             }
            
          }
+        } else{
+            $guest_id=rand(0,100000);
+            $item =new Cart();
+            $item->product_id = $request->product_id;
+            $item->customer_id = $guest_id;
+            if($request->quantity)
+              $item->quantity = $request->quantity;
+            else
+              $item->quantity =1; 
+            $item->save();
+            $rows++;
+                    
+        }
        
         if ($rows>0) {
-
-            $total['count'] =Cart::where('customer_id',$request->user()->id)->count();  
-            $total['count']+= BoxesOrder::where('customer_id',$request->user()->id)->where('order_customer_id',0)->count();
+            $total['customer_id']=(int)$guest_id;
+            $total['count'] =Cart::where('customer_id',$guest_id)->count();  
+            $total['count']+= BoxesOrder::where('customer_id',$guest_id)->where('order_customer_id',0)->count();
            return response()->json(['status'=>true,'msg' => $message,'data'=>$total], $this->successStatus);
        } else {
            $message = "Not cart empty  ";
@@ -120,13 +151,15 @@ class CartController extends Controller
         return response()->json(['status'=>false,'msg' => $message,'data'=>$data], $this->successStatus);
     }
     }
-    public function reorder(Request $request)
+  
+    public function show(Request $request)
     {
-        
          $data=null;
          $message='';
+         $total=0;
+         $totals=0;
          $validator = Validator::make($request->all(), [
-            'order_id' => ['required', 'numeric'],
+            'guest_id' => ['required', 'numeric'],
              
             ]);
        if ($validator->fails()) {
@@ -139,72 +172,8 @@ class CartController extends Controller
             
            return response()->json(['status'=>false,'msg' => $mess,'data'=>$data], 503);
        }
-         $products=
-         OrderProduct::select('products.id','products.name_ar','products.name_en','order_products.quantity','products.quantity as proquantity')
-         ->join('products', 'products.id', '=', 'order_products.product_id')
-         ->join('orders','orders.id','=','order_products.order_id')->
-         where('orders.id',$request->order_id)->where('orders.customer_id',$request->user()->id)
-			->where('order_products.order_id',$request->order_id) 
-			 ->get();
-    if($products->count()>0)
-    {
-       
-         foreach($products as $product)
-         {
-             
-                
-                    if($product->quantity>$product->proquantity)
-                    {
-                    $lang=  $request->header('lang');
-                        if(!$lang)
-                          $lang='ar';
-                    $message.= $lang=='ar'?' الكمية المطلوبة من هذا المنتج '.$product->name_ar.'   غير متاحه ' :'The quantity required for this product '.$product->name_en.' is not available ' ;
-                    //return response()->json(['status'=>false,'msg' => $message,'data'=>$data], $this->successStatus);
-                continue;  
-                }
-                    
-                    $items =Cart::where('customer_id',$request->user()->id)->where('product_id',$product->id)->first();  
-                    
-                    if(!$items)
-                    { 
-                        $item =new Cart();
-                        $item->product_id = $product->id;
-                        $item->customer_id = $request->user()->id;
-                        if($product->quantity)
-                           $item->quantity = $product->quantity;
-                        else
-                           $item->quantity =1; 
-                        $item->save();
-                      
-                    }
-                    else{
-                            $quantity= $items->quantity+$product->quantity;
-                           
-                            DB::table('carts')
-                            ->where('customer_id', $request->user()->id)
-                            ->where('product_id',$product->id)
-                            ->update(['quantity' =>  $quantity]);
-                            
-                    }
-                }
-                        $item =Cart::where('customer_id',$request->user()->id)->get(); 
-                        $result=ApiCartResource::collection($item);                 
-                    return response()->json(['status'=>true,'msg' => $message,'data'=>$result], $this->successStatus);
-               
-            }
-            else{
-                $message='الطلب او العضو غير موجودين';
-                return response()->json(['status'=>true,'msg' => $message,'data'=>$data], $this->successStatus);
-            }
-    }
-    public function show(Request $request)
-    {
-         $data=null;
-         $message='';
-         $total=0;
-         $totals=0;
-         $item =Cart::where('customer_id',$request->user()->id)->get();  
-         $gifts =BoxesOrder::where('customer_id',$request->user()->id)->where('order_customer_id',0)->get(); 
+         $item =Cart::where('customer_id',$request->guest_id)->get();  
+         $gifts =BoxesOrder::where('customer_id',$request->guest_id)->where('order_customer_id',0)->get(); 
         
          $j=0;
         if ($item->count()>0 ) {
@@ -258,7 +227,7 @@ class CartController extends Controller
          $message='';
          $validator = Validator::make($request->all(), [
             'product_id' => ['required', 'numeric'],
-             
+            'guest_id' => ['required', 'numeric'],
             ]);
        if ($validator->fails()) {
           
@@ -271,7 +240,7 @@ class CartController extends Controller
            return response()->json(['status'=>false,'msg' => $mess,'data'=>$data], 503);
        }
           
-         $item =Cart::where('customer_id',$request->user()->id)->where('product_id',$request->product_id)->first();
+         $item =Cart::where('customer_id',$request->guest_id)->where('product_id',$request->product_id)->first();
          if ($item) {
             
            if ($item->delete()) {

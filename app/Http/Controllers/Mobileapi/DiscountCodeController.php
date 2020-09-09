@@ -77,10 +77,12 @@ class DiscountCodeController extends Controller
            }
            return response()->json(['status'=>false,'msg' => $mess,'data'=>$data], 503);
         }
-        
+        $checkCart=Cart::where('customer_id',$request->user()->id)->get();
+        if($checkCart->count()>0)
+        {
 		 $i=0;
         $discount= DiscountcodeModel::where('discount_code',$request->discount_code)->where('status',1)->first();
-        if(count($discount)>0)
+        if($discount)
         {
         
         if($discount->discount_num)
@@ -237,5 +239,10 @@ class DiscountCodeController extends Controller
 			
             return response()->json(['status'=>false,'msg' => $message,'data'=>$data], 503);
         }
+    }else{
+        $message = "Cart Empty ";
+			
+            return response()->json(['status'=>false,'msg' => $message,'data'=>$data], 503);
+    }
     }
 }
