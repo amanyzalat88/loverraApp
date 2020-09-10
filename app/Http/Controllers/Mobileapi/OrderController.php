@@ -308,8 +308,9 @@ class OrderController extends Controller
                 }
                     DB::table('boxes_orders')->where('customer_id',$request->user()->id)->where('order_customer_id',0)->update(array('order_customer_id' => $itemObj->id));
                  }
-
-                 DB::table('payment')->where('txnId',$request->txnId)->update(array('order_id' => $itemObj->id));
+                 $Payment->order_id=$itemObj->id;
+                 $Payment->save();
+                 
                  
                  DB::table('carts')->where('customer_id',$request->user()->id)->delete();
  
