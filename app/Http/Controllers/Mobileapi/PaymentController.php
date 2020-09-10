@@ -95,7 +95,7 @@ class PaymentController extends Controller
     }
     else{
         $message = "Cart Empty ";
-        return response()->json(['status'=>false,'msg' => $message,'data'=>$data], 503);
+        return response()->json(['status'=>false,'msg' => $message,'data'=>null], 503);
     }
     }
     public function GenerateHashMac($price, $time)
