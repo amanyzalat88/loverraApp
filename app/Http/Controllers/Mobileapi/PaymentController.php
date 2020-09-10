@@ -53,8 +53,8 @@ class PaymentController extends Controller
         $secreatKey = '3650191';*/
         $merchantId = 'mer2000013';
         $secreatKey = '5083930';
-        $furl = 'https://cp.myloverra.com/paymentFail';
-        $surl = 'https://cp.myloverra.com/paymentSuccess';
+        $furl = 'https://cp.myloverra.com/mobileapi/paymentFail';
+        $surl = 'https://cp.myloverra.com/mobileapi/paymentSuccess';
         $tranid = $Time;
         $txntime = $Time;
         $hashMac = self::GenerateHashMac($request->price, $tranid);
@@ -98,8 +98,8 @@ class PaymentController extends Controller
         $mid = 'mer2000013';
         $secret_key = '5083930';
         $txRefNo = $time;
-        $furl = 'https://cp.myloverra.com/paymentFail';
-        $surl = 'https://cp.myloverra.com/paymentSuccess';
+        $furl = 'https://cp.myloverra.com/mobileapi/paymentFail';
+        $surl = 'https://cp.myloverra.com/mobileapi/paymentSuccess';
         $crossCat = 'GEN';
         $txTime = $time;
         $amt = (string) $price;
