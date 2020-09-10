@@ -11,7 +11,7 @@ use DB;
 use File;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
-
+use App\Models\Mobile\Cart;
 class CustomerController extends Controller
 {
     public $successStatus = 200;
@@ -107,6 +107,7 @@ class CustomerController extends Controller
              
             return response()->json(['status'=>false,'msg' => $mess,'data'=>$itemObj], 503);
         }
+        
             $item =new Customer();
             $item->name = $request->input('name');
             $item->phone = $request->input('phone');
@@ -119,6 +120,10 @@ class CustomerController extends Controller
              // $item->uuid = $request->input('uuid');
             $item->email = $request->input('email');
             if ($item->save()) {
+                if($request->guest_id)
+                    {
+                        Cart::where('customer_id',$request->guest_id)->update(array('customer_id'=>$item->id)); 
+                    }
                  $itemObj = $item;
                    unset($itemObj->password);
                 return response()->json(['status'=>true,'msg' => $mess,'data'=>$itemObj], $this->successStatus);

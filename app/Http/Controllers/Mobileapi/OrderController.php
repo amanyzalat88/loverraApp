@@ -183,7 +183,8 @@ class OrderController extends Controller
             $validator = Validator::make($request->all(), [
             'customer_address_id' => ['required'],
             'discount_id' => 'required',
-            'payment_id' => 'required'
+            'payment_id' => 'required',
+            'txnId'=>'required'
             ]);
         if ($validator->fails()) {
         
@@ -304,6 +305,9 @@ class OrderController extends Controller
                 }
                     DB::table('boxes_orders')->where('customer_id',$request->user()->id)->where('order_customer_id',0)->update(array('order_customer_id' => $itemObj->id));
                  }
+
+                 DB::table('payment')->where('txnId',$request->txnId)->update(array('order_id' => $itemObj->id));
+                 
                  DB::table('carts')->where('customer_id',$request->user()->id)->delete();
  
             $shipping=Store::select('shipping','free_shipping')->first();

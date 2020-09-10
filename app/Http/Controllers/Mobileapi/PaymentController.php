@@ -47,71 +47,34 @@ class PaymentController extends Controller
        
 
         $Time = (string) str_random(10).time();
-        $baseUrl = 'https://apps.bookeey.com/pgapi/api/payment/requestLink';
+        $baseUrl = 'https://demo.bookeey.com/portal/mobileBookeeyPg';
         $price = '"'.$request->price.'"';
-        $merchantId = 'mer20000393';
-        $secreatKey = '3650191';
-        $furl = 'https://cp.myloverra.com/Mobileapi/paymentFail';
-        $surl = 'https://cp.myloverra.com/Mobileapi/paymentSuccess';
+       /* $merchantId = 'mer20000393';
+        $secreatKey = '3650191';*/
+        $merchantId = 'mer2000013';
+        $secreatKey = '5083930';
+        $furl = 'https://cp.myloverra.com/paymentFail';
+        $surl = 'https://cp.myloverra.com/paymentSuccess';
         $tranid = $Time;
         $txntime = $Time;
         $hashMac = self::GenerateHashMac($request->price, $tranid);
         $paymentOptions = $request->type;
 
-        /*$payment = new Payment();
-        $payment->txnId = $tranid;
-        //$payment->order_id = $request->price;
-        $payment->custromer_id = $Member->id;
-        
-        $payment->save();*/
+        $Payment = new Payment();
+        $Payment->txnId = $tranid;
+        $Payment->custromer_id = $request->user()->id;
+        $Payment->amount =  $request->price;
+        $Payment->save();
 
-        
+        $Url = $baseUrl."?data={\"price\":\"{$request->price}\",\"merchantId\":\"{$merchantId}\",\"secreatKey\":\"{$secreatKey}\",\"surl\":\"{$surl}\",\"furl\":\"{$furl}\",\"tranid\":\"{$tranid}\",\"txntime\":\"{$txntime}\",\"hashMac\":\"{$hashMac}\",\"paymentOptions\":\"{$paymentOptions}\"}";
 
+        $Curl = curl_init();
+        curl_setopt($Curl, CURLOPT_URL, $Url);
+        curl_setopt($Curl, CURLOPT_RETURNTRANSFER, true);
+        $result = curl_exec($Curl);
+        curl_close($Curl);
 
-       $params = array(
-            "DBRqst" => "PY_ECom",
-            "Do_Appinfo" => array(
-            "APIVer"=>"",
-            "APPID"=>"",
-            "APPTyp"=>"WEB",
-            "AppVer"=>"V1.6",
-            "ApiVer"=>"V1.6",
-            "Country"=>"",
-            "DevcType"=>"5",
-            "HsCode"=>"",
-            "IPAddrs"=>"",
-            "MdlID"=>"",
-            "OS"=>"Android",
-            "UsrSessID"=>""
-            ),
-            "Do_TxnDtl"=>array(array(
-                "SubMerchUID"=>"subm20000393",
-                "Txn_AMT"=>'"'.$request->price.'"'
-            )),
-            "Do_MerchDtl"=>array(
-                "BKY_PRDENUM"=>"ECom",
-                "FURL"=>"https://cp.myloverra.com/Mobileapi/paymentFail",
-                "MerchUID"=>"mer20000393",
-                "SURL"=>"https://cp.myloverra.com/Mobileapi/paymentSuccess"
-            ),
-            "Do_TxnHdr"=>array(
-                "BKY_Txn_UID"=>"",
-                "Merch_Txn_UID"=>$Time,
-                "PayFor"=>"ECom",
-                "PayMethod"=> $request->type,
-                "Txn_HDR"=>$Time,
-                "hashMac"=>self::GenerateHashMac($request->price, $tranid)
-                )
-           
-        );
-       
-        
-        $result= self::httpPost($baseUrl,$params);
-        
-         
         $result = json_decode($result);
-        var_dump($result);
-        die();
         if (isset($result->bookeeyUrl)) {
             $url = $result->bookeeyUrl;
         }
@@ -127,40 +90,16 @@ class PaymentController extends Controller
 
         return response()->json(['status' => 200, 'data' => $url]);
     }
-    function httpPost($url,$params)
-    {
-        
-        $data_string = json_encode($params);         
-        
-            $ch = curl_init();  
-        
-            curl_setopt($ch,CURLOPT_URL,$url);
-            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");                                                                     
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $data_string);                                                                  
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);     
-            curl_setopt($ch, CURLOPT_HTTPHEADER, array(                                                                          
-                'Content-Type: application/json',                                                                                
-                'Content-Length: ' . strlen($data_string))                                                                       
-            );   
-             
-        
-            $result=curl_exec($ch);
-        
-            curl_close($ch);
-            $result = json_decode($result);
-            var_dump($result);
-            die();
-            return $output;
-    
-    }
     public function GenerateHashMac($price, $time)
     {
-        $mid = 'mer20000393';
-        $secret_key = '3650191';
-
+    
+       /* $mid = 'mer20000393';
+        $secret_key = '3650191';*/
+        $mid = 'mer2000013';
+        $secret_key = '5083930';
         $txRefNo = $time;
-        $furl = 'https://cp.myloverra.com/Mobileapi/paymentFail';
-        $surl = 'https://cp.myloverra.com/Mobileapi/paymentSuccess';
+        $furl = 'https://cp.myloverra.com/paymentFail';
+        $surl = 'https://cp.myloverra.com/paymentSuccess';
         $crossCat = 'GEN';
         $txTime = $time;
         $amt = (string) $price;
@@ -171,7 +110,6 @@ class PaymentController extends Controller
         $sig = hash('sha512', $hstring);
 
         return $sig;
-        
     }
     public static function requery($txnId)
     {
@@ -191,35 +129,34 @@ class PaymentController extends Controller
         $res = json_decode($res);
 
         $Payment = Payment::where('txnId', $request->merchantTxnId)->first();
-        $Payment->order_id = $res->ecomTxnId;
-        $Subscription->amount = $res->amount;
-        $Subscription->totalAmountDebittedFromCust = $res->totalAmountDebittedFromCust;
-        $Subscription->totalAmountCreditedToMerchant = $res->totalAmountCreditedToMerchant;
-        $Subscription->tranStatus = $res->tranStatus;
-        $Subscription->walletTranStatus = $res->walletTranStatus;
-        $Subscription->merchantTxnRefNo = $res->merchantTxnRefNo;
-        $Subscription->txnRefNo = $res->txnRefNo;
-        $Subscription->merchantID = $res->merchantID;
-        $Subscription->successUrl = $res->successUrl;
-        $Subscription->failureUrl = $res->failureUrl;
-        $Subscription->crosscat = $res->crosscat;
-        $Subscription->requestHashMac = $res->requestHashMac;
-        $Subscription->paymentOptions = $res->paymentOptions;
-        $Subscription->merchantName = $res->merchantName;
-        $Subscription->payment_date = date('Y-m-d H:i:s');
-        $Subscription->confirmed = 'true';
-        $Subscription->statusDescription = $res->statusDescription;
-        $Subscription->created_at = date('Y-m-d H:i:s');
-        $Subscription->save();
-
-        return view('payment.paymentSuccess');
+        $Payment->totalAmountDebittedFromCust = $res->totalAmountDebittedFromCust;
+        $Payment->totalAmountCreditedToMerchant = $res->totalAmountCreditedToMerchant;
+        $Payment->tranStatus = $res->tranStatus;
+        $Payment->walletTranStatus = $res->walletTranStatus;
+        $Payment->merchantTxnRefNo = $res->merchantTxnRefNo;
+        $Payment->txnRefNo = $res->txnRefNo;
+        $Payment->merchantID = $res->merchantID;
+        $Payment->successUrl = $res->successUrl;
+        $Payment->failureUrl = $res->failureUrl;
+        $Payment->crosscat = $res->crosscat;
+        $Payment->requestHashMac = $res->requestHashMac;
+        $Payment->paymentOptions = $res->paymentOptions;
+        $Payment->merchantName = $res->merchantName;
+        $Payment->payment_date = date('Y-m-d H:i:s');
+        $Payment->confirmed = 'true';
+        $Payment->statusDescription = $res->statusDescription;
+        $Payment->created_at = date('Y-m-d H:i:s');
+        $Payment->save();
+        $mess="congratulations";
+        return response()->json(['status'=>true,'msg' => $mess,'data'=>$request->merchantTxnId], $this->successStatus);
     }
 
     
 
     public function paymentFail(Request $request)
     {
-        return view('payment.paymentFail');
+        $mess="Payment Failed Reason:  ".$request->errorMessage;
+        return response()->json(['status'=>false,'msg' => $mess,'data'=>null], $this->successStatus);
     }
    
 }
