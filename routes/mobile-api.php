@@ -68,6 +68,8 @@ Route::group(['namespace' => 'Mobileapi'], function () {
 
 	//country
 	   Route::GET('/country', 'CountryController@index');
+	   Route::GET('/paymentFail', 'PaymentController@paymentFail');
+	   Route::GET('/paymentSuccess', 'PaymentController@paymentSuccess');
 });
 
 Route::group(['middleware' => 'auth:customerapi', 'namespace' => 'Mobileapi'], function () {
@@ -114,8 +116,7 @@ Route::group(['middleware' => 'auth:customerapi', 'namespace' => 'Mobileapi'], f
 
 	 //Payment
 	 Route::POST('/payment', 'PaymentController@index');
-	 Route::GET('/paymentFail', 'PaymentController@paymentFail');
-	 Route::GET('/paymentSuccess', 'PaymentController@paymentSuccess');
+	 
 	 
 	 
 });

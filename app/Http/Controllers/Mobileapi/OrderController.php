@@ -178,6 +178,9 @@ class OrderController extends Controller
     }
     public function add(Request $request)
     {
+        $Payment = Payment::where('txnId', $request->txnId)->first();
+        if($Payment)
+        {
             $itemObj=null;
             $mess=null;
             $validator = Validator::make($request->all(), [
@@ -335,5 +338,12 @@ class OrderController extends Controller
         $this->status = '504';
     return response()->json(['status'=>false,'msg' => $message,'data'=>$itemObj],  $this->status);
     }
+    }
+
+        else{
+            $message = "Transaction Id Payment not found";
+                $this->status = '404';
+            return response()->json(['status'=>false,'msg' => $message,'data'=>null],  $this->status); 
+        }
     }
 }
