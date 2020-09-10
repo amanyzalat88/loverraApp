@@ -17,6 +17,8 @@ class PaymentController extends Controller
     
     public function index(Request $request)
     {
+        $item =Cart::where('customer_id',$request->user()->id)->count();  
+        if ($item >0 ) {
         $rules = [
             
             'price' => 'required|int',
@@ -89,6 +91,11 @@ class PaymentController extends Controller
         }
 
         return response()->json(['status' => 200, 'data' => $url]);
+    }
+    else{
+        $message = "Cart Empty ";
+        return response()->json(['status'=>false,'msg' => $message,'data'=>$data], 503);
+    }
     }
     public function GenerateHashMac($price, $time)
     {

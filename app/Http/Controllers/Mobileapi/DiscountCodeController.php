@@ -28,8 +28,8 @@ class DiscountCodeController extends Controller
         $message='This code Removed';
         $total=0;
         $tot_discount=0;
-        $item =Cart::where('customer_id',$request->user()->id)->get();  
-        if ($item->count()>0 ) {
+        $item =Cart::where('customer_id',$request->user()->id)->count();  
+        if ($item >0 ) {
             $j=1;
             $products=ApiCartResource::collection($item);
             $Finalproducts=json_decode((json_encode($products)));
@@ -77,8 +77,8 @@ class DiscountCodeController extends Controller
            }
            return response()->json(['status'=>false,'msg' => $mess,'data'=>$data], 503);
         }
-        $checkCart=Cart::where('customer_id',$request->user()->id)->get();
-        if($checkCart->count()>0)
+        $checkCart=Cart::where('customer_id',$request->user()->id)->count();
+        if($checkCart >0)
         {
 		 $i=0;
         $discount= DiscountcodeModel::where('discount_code',$request->discount_code)->where('status',1)->first();
