@@ -179,7 +179,7 @@ class OrderController extends Controller
     }
     public function add(Request $request)
     {
-        $Payment = Payment::where('txnId', $request->txnId)->first();
+        $Payment = Payment::where('txnId', $request->txnId)->where('order_id', 0)->first();
         if($Payment)
         {
             $itemObj=null;
@@ -343,7 +343,11 @@ class OrderController extends Controller
     }
 
         else{
+            $Payment = Payment::where('txnId', $request->txnId)->first();
+            if(!$Payment)
             $message = "Transaction Id Payment not found";
+             else 
+             $message = "Transaction Id Used Before ";
                 $this->status = '404';
             return response()->json(['status'=>false,'msg' => $message,'data'=>null],  $this->status); 
         }
