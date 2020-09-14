@@ -108,10 +108,10 @@
                             
                             this.processing = true;
                             var formData = new FormData();
-
+                           console.log(this.payment_method_en);
                             formData.append("access_token", window.settings.access_token);
                             formData.append("payment_method_en", (this.payment_method_en == null)?'':this.payment_method_en);
-                            formData.append("payment_method_en", (this.payment_method_en == null)?'':this.payment_method_ar);
+                            formData.append("payment_method_ar", (this.payment_method_ar == null)?'':this.payment_method_ar);
                             formData.append("description", (this.description == null)?'':this.description);
                             formData.append("status", (this.status == null)?'':this.status);
 
