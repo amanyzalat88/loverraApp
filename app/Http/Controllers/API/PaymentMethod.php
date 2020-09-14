@@ -132,8 +132,8 @@ class PaymentMethod extends Controller
             
             $payment_method = [
                 "slack" => $this->generate_slack("payment_methods"),
-                "label_ar" => Str::title($request->payment_method_name_ar),
-                "label_en" => Str::title($request->payment_method_name_en),
+                "label_ar" => Str::title($request->payment_method_ar),
+                "label_en" => Str::title($request->payment_method_en),
                 "description" => $request->description,
                 "status" => $request->status,
                 "created_by" => $request->logged_user_id
@@ -212,8 +212,8 @@ class PaymentMethod extends Controller
             DB::beginTransaction();
             
             $payment_method = [
-                "label_ar" => Str::title($request->payment_method_name_ar),
-                "label_en" => Str::title($request->payment_method_name_en),
+                "label_ar" => Str::title($request->payment_method_ar),
+                "label_en" => Str::title($request->payment_method_en),
                 "description" => $request->description,
                 "status" => $request->status,
                 "updated_by" => $request->logged_user_id
