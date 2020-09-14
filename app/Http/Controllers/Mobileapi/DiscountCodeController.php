@@ -90,7 +90,7 @@ class DiscountCodeController extends Controller
            
         $count=OrderModel::where('store_level_discount_code_id',$discount->id)->count();
          
-        if($count>$discount->discount_num)
+        if($discount->discount_num<=$count)
         {
             $message='This Code expired ';
             return response()->json(['status'=>false,'msg' => $message,'data'=>$data], 503);

@@ -122,7 +122,7 @@ class PaymentMethod extends Controller
             $this->validate_request($request);
 
             $payment_method_data_exists = PaymentMethodModel::select('id')
-            ->where('label', '=', trim($request->payment_method_name))
+            ->where('label_ar', '=', trim($request->payment_method_name_ar))
             ->first();
             if (!empty($payment_method_data_exists)) {
                 throw new Exception("Payment method already exists", 400);
@@ -202,7 +202,7 @@ class PaymentMethod extends Controller
             $payment_method_data_exists = PaymentMethodModel::select('id')
             ->where([
                 ['slack', '!=', $slack],
-                ['label', '=', trim($request->payment_method_name)],
+                ['label_ar', '=', trim($request->payment_method_name_ar)],
             ])
             ->first();
             if (!empty($payment_method_data_exists)) {
@@ -255,7 +255,8 @@ class PaymentMethod extends Controller
     public function validate_request($request)
     {
         $validator = Validator::make($request->all(), [
-            'payment_method_name' => $this->get_validation_rules("name_label", true),
+            'payment_method_en' => $this->get_validation_rules("name_label", true),
+            'payment_method_ar' => $this->get_validation_rules("name_label", true),
             'status' => $this->get_validation_rules("status", true),
         ]);
         $validation_status = $validator->fails();
