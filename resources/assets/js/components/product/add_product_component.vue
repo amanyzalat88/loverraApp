@@ -144,8 +144,8 @@
                     </div>
                      <div class="form-group col-md-3">
                         <label for="photo">Photo</label>
-                        <input type="file" id="photo" ref="file" v-validate="'required|max:250'" v-on:change="handleFileUpload()" class="form-control form-control-custom" />
-                        <span v-bind:class="{ 'error' : errors.has('photo') }">{{ errors.first('photo') }}</span>
+                        <input type="file" id="photo"  ref="file" v-validate="'max:250'" v-on:change="handleFileUpload()" class="form-control form-control-custom" />
+                         
                        
                     </div>
                       <div class="form-group col-md-3">

@@ -20,7 +20,7 @@
                 <div class="form-row mb-2">
                       <div class="form-group col-md-3">
                         <label for="photo_ar">Photo <span style="color:red">Ar</span></label>
-                        <input type="file" id="photo_ar" ref="file_ar" v-validate="'required|max:250'" v-on:change="FileUpload()" class="form-control form-control-custom" />
+                        <input type="file" id="photo_ar" ref="file_ar" v-validate="'max:250'" v-on:change="FileUpload()" class="form-control form-control-custom" />
                         <span v-bind:class="{ 'error' : errors.has('photo_ar') }">{{ errors.first('photo_ar') }}</span>
                        
                     </div>
@@ -32,9 +32,8 @@
                    <div class="form-row mb-2">
                     <div class="form-group col-md-3">
                         <label for="photo_en">Photo <span style="color:red">En</span></label>
-                        <input type="file" id="photo_en" ref="file_en" v-validate="'required|max:250'" v-on:change="handleFileUpload()" class="form-control form-control-custom" />
-                        <span v-bind:class="{ 'error' : errors.has('photo_en') }">{{ errors.first('photo_en') }}</span>
-                       
+                        <input type="file" id="photo_en" ref="file_en" v-validate="'max:250'" v-on:change="handleFileUpload()" class="form-control form-control-custom" />
+                      
                     </div>
                       <div class="form-group col-md-3">
                           <img :src="getPhoto(photo_en)"  height="150px" width="250px"/> 

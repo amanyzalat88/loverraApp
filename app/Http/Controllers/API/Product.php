@@ -291,7 +291,7 @@ class Product extends Controller
                 throw new Exception("Invalid request", 400);
             }
 
-            $this->validate_request($request);
+            $this->validate_request_update($request);
 
             $product_data_exists = ProductModel::select('id')
             ->where([
@@ -405,6 +405,27 @@ class Product extends Controller
     }
 
     public function validate_request($request)
+    {
+        $validator = Validator::make($request->all(), [
+            'product_name_en' => $this->get_validation_rules("name_label_en", true),
+            'product_name_ar' => $this->get_validation_rules("name_label_ar", true),
+            'product_code' => $this->get_validation_rules("codes", true),
+            'purchase_price' => $this->get_validation_rules("numeric", true),
+           // 'sale_price' => $this->get_validation_rules("numeric", true),
+            'quantity' => $this->get_validation_rules("numeric", true),
+            'supplier' => $this->get_validation_rules("slack", true),
+            'category' => $this->get_validation_rules("slack", true),
+           // 'tax_code' => $this->get_validation_rules("slack", true),
+            'description' => $this->get_validation_rules("text", false),
+            'status' => $this->get_validation_rules("status", true),
+            'photo'=>$this->get_validation_rules("photo", true),
+        ]);
+        $validation_status = $validator->fails();
+        if($validation_status){
+            throw new Exception($validator->errors());
+        }
+    }
+    public function validate_request_update($request)
     {
         $validator = Validator::make($request->all(), [
             'product_name_en' => $this->get_validation_rules("name_label_en", true),

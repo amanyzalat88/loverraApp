@@ -23,14 +23,14 @@ class Slider{
                     "targets" :0 ,
                     "data": "img",
                     "render" : function ( url, type, full) {
-                    return '<img height="75%" width="75%" src="public/'+full[0]+'"/>';
+                    return '<img height="200" width="300" src="public/'+full[0]+'"/>';
                     }
                 },
                 {
                     "targets" :1 ,
                     "data": "img",
                     "render" : function ( url, type, full) {
-                    return '<img height="75%" width="75%" src="public/'+full[1]+'"/>';
+                    return '<img height="200" width="300" src="public/'+full[1]+'"/>';
                     }
                 }
             ]
