@@ -148,6 +148,7 @@ class Product extends Controller
 
             $product_data_exists = ProductModel::select('id')
             ->where('product_code', '=', trim($request->product_code))
+             
             ->first();
             if (!empty($product_data_exists)) {
                 throw new Exception("Product code already assigned to a product", 400);
@@ -350,25 +351,47 @@ class Product extends Controller
             DB::beginTransaction();
             $sale=0.00;
             if($request->sale_price)
-				$sale=$request->sale_price;
-            $product = [
-                "name_ar" => $request->product_name_ar,
-				"name_en" => $request->product_name_en,
-                "product_code" => strtoupper($request->product_code),
-                "description_ar" => $request->description_ar,
-                "description_en" => $request->description_en,
-                "category_id" => $category_data->id,
-                "supplier_id" => $supplier_data->id,
-                "soldout" => $request->soldout,
-                "tax_code_id" => $taxcode_data->id,
-                "discount_code_id" => $discount_code_id,
-                "quantity" => $request->quantity,
-                "photo"=> "uploads/product/".$name,
-                "purchase_amount_excluding_tax" => $request->purchase_price,
-                "sale_amount_excluding_tax" => $sale,
-                "status" => $request->status,
-                "updated_by" => $request->logged_user_id
-            ];
+                $sale=$request->sale_price;
+                if ($request->file('photo')) {
+                    $product = [
+                        "name_ar" => $request->product_name_ar,
+                        "name_en" => $request->product_name_en,
+                        "product_code" => strtoupper($request->product_code),
+                        "description_ar" => $request->description_ar,
+                        "description_en" => $request->description_en,
+                        "category_id" => $category_data->id,
+                        "supplier_id" => $supplier_data->id,
+                        "soldout" => $request->soldout,
+                        "tax_code_id" => $taxcode_data->id,
+                        "discount_code_id" => $discount_code_id,
+                        "quantity" => $request->quantity,
+                        "photo"=> "uploads/product/".$name,
+                        "purchase_amount_excluding_tax" => $request->purchase_price,
+                        "sale_amount_excluding_tax" => $sale,
+                        "status" => $request->status,
+                        "updated_by" => $request->logged_user_id
+                    ];
+                }else{
+                    $product = [
+                        "name_ar" => $request->product_name_ar,
+                        "name_en" => $request->product_name_en,
+                        "product_code" => strtoupper($request->product_code),
+                        "description_ar" => $request->description_ar,
+                        "description_en" => $request->description_en,
+                        "category_id" => $category_data->id,
+                        "supplier_id" => $supplier_data->id,
+                        "soldout" => $request->soldout,
+                        "tax_code_id" => $taxcode_data->id,
+                        "discount_code_id" => $discount_code_id,
+                        "quantity" => $request->quantity,
+                        
+                        "purchase_amount_excluding_tax" => $request->purchase_price,
+                        "sale_amount_excluding_tax" => $sale,
+                        "status" => $request->status,
+                        "updated_by" => $request->logged_user_id
+                    ];
+                }
+           
 
             $action_response = ProductModel::where('slack', $slack)
             ->update($product);
