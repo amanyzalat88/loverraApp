@@ -24,9 +24,9 @@ class Products{
                 { name: 'products.updated_at' },
                 { name: 'user_created.fullname' },
             ],
-            order: [[ 10, "desc" ]],
+            order: [[ 11, "desc" ]],
             columnDefs: [
-                { "orderable": false, "targets": [11] }
+                { "orderable": false, "targets": [12] }
             ]
         });
 
