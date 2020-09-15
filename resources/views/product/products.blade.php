@@ -25,16 +25,16 @@
                         <th>Prodcut Code</th>
                         <th>Name</th>
                         <th>اسم المنتج</th>
-                        <th>Supplier</th>
+                        <!--<th>Supplier</th>-->
                         <th>Category</th>
                        
-                        <th>Discount Code</th>
+                        <!--<th>Discount Code</th>-->
                         <th>Quantity</th>
                         <th>Amount</th>
                         <th>Status</th>
-                        <th>Created On</th>
+                        <!--<th>Created On</th>
                         <th>Updated On</th>
-                        <th>Created By</th>
+                        <th>Created By</th>-->
                         <th>Action</th>
                     </tr>
                 </thead>

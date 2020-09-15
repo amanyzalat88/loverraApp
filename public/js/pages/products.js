@@ -13,20 +13,20 @@ class Products{
                 { name: 'products.product_code' },
                 { name: 'products.name_en' },
                 { name: 'products.name_ar' },
-                { name: 'suppliers.name' },
+               // { name: 'suppliers.name' },
                 { name: 'category.label_en' },
                 
-                { name: 'discount_codes.label' },
+              //  { name: 'discount_codes.label' },
                 { name: 'products.quantity' },
                 { name: 'products.sale_amount_excluding_tax' },
                 { name: 'master_status.label' },
-                { name: 'products.created_at' },
-                { name: 'products.updated_at' },
-                { name: 'user_created.fullname' },
+              //  { name: 'products.created_at' },
+             //   { name: 'products.updated_at' },
+             //   { name: 'user_created.fullname' },
             ],
-            order: [[ 11, "desc" ]],
+            order: [[ 6, "desc" ]],
             columnDefs: [
-                { "orderable": false, "targets": [12] }
+                { "orderable": false, "targets": [7] }
             ]
         });
 
