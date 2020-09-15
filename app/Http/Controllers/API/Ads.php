@@ -221,17 +221,31 @@ class Ads extends Controller
                 $image->move($destinationPath, $name);
             }
             DB::beginTransaction();
+            if ($request->file('photo')) {
+                $ads = [
+                    "slack" => $this->generate_slack("ads"),
+                    "photo" => 'uploads/ads/'.$image,
+                    "title_ar"=>$request->title_ar,
+                    "title_en"=>$request->title_en,
+                    "description_ar"=>$request->description_ar,
+                    "description_en"=>$request->description_en,
+                    
+                    "created_by" => $request->logged_user_id
+                ];
+            }else{
+                $ads = [
+                    "slack" => $this->generate_slack("ads"),
+                    
+                    "title_ar"=>$request->title_ar,
+                    "title_en"=>$request->title_en,
+                    "description_ar"=>$request->description_ar,
+                    "description_en"=>$request->description_en,
+                    
+                    "created_by" => $request->logged_user_id
+                ];
 
-            $ads = [
-                "slack" => $this->generate_slack("ads"),
-                "photo" => 'uploads/ads/'.$image,
-                "title_ar"=>$request->title_ar,
-                "title_en"=>$request->title_en,
-                "description_ar"=>$request->description_ar,
-                "description_en"=>$request->description_en,
-                
-                "created_by" => $request->logged_user_id
-            ];
+            }
+           
 
             $action_response = AdsModel::where('slack', $slack)
             ->update($ads);
@@ -280,4 +294,5 @@ class Ads extends Controller
             throw new Exception($validator->errors());
         }
     }
+    
 }

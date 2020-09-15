@@ -204,7 +204,7 @@ class Slider extends Controller
                 throw new Exception("Invalid request", 400);
             }
 
-            $this->validate_request($request);
+            //$this->validate_request($request);
 
            
             if ($request->hasFile('photo_ar')) {
@@ -220,13 +220,31 @@ class Slider extends Controller
                 $image1->move($destinationPath, $photo_en);
             }
             DB::beginTransaction();
+            if ($request->hasFile('photo_ar')) {
+                $slider = [
+                    "slack" => $this->generate_slack("slider"),
+                    "photo_ar" => 'uploads/slider/'.$photo_ar,
+                    
+                    "created_by" => $request->logged_user_id
+                ];
+            }else if($request->hasFile('photo_en')){
 
-            $slider = [
-                "slack" => $this->generate_slack("slider"),
-                "photo_ar" => 'uploads/slider/'.$photo_ar,
-                "photo_en" => 'uploads/slider/'.$photo_en,
-                "created_by" => $request->logged_user_id
-            ];
+                $slider = [
+                    "slack" => $this->generate_slack("slider"),
+                    "photo_en" => 'uploads/slider/'.$photo_en,
+                    
+                    "created_by" => $request->logged_user_id
+                ];
+            }
+                else{
+                    $slider = [
+                        "slack" => $this->generate_slack("slider"),
+                        "photo_ar" => 'uploads/slider/'.$photo_ar,
+                        "photo_en" => 'uploads/slider/'.$photo_en,
+                        "created_by" => $request->logged_user_id
+                    ];
+                }
+           
 
             $action_response = SliderModel::where('slack', $slack)
             ->update($slider);
@@ -272,4 +290,5 @@ class Slider extends Controller
             throw new Exception($validator->errors());
         }
     }
+     
 }

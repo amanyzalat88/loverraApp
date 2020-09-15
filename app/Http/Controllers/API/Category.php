@@ -232,7 +232,7 @@ class Category extends Controller
                 throw new Exception("Invalid request", 400);
             }
 
-            $this->validate_request($request);
+            $this->validate_request_update($request);
 
             $category_data_exists = CategoryModel::select('id')
             ->where([
@@ -263,19 +263,35 @@ class Category extends Controller
                 $discount_code_id = $discount_code_data->id;
             }
             DB::beginTransaction();
+            if ($request->file('photo')) {
+                $category = [
+                    "label_en" => Str::title($request->category_name_en),
+                    "description_en" => $request->description_en,
+                    "label_ar" => Str::title($request->category_name_ar),
+                    "description_ar" => $request->description_ar,
+                    "status" => $request->status,
+                    "photo"=> "uploads/category/".$name,
+                    "discount_code_id" => $discount_code_id,
+                    "parent" =>  $request->parent,
+                    'updated_by' => $request->logged_user_id
+                ];
+    
+            }else{
 
-            $category = [
-                "label_en" => Str::title($request->category_name_en),
-                "description_en" => $request->description_en,
-                "label_ar" => Str::title($request->category_name_ar),
-                "description_ar" => $request->description_ar,
-                "status" => $request->status,
-                "photo"=> "uploads/category/".$name,
-                "discount_code_id" => $discount_code_id,
-                "parent" =>  $request->parent,
-                'updated_by' => $request->logged_user_id
-            ];
-
+                $category = [
+                    "label_en" => Str::title($request->category_name_en),
+                    "description_en" => $request->description_en,
+                    "label_ar" => Str::title($request->category_name_ar),
+                    "description_ar" => $request->description_ar,
+                    "status" => $request->status,
+                    
+                    "discount_code_id" => $discount_code_id,
+                    "parent" =>  $request->parent,
+                    'updated_by' => $request->logged_user_id
+                ];
+    
+            }
+           
             $action_response = CategoryModel::where('slack', $slack)
             ->update($category);
 
@@ -309,9 +325,22 @@ class Category extends Controller
         //
     }
 
+    public function validate_request_update($request)
+    {
+        $validator = Validator::make($request->all(), [
+            'category_name_ar' => $this->get_validation_rules("name_label_ar", true),
+            'category_name_en' => $this->get_validation_rules("name_label_en", true),
+            'status' => $this->get_validation_rules("status", true),
+        ]);
+        $validation_status = $validator->fails();
+        if($validation_status){
+            throw new Exception($validator->errors());
+        }
+    }
     public function validate_request($request)
     {
         $validator = Validator::make($request->all(), [
+            'photo' => $this->get_validation_rules("name_label_ar", true),
             'category_name_ar' => $this->get_validation_rules("name_label_ar", true),
             'category_name_en' => $this->get_validation_rules("name_label_en", true),
             'status' => $this->get_validation_rules("status", true),
