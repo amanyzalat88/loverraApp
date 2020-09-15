@@ -11,6 +11,7 @@ class Categories{
             },
             columns: [
                 { name: 'category.label' },
+                { name: 'category.label_ar' },
                 { name: 'category.category_code' },
                 { name: 'master_status.label' },
                 { name: 'discount_codes.label' },
@@ -18,9 +19,9 @@ class Categories{
                 { name: 'category.updated_at' },
                 { name: 'user_created.fullname' }
             ],
-            order: [[ 6, "desc" ]],
+            order: [[ 7, "desc" ]],
             columnDefs: [
-                { "orderable": false, "targets": [7] }
+                { "orderable": false, "targets": [8] }
             ]
         });
 

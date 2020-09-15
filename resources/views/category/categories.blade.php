@@ -20,6 +20,7 @@
                 <thead>
                     <tr>
                         <th>Category Name</th>
+                        <th> اسم القسم</th>
                         <th>Category Code</th>
                         <th>Status</th>
                         <th>Discount Code</th>

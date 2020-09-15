@@ -71,6 +71,7 @@ class Category extends Controller
                 $category = $category->toArray($request);
                 
                 $item_array[$key][] = $category['label_en'];
+                $item_array[$key][] = $category['label_ar'];
                 $item_array[$key][] = $category['category_code'];
                 $item_array[$key][] = view('common.status', ['status_data' => ['label' => $category['status']['label'], "color" => $category['status']['color']]])->render();
                 $item_array[$key][] = ($category['discount_code_id']  != null)?(view('common.status_indicators', ['status' => $category['discount_code']['status']])->render().Str::limit($category['discount_code']['label'], 50))." (".$category['discount_code']['discount_code'].")":'-';
