@@ -87,6 +87,7 @@ class Product extends Controller
 
                 $item_array[$key][] = $product['product_code'];
                 $item_array[$key][] = Str::limit($product['name_en'], 50);
+                $item_array[$key][] = Str::limit($product['name_ar'], 50);
                 $item_array[$key][] = view('common.status_indicators', ['status' => $product['supplier']['status']])->render().Str::limit($product['supplier']['name'], 50)." (".$product['supplier']['supplier_code'].")";
                 $item_array[$key][] = view('common.status_indicators', ['status' => $product['category']['status']])->render().Str::limit($product['category']['label_en'], 50)." (".$product['category']['category_code'].")";
                

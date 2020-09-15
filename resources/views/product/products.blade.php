@@ -24,6 +24,7 @@
                     <tr>
                         <th>Prodcut Code</th>
                         <th>Name</th>
+                        <th>اسم المنتج</th>
                         <th>Supplier</th>
                         <th>Category</th>
                        

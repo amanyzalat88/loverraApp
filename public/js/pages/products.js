@@ -12,6 +12,7 @@ class Products{
             columns: [
                 { name: 'products.product_code' },
                 { name: 'products.name_en' },
+                { name: 'products.name_ar' },
                 { name: 'suppliers.name' },
                 { name: 'category.label_en' },
                 
