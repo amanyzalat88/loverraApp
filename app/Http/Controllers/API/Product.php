@@ -88,16 +88,16 @@ class Product extends Controller
                 $item_array[$key][] = $product['product_code'];
                 $item_array[$key][] = Str::limit($product['name_en'], 50);
                 $item_array[$key][] = Str::limit($product['name_ar'], 50);
-                $item_array[$key][] = view('common.status_indicators', ['status' => $product['supplier']['status']])->render().Str::limit($product['supplier']['name'], 50)." (".$product['supplier']['supplier_code'].")";
-                $item_array[$key][] = view('common.status_indicators', ['status' => $product['category']['status']])->render().Str::limit($product['category']['label_en'], 50)." (".$product['category']['category_code'].")";
                
-                $item_array[$key][] = ($product['discount_code_id'] != null)?(view('common.status_indicators', ['status' => $product['discount_code']['status']])->render().Str::limit($product['discount_code']['label'], 50))." (".$product['discount_code']['discount_code'].")":'-';
+                $item_array[$key][] = view('common.status_indicators', ['status' => $product['category']['status']])->render().Str::limit($product['category']['label_en'], 50);
+               
+               // $item_array[$key][] = ($product['discount_code_id'] != null)?(view('common.status_indicators', ['status' => $product['discount_code']['status']])->render().Str::limit($product['discount_code']['label'], 50))." (".$product['discount_code']['discount_code'].")":'-';
                 $item_array[$key][] = $product['quantity'];
-                $item_array[$key][] = $product['sale_amount_excluding_tax'];
-                $item_array[$key][] = view('common.status', ['status_data' => ['label' => $product['status']['label'], "color" => $product['status']['color']]])->render();
-                $item_array[$key][] = $product['created_at_label'];
-                $item_array[$key][] = $product['updated_at_label'];
-                $item_array[$key][] = (isset($product['created_by']) && $product['created_by']['fullname'] != '')?$product['created_by']['fullname']:'-';
+                $item_array[$key][] = $product['sale_amount_excluding_tax']!=''?$product['sale_amount_excluding_tax']:$product['product_amount_excluding_tax'];
+               // $item_array[$key][] = view('common.status', ['status_data' => ['label' => $product['status']['label'], "color" => $product['status']['color']]])->render();
+                //$item_array[$key][] = $product['created_at_label'];
+               // $item_array[$key][] = $product['updated_at_label'];
+               // $item_array[$key][] = (isset($product['created_by']) && $product['created_by']['fullname'] != '')?$product['created_by']['fullname']:'-';
               
                 $item_array[$key][] = view('product.layouts.product_actions', array('product' => $product))->render();
             }

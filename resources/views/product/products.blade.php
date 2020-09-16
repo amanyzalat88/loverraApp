@@ -30,8 +30,8 @@
                        
                         <!--<th>Discount Code</th>-->
                         <th>Quantity</th>
-                        <th>Amount</th>
-                        <th>Status</th>
+                        <th>Price</th>
+                        <!--<th>Status</th>-->
                         <!--<th>Created On</th>
                         <th>Updated On</th>
                         <th>Created By</th>-->
