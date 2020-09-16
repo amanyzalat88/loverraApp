@@ -14,7 +14,7 @@ class Products{
                 { name: 'products.name_en' },
                 { name: 'products.name_ar' },
                // { name: 'suppliers.name' },
-                { name: 'category.label_en' },
+                { name: 'category.label_ar' },
                 
               //  { name: 'discount_codes.label' },
                 { name: 'products.quantity' },
@@ -27,18 +27,7 @@ class Products{
             order: [[ 5, "desc" ]],
             columnDefs: [
                 { "orderable": false, "targets": [6] },
-                {
-                    "targets" :5 ,
-                    "data": function ( row, type, val, meta ) {
-                        if (row.sale_amount_excluding_tax!='') {
-                           
-                          return row.sale_amount_excluding_tax; 
-                        }
-                        else {
-                            return row.purchase_amount_excluding_tax; 
-                        }
-                    }
-                    }
+                 
                 
             ]
         });

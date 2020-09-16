@@ -86,10 +86,10 @@ class Product extends Controller
                 $product = $product->toArray($request);
 
                 $item_array[$key][] = $product['product_code'];
-                $item_array[$key][] = Str::limit($product['name_en'], 50);
-                $item_array[$key][] = Str::limit($product['name_ar'], 50);
+                $item_array[$key][] = Str::limit($product['name_en'], 30);
+                $item_array[$key][] = Str::limit($product['name_ar'], 30);
                
-                $item_array[$key][] = view('common.status_indicators', ['status' => $product['category']['status']])->render().Str::limit($product['category']['label_en'], 50);
+                $item_array[$key][] = view('common.status_indicators', ['status' => $product['category']['status']])->render().Str::limit($product['category']['label_ar'], 50);
                
                // $item_array[$key][] = ($product['discount_code_id'] != null)?(view('common.status_indicators', ['status' => $product['discount_code']['status']])->render().Str::limit($product['discount_code']['label'], 50))." (".$product['discount_code']['discount_code'].")":'-';
                 $item_array[$key][] = $product['quantity'];
