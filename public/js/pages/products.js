@@ -18,15 +18,15 @@ class Products{
                 
               //  { name: 'discount_codes.label' },
                 { name: 'products.quantity' },
-                { name: 'products.sale_amount_excluding_tax' },
+                { name: 'products.product_amount_excluding_tax' },
                // { name: 'master_status.label' },
               //  { name: 'products.created_at' },
              //   { name: 'products.updated_at' },
              //   { name: 'user_created.fullname' },
             ],
-            order: [[ 5, "desc" ]],
+            order: [[ 6, "desc" ]],
             columnDefs: [
-                { "orderable": false, "targets": [6] }
+                { "orderable": false, "targets": [7] }
             ]
         });
 
