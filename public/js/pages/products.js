@@ -18,15 +18,28 @@ class Products{
                 
               //  { name: 'discount_codes.label' },
                 { name: 'products.quantity' },
-                { name: 'products.product_amount_excluding_tax' },
+                { name: 'products.purchase_amount_excluding_tax' },
                // { name: 'master_status.label' },
               //  { name: 'products.created_at' },
              //   { name: 'products.updated_at' },
              //   { name: 'user_created.fullname' },
             ],
-            order: [[ 6, "desc" ]],
+            order: [[ 5, "desc" ]],
             columnDefs: [
-                { "orderable": false, "targets": [7] }
+                { "orderable": false, "targets": [6] },
+                {
+                    "targets" :5 ,
+                    "data": function ( row, type, val, meta ) {
+                        if (row.sale_amount_excluding_tax!='') {
+                           
+                          return row.sale_amount_excluding_tax; 
+                        }
+                        else {
+                            return row.purchase_amount_excluding_tax; 
+                        }
+                    }
+                    }
+                
             ]
         });
 
