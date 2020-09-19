@@ -24,6 +24,7 @@ class ApiPaymentMethodResource extends Resource
             'id'=>$this->id,
             'slack' => $this->slack,
             'label' => $name,
+            'icon'=>$this->icon
             
         ];
     }

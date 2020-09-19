@@ -37,9 +37,19 @@
                         </select>
                         <span v-bind:class="{ 'error' : errors.has('status') }">{{ errors.first('status') }}</span> 
                     </div>
+                    
                 </div>
 
                 <div class="form-row mb-2">
+                 <div class="form-group col-md-3">
+                        <label for="photo">Photo</label>
+                        <input type="file" id="photo"  ref="file"  v-on:change="handleFileUpload()" class="form-control form-control-custom" />
+                         
+                       
+                    </div>
+                      <div class="form-group col-md-3">
+                          <img :src="getPhoto(photo)"  height="150px" width="250px"/> 
+                      </div>
                     <div class="form-group col-md-3">
                         <label for="description">Description</label>
                         <textarea name="description" v-model="description" v-validate="'max:65535'" class="form-control form-control-custom" rows="5" placeholder="Enter description"></textarea>
@@ -86,6 +96,7 @@
                 payment_method_ar   : (this.payment_method_data == null)?'':this.payment_method_data.label_ar,
                 description     : (this.payment_method_data == null)?'':this.payment_method_data.description,
                 status          : (this.payment_method_data == null)?'':this.payment_method_data.status.value,
+                photo           : (this.product_data == null)?'':(this.product_data.icon == null)?'':this.product_data.icon,
             }
         },
         props: {
@@ -96,6 +107,17 @@
             console.log('Add payment method page loaded');
         },
         methods: {
+             getPhoto(photo){
+          if(photo)
+            return base_url+photo;
+            else
+             return base_url+"images/4.jpg";
+         },
+         handleFileUpload () {
+        // get the input
+        this.file = this.$refs.file.files[0];
+            //console.log(this.files);
+        },
             submit_form(){
 
                 this.$off("submit");
@@ -114,7 +136,7 @@
                             formData.append("payment_method_ar", (this.payment_method_ar == null)?'':this.payment_method_ar);
                             formData.append("description", (this.description == null)?'':this.description);
                             formData.append("status", (this.status == null)?'':this.status);
-
+                            formData.append('photo', (this.file == null)?'':this.file);
                             axios.post(this.api_link, formData).then((response) => {
                                 if(response.data.status_code == 200) {
                                     this.show_response_message(response.data.msg, 'SUCCESS');

@@ -11,7 +11,7 @@ class PaymentMethod extends Model
 {
     protected $table = 'payment_methods';
     protected $hidden = ['id', 'store_id','created_by', 'updated_by', 'created_at', 'updated_at'];
-    protected $fillable = ['slack', 'label_ar','label_en', 'description', 'status'];
+    protected $fillable = ['slack', 'label_ar','label_en', 'description', 'status','icon'];
 
     protected static function boot()
     {

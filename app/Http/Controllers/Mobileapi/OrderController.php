@@ -179,15 +179,164 @@ class OrderController extends Controller
     }
     public function add(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'customer_address_id' => ['required'],
+            'discount_id' => 'required',
+            'payment_id' => 'required'
+            ]);
+        if ($validator->fails()) {
+        
+            $bb = $validator->errors()->toArray();
+            foreach ($bb as $k => $v) {
+                $mess[$k]=$v;
+            }
+        //  $ErrorMess= json_encode($mess);
+            
+            return response()->json(['status'=>false,'msg' => $mess,'data'=>$itemObj], 503);
+        }
+        if($request->payment_id==1)
+        {
+            $itemObj=null;
+            $mess=null;
+           
+            $products =Cart::where('customer_id',$request->user()->id)->get();  
+            if($products->count()>0)
+            {
+            $gifts =BoxesOrder::where('customer_id',$request->user()->id)->where('order_customer_id',0)->get(); 
+            $Customer =Customer::find($request->user()->id);
+            $item =new Order();
+            $item->slack = $this->generate_slack("orders");
+            $item->order_number = Str::random(6);
+            $item->customer_id =$request->user()->id;
+            $item->customer_address=$request->customer_address_id;
+            $item->store_level_discount_code_id= $request->discount_id;
+            $item->payment_method_id=$request->payment_id;
+            $item->customer_email=$Customer->email;
+            $item->customer_phone=$Customer->phone;
+            $item->country_id= $request->header('country');
+            if ($item->save()) {
+                $itemObj = $item;
+                 foreach($products as $product)
+                 {
+                    $iproduct=Product::find($product->product_id);
+                    if($iproduct){
+                    $OrderProduct =new OrderProduct();
+                    $OrderProduct->slack = $this->generate_slack("order_products");
+                    $OrderProduct->order_id = $itemObj->id;
+                    $OrderProduct->product_id =$iproduct->id;
+                    $OrderProduct->product_slack=$iproduct->slack;
+                    $OrderProduct->product_code= $iproduct->product_code;
+                    $OrderProduct->name=$iproduct->name_en;
+                    $OrderProduct->quantity=$product->quantity;
+                    $OrderProduct->purchase_amount_excluding_tax=$iproduct->purchase_amount_excluding_tax;
+                    $OrderProduct->sale_amount_excluding_tax=$iproduct->sale_amount_excluding_tax;
+                    if($product->discount!=='0.00')
+                    {
+                        
+                        $discount= DiscountcodeModel::find($iproduct->discount_code_id);
+                        $OrderProduct->discount_code_id=$discount->id;
+                        $OrderProduct->discount_code=$discount->discount_code;
+                        $OrderProduct->discount_percentage=$discount->discount_percentage;
+                        $OrderProduct->discount_amount=$product->discount;
+                        $OrderProduct->total_after_discount=$product->quantity*$product->discount;
+                        $OrderProduct->total_amount=$product->quantity*$product->discount;
+                    }else{
+                    $OrderProduct->sub_total_purchase_price_excluding_tax=$iproduct->purchase_amount_excluding_tax;
+                    $OrderProduct->sub_total_sale_price_excluding_tax=$iproduct->sale_amount_excluding_tax;
+                    if($iproduct->sale_amount_excluding_tax!='0.00')
+                    $OrderProduct->total_amount=$product->quantity*$iproduct->sale_amount_excluding_tax;
+                    else
+                    $OrderProduct->total_amount=$product->quantity*$iproduct->purchase_amount_excluding_tax;
+                    }
+                    $total=0;
+                    $iproduct->quantity=($iproduct->quantity)-($product->quantity);
+                    $iproduct->save();
+                    $OrderProduct->save();
+                    $discountTotal= DiscountcodeModel::find($request->discount_id);
+                    if($discountTotal->discount_type==3)
+                    {
+                        $updateTotal =Order::find($item->id);
+                        $updateTotal->store_level_discount_code_id=$discountTotal->id;
+                        $updateTotal->store_level_discount_code=$discountTotal->discount_code;
+                        $updateTotal->store_level_total_discount_percentage=$discountTotal->discount_percentage;
+                        $total=DB::table('order_products')->where('order_id',$item->id)->sum('total_amount');
+                        $tot=$total-($total*$discountTotal->discount_percentage);
+                        $updateTotal->total_discount_amount=number_format($total-$tot,2);
+                        $updateTotal->total_after_discount=$tot;
+                        $updateTotal->total_order_amount=$tot;
+                        $updateTotal->save();
+                        $itemObj["total"]=$tot;
+                        $itemObj["total_after_discount"]=$tot;
+                        $itemObj["total_discount"]=number_format($total-$tot,2);
+                        $total=$tot;
+                    }
+                    else{
+                       
+                        $updateTotal =Order::find($item->id);
+                        $updateTotal->store_level_discount_code_id=$discountTotal->id;
+                        $updateTotal->store_level_discount_code=$discountTotal->discount_code;
+                        $updateTotal->store_level_total_discount_percentage=$discountTotal->discount_percentage;
+                        $total_after_discount=DB::table('order_products')->where('order_id',$item->id)->sum('total_amount');
+                        $total_discount=DB::table('order_products')->where('order_id',$item->id)->sum('discount_amount');
+                        $updateTotal->total_discount_amount=$total_discount;
+                        $updateTotal->total_after_discount=$total_after_discount;
+                        $updateTotal->total_order_amount=$total_after_discount;
+                        $updateTotal->save();
+                        $total=$total_after_discount;
+                        $itemObj["total"]=$total_after_discount;
+                        $itemObj["total_after_discount"]=$total_after_discount;
+                        $itemObj["total_discount"]=$total_discount;
+                    }
+                    
+                   
+                     
+                }
+                 }
+                 if($gifts->count()>0)
+                 {
+                    $iproducts=BoxesOrderProducts::where('order_id',$gift->id)->get();
+                    if($iproducts->count()>0){
+                    foreach($iproducts as $iproduct)
+                    {
+                        $ipro=Product::find($iproduct->product_id);
+                        if($ipro){
+                        $ipro->quantity=($ipro->quantity)-1;
+                        $ipro->save();
+                        }
+                    }
+                }
+                    DB::table('boxes_orders')->where('customer_id',$request->user()->id)->where('order_customer_id',0)->update(array('order_customer_id' => $itemObj->id));
+                 }
+                 
+                 
+                 
+                 DB::table('carts')->where('customer_id',$request->user()->id)->delete();
+ 
+            $shipping=Store::select('shipping','free_shipping')->first();
+           
+          if($total>$shipping->free_shipping)
+          $shipping=0;
+          else
+          $shipping=$shipping->shipping;
+            
+            $itemObj["shipping"]=$shipping;
+            $itemObj["all"]=$total+$shipping;
+            $itemObj['discount_id']=$discountTotal->id;  
+            $itemObj['discount_code']=$discountTotal->discount_code;
+            $itemObj['discount_percentage']=$discountTotal->discount_percentage;
+
+                return response()->json(['status'=>true,'msg' => $mess,'data'=>$itemObj], $this->successStatus);
+              
+        }
+    }
+}   
         $Payment = Payment::where('txnId', $request->txnId)->where('order_id', 0)->first();
         if($Payment)
         {
             $itemObj=null;
             $mess=null;
             $validator = Validator::make($request->all(), [
-            'customer_address_id' => ['required'],
-            'discount_id' => 'required',
-            'payment_id' => 'required',
+           
             'txnId'=>'required'
             ]);
         if ($validator->fails()) {

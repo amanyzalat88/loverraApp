@@ -127,7 +127,12 @@ class PaymentMethod extends Controller
             if (!empty($payment_method_data_exists)) {
                 throw new Exception("Payment method already exists", 400);
             }
-
+            if ($request->hasFile('photo')) {
+                $image = $request->file('photo');
+                $photo = time().'.'.$image->getClientOriginalExtension();
+                $destinationPath = public_path('/uploads/payment');
+                $image->move($destinationPath, $photo);
+            }
             DB::beginTransaction();
             
             $payment_method = [
@@ -136,6 +141,7 @@ class PaymentMethod extends Controller
                 "label_en" => Str::title($request->payment_method_en),
                 "description" => $request->description,
                 "status" => $request->status,
+                "icon" => 'uploads/payment/'.$photo,
                 "created_by" => $request->logged_user_id
             ];
             
@@ -208,9 +214,23 @@ class PaymentMethod extends Controller
             if (!empty($payment_method_data_exists)) {
                 throw new Exception("Payment method already exists", 400);
             }
-
+            if ($request->file('photo')) {
+                $image = $request->file('photo');
+                $name = time().'.'.$image->getClientOriginalExtension();
+                $destinationPath = public_path('/uploads/product');
+                $image->move($destinationPath, $name);
+            }
             DB::beginTransaction();
-            
+            if ($request->file('photo')) {
+            $payment_method = [
+                "label_ar" => Str::title($request->payment_method_ar),
+                "label_en" => Str::title($request->payment_method_en),
+                "icon" => 'uploads/payment/'.$photo,
+                "description" => $request->description,
+                "status" => $request->status,
+                "updated_by" => $request->logged_user_id
+            ];
+        }else{
             $payment_method = [
                 "label_ar" => Str::title($request->payment_method_ar),
                 "label_en" => Str::title($request->payment_method_en),
@@ -218,6 +238,7 @@ class PaymentMethod extends Controller
                 "status" => $request->status,
                 "updated_by" => $request->logged_user_id
             ];
+        }
 
             $action_response = PaymentMethodModel::where('slack', $slack)
             ->update($payment_method);

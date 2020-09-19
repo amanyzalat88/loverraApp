@@ -42,7 +42,7 @@ class CartController extends Controller
          $message='';
          $validator = Validator::make($request->all(), [
             'product_id' => ['required', 'numeric'],
-            'quantity'=>['required']
+            //'quantity'=>['required']
             ]);
        if ($validator->fails()) {
           
