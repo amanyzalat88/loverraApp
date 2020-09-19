@@ -216,9 +216,9 @@ class PaymentMethod extends Controller
             }
             if ($request->file('photo')) {
                 $image = $request->file('photo');
-                $name = time().'.'.$image->getClientOriginalExtension();
+                $photo = time().'.'.$image->getClientOriginalExtension();
                 $destinationPath = public_path('/uploads/product');
-                $image->move($destinationPath, $name);
+                $image->move($destinationPath, $photo);
             }
             DB::beginTransaction();
             if ($request->file('photo')) {
