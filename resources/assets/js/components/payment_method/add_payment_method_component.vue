@@ -80,7 +80,7 @@
 
 <script>
     'use strict';
-    
+    let base_url= "/public/";
     export default {
         data(){
             return{
