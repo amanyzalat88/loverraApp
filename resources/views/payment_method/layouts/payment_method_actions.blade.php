@@ -7,7 +7,7 @@
             <a href="{{ $payment_method['detail_link'] }}" class="dropdown-item">View</a>
         @endif
         @if (check_access(array('A_EDIT_PAYMENT_METHOD'), true))
-            <a href="edit_payment_method/{{ $payment_method['slack'] }}" class="dropdown-item">Edit</a>
+         <!--   <a href="edit_payment_method/{{ $payment_method['slack'] }}" class="dropdown-item">Edit</a>-->
         @endif
     </div>
 </div>
