@@ -20,7 +20,7 @@ use App\Models\Category as CategoryModel;
 use App\Models\Taxcode as TaxcodeModel;
 use App\Models\Discountcode as DiscountcodeModel;
 use App\Models\MasterStatus;
-
+use ImageOptimizer;
 use Mpdf\Mpdf;
 use Intervention\Image\ImageManagerStatic as Image;
 use Illuminate\Support\Facades\Storage;
@@ -193,7 +193,13 @@ class Product extends Controller
                 $image = $request->file('photo');
                 $name = time().'.'.$image->getClientOriginalExtension();
                 $destinationPath = public_path('/uploads/product');
-                $image->move($destinationPath, $name);
+                $img = Image::make($image->getRealPath());
+                
+                $img->resize(300, 300, function ($constraint) {
+                    $constraint->aspectRatio();
+                })->save($destinationPath.'/'.$name);
+           
+                ImageOptimizer::optimize($destinationPath.'/'.$name);
             }
             
             DB::beginTransaction();
@@ -228,7 +234,13 @@ class Product extends Controller
                 foreach($files as $file) {
                     $name = time().'.'.$file->getClientOriginalExtension();
                     $destinationPath = public_path('/uploads/product');
-                    $file->move($destinationPath, $name);
+                    $img = Image::make($file->getRealPath());
+                
+                    $img->resize(300, 300, function ($constraint) {
+                        $constraint->aspectRatio();
+                    })->save($destinationPath.'/'.$name);
+               
+                    ImageOptimizer::optimize($destinationPath.'/'.$name);
                     $photo = [
                         "product_id" => $product_id,
                         "photo" =>"uploads/product/".$name
@@ -342,11 +354,17 @@ class Product extends Controller
                 }
                 $discount_code_id = $discount_code_data->id;
             }
-            if ($request->file('photo')) {
+            if ($request->hasFile('photo')) {
                 $image = $request->file('photo');
                 $name = time().'.'.$image->getClientOriginalExtension();
                 $destinationPath = public_path('/uploads/product');
-                $image->move($destinationPath, $name);
+                $img = Image::make($image->getRealPath());
+                
+                $img->resize(300, 300, function ($constraint) {
+                    $constraint->aspectRatio();
+                })->save($destinationPath.'/'.$name);
+           
+                ImageOptimizer::optimize($destinationPath.'/'.$name);
             }
             DB::beginTransaction();
             $sale=0.00;
@@ -400,7 +418,14 @@ class Product extends Controller
                 foreach($files as $file) {
                     $name = time().'.'.$file->getClientOriginalExtension();
                     $destinationPath = public_path('/uploads/product');
-                    $file->move($destinationPath, $name);
+                    $img = Image::make($file->getRealPath());
+                
+                    $img->resize(300, 300, function ($constraint) {
+                        $constraint->aspectRatio();
+                    })->save($destinationPath.'/'.$name);
+               
+                    ImageOptimizer::optimize($destinationPath.'/'.$name);
+                    
                     $photo = [
                         "product_id" => $product_id,
                         "photo" =>"uploads/product/".$name

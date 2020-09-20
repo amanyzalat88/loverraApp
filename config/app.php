@@ -180,6 +180,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         App\Providers\MailServiceProvider::class,
         App\Providers\AppSettingServiceProvider::class,
+        
 
     ],
 
@@ -230,7 +231,8 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
-        'Image' => Intervention\Image\Facades\Image::class
+        'Image' => Intervention\Image\Facades\Image::class,
+      
 
     ],
 
