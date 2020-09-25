@@ -65,7 +65,7 @@ class ApiOrderResource extends Resource
             return [
                 'id'=>$this->id,
                 'order_number '=>$this->order_number,
-                'payment_method' => $this->payment_method,
+                'payment_method' => $this->paymentMethod($lang),
                 'status' =>$this->Status($this->order_status_id,$lang),
                 'total_order_amount' => $price,
                 'currency'=>$currency,

@@ -44,6 +44,11 @@ class Order extends Model
 
    /* For view files */
 
+   public function paymentMethod($lang){
+       $name='label_'.$lang;
+    return $this->hasOne('App\Models\PaymentMethod', 'id', 'payment_method_id')->select([$name]);;
+}
+
     public function products(){
         return $this->hasMany('App\Models\OrderProduct', 'order_id', 'id')->where('order_products.status', 1);
     }

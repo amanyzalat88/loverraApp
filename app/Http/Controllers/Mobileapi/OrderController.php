@@ -392,6 +392,7 @@ class OrderController extends Controller
             $products =Cart::where('customer_id',$request->user()->id)->get();  
             if($products->count()>0)
             {
+                $discountTotal=null;
             $gifts =BoxesOrder::where('customer_id',$request->user()->id)->where('order_customer_id',0)->get(); 
             $Customer =Customer::find($request->user()->id);
             $item =new Order();

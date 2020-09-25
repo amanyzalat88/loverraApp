@@ -19,7 +19,7 @@ class PaymentMethodController extends Controller
         $data=null;
         $message='';
           
-        $Payment= PaymentMethodModel::all();  
+        $Payment= PaymentMethodModel::where('status',1)->get();  
         
        if ($Payment->count()>0) {
             $result=ApiPaymentMethodResource::collection($Payment);

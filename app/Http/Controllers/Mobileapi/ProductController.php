@@ -28,7 +28,7 @@ class ProductController extends Controller
             //if($cats->parent==0&& $cats->label_ar=='الكل')
             if($cats->parent==0)
             {
-                $catss=Category::where('parent',$cats->parent)->where('status',1)->get();
+                $catss=Category::where('parent',$cats->id)->where('status',1)->get();
                 $in='';
                
                 for($i=1;$i<$catss->count();$i++)
