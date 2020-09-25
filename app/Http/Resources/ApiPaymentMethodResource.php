@@ -12,7 +12,9 @@ class ApiPaymentMethodResource extends Resource
      * @param  \Illuminate\Http\Request  $request
      * @return array
      */
-       
+    public function NullablePhoto($value){
+        return $value ==  NULL ? url('public/images/4.jpg') :   url('public/'.$value) ;
+    }
 
     public function toArray($request)
     {
@@ -24,7 +26,7 @@ class ApiPaymentMethodResource extends Resource
             'id'=>$this->id,
             'slack' => $this->slack,
             'label' => $name,
-            'icon'=>$this->icon
+            'icon'=>$this->NullablePhoto($this->icon),
             
         ];
     }

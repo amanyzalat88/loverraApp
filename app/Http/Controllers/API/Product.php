@@ -47,7 +47,7 @@ class Product extends Controller
             $order_direction = $request->order[0]["dir"];
             $order_by_column = $request->columns[$order_by]['name'];
 
-            $filter_string =null;// $request->search['value'];
+            $filter_string = $request->search['value'];
             $filter_columns = array_filter(data_get($request->columns, '*.name'));
            
             $query = ProductModel::select('products.*', 'master_status.label as status_label', 'master_status.color as status_color', 'suppliers.name as supplier_name', 'suppliers.status as supplier_status', 'category.label_en', 'category.status as category_status', 'discount_codes.discount_code as discount_code_label', 'discount_codes.status as discount_code_status', 'user_created.fullname')

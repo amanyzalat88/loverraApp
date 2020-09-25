@@ -141,16 +141,20 @@ class OrderController extends Controller
       if($request->discount_id)
       {
         $discount= DiscountcodeModel::where('id',$request->discount_id)->where('status',1)->first();
-      
-        if($discount->discount_type==3)
+		  
+        if($discount)
         {
+			if($discount->discount_type==3)
+			{
             $totInvoce= $tot-($tot*$discount->discount_percentage);
             $tot_discount=number_format($tot-$totInvoce,2);
             $tot=$totInvoce;
-        }
+			}
+        
        $dicount_id= $discount->id;
        $discount_discount_code=$discount->discount_code;
        $discount_discount_percentage=$discount->discount_percentage;
+			}
     }
      
       $shipping=Store::select('shipping','free_shipping')->first();
@@ -179,9 +183,10 @@ class OrderController extends Controller
     }
     public function add(Request $request)
     {
+		
         $validator = Validator::make($request->all(), [
             'customer_address_id' => ['required'],
-            'discount_id' => 'required',
+            
             'payment_id' => 'required'
             ]);
         if ($validator->fails()) {
@@ -192,16 +197,22 @@ class OrderController extends Controller
             }
         //  $ErrorMess= json_encode($mess);
             
-            return response()->json(['status'=>false,'msg' => $mess,'data'=>$itemObj], 503);
+            return response()->json(['status'=>false,'msg' => $mess,'data'=>null], 503);
         }
+		  $products =Cart::where('customer_id',$request->user()->id)->get(); 
+		if($products->count()>0)
+		{
+			 $itemObj=null;
+            $mess=null;
         if($request->payment_id==1)
         {
-            $itemObj=null;
-            $mess=null;
            
-            $products =Cart::where('customer_id',$request->user()->id)->get();  
+           
+            $products =Cart::where('customer_id',$request->user()->id)->get(); 
+			
             if($products->count()>0)
             {
+				$discountTotal=null;
             $gifts =BoxesOrder::where('customer_id',$request->user()->id)->where('order_customer_id',0)->get(); 
             $Customer =Customer::find($request->user()->id);
             $item =new Order();
@@ -252,7 +263,11 @@ class OrderController extends Controller
                     $iproduct->quantity=($iproduct->quantity)-($product->quantity);
                     $iproduct->save();
                     $OrderProduct->save();
+						if($request->discount_id)
+						{
                     $discountTotal= DiscountcodeModel::find($request->discount_id);
+							if($discountTotal)
+							{
                     if($discountTotal->discount_type==3)
                     {
                         $updateTotal =Order::find($item->id);
@@ -287,7 +302,24 @@ class OrderController extends Controller
                         $itemObj["total_after_discount"]=$total_after_discount;
                         $itemObj["total_discount"]=$total_discount;
                     }
-                    
+						}
+						}else{
+						 $updateTotal =Order::find($item->id);
+                        $updateTotal->store_level_discount_code_id=0;
+                        $updateTotal->store_level_discount_code=null;
+                        $updateTotal->store_level_total_discount_percentage=0.00;
+                        $total_after_discount=DB::table('order_products')->where('order_id',$item->id)->sum('total_amount');
+                        //$total_discount=DB::table('order_products')->where('order_id',$item->id)->sum('discount_amount');
+                        $updateTotal->total_discount_amount=0;
+                        $updateTotal->total_after_discount=$total_after_discount;
+                        $updateTotal->total_order_amount=$total_after_discount;
+                        $updateTotal->save();
+                        $total=$total_after_discount;
+                        $itemObj["total"]=$total_after_discount;
+                        $itemObj["total_after_discount"]=$total_after_discount;
+                        $itemObj["total_discount"]=0;
+						
+						}
                    
                      
                 }
@@ -321,15 +353,22 @@ class OrderController extends Controller
             
             $itemObj["shipping"]=$shipping;
             $itemObj["all"]=$total+$shipping;
+				if($discountTotal)
+				{
             $itemObj['discount_id']=$discountTotal->id;  
             $itemObj['discount_code']=$discountTotal->discount_code;
             $itemObj['discount_percentage']=$discountTotal->discount_percentage;
+				}else{
+					 $itemObj['discount_id']=0;  
+            $itemObj['discount_code']=0;
+            $itemObj['discount_percentage']=0;
+				}
 
                 return response()->json(['status'=>true,'msg' => $mess,'data'=>$itemObj], $this->successStatus);
               
         }
     }
-}   
+}  else{ 
         $Payment = Payment::where('txnId', $request->txnId)->where('order_id', 0)->first();
         if($Payment)
         {
@@ -403,7 +442,12 @@ class OrderController extends Controller
                     $iproduct->quantity=($iproduct->quantity)-($product->quantity);
                     $iproduct->save();
                     $OrderProduct->save();
+						
+						if($request->discount_id)
+						{
                     $discountTotal= DiscountcodeModel::find($request->discount_id);
+							if($discountTotal)
+							{
                     if($discountTotal->discount_type==3)
                     {
                         $updateTotal =Order::find($item->id);
@@ -438,6 +482,23 @@ class OrderController extends Controller
                         $itemObj["total_after_discount"]=$total_after_discount;
                         $itemObj["total_discount"]=$total_discount;
                     }
+							}else{
+							$updateTotal =Order::find($item->id);
+                        $updateTotal->store_level_discount_code_id=0;
+                        $updateTotal->store_level_discount_code=null;
+                        $updateTotal->store_level_total_discount_percentage=0.00;
+                        $total_after_discount=DB::table('order_products')->where('order_id',$item->id)->sum('total_amount');
+                       // $total_discount=DB::table('order_products')->where('order_id',$item->id)->sum('discount_amount');
+                        $updateTotal->total_discount_amount=0;
+                        $updateTotal->total_after_discount=$total_after_discount;
+                        $updateTotal->total_order_amount=$total_after_discount;
+                        $updateTotal->save();
+                        $total=$total_after_discount;
+                        $itemObj["total"]=$total_after_discount;
+                        $itemObj["total_after_discount"]=$total_after_discount;
+                        $itemObj["total_discount"]=0;
+							}
+						}
                     
                    
                      
@@ -473,9 +534,16 @@ class OrderController extends Controller
             
             $itemObj["shipping"]=$shipping;
             $itemObj["all"]=$total+$shipping;
+				if($discountTotal)
+						{
             $itemObj['discount_id']=$discountTotal->id;  
             $itemObj['discount_code']=$discountTotal->discount_code;
             $itemObj['discount_percentage']=$discountTotal->discount_percentage;
+				}else{
+					  $itemObj['discount_id']=0;  
+            $itemObj['discount_code']=0;
+            $itemObj['discount_percentage']=0;
+				}
 
                 return response()->json(['status'=>true,'msg' => $mess,'data'=>$itemObj], $this->successStatus);
             
@@ -500,5 +568,11 @@ class OrderController extends Controller
                 $this->status = '404';
             return response()->json(['status'=>false,'msg' => $message,'data'=>null],  $this->status); 
         }
-    }
+		}
+    }else{
+		$message = "Cart Is empty ";
+		 
+            return response()->json(['status'=>false,'msg' => $message,'data'=>null], $this->successStatus);
+	}
+	}
 }

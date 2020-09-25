@@ -28,9 +28,10 @@ class DiscountCodeController extends Controller
         $message='This code Removed';
         $total=0;
         $tot_discount=0;
-        $item =Cart::where('customer_id',$request->user()->id)->count();  
-        if ($item >0 ) {
+        $item =Cart::where('customer_id',$request->user()->id)->get();  
+        if ($item->count() >0 ) {
             $j=1;
+			 
             $products=ApiCartResource::collection($item);
             $Finalproducts=json_decode((json_encode($products)));
             foreach($Finalproducts as $i)
