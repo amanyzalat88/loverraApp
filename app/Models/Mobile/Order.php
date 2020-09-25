@@ -17,7 +17,7 @@ class Order extends Model {
 		if($orderstatus=OrderStatus::find($order_status_id))
          return  $orderstatus->$name;
     }
-    
+ 
     public function products($id){
         $products=OrderProduct::select('products.*')
         ->join('products', 'products.id', '=', 'order_products.product_id')->where('order_products.order_id',$id)->get();
