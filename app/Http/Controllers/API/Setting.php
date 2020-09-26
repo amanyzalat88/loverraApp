@@ -151,11 +151,11 @@ class Setting extends Controller
             DB::beginTransaction();
 
             $app_setting = SettingAppModel::select('*')->first();
-            $file_name = $app_setting->company_logo;
-
+           
             SettingAppModel::truncate();
 
             if($request->hasFile('company_logo')){
+                $file_name = $app_setting->company_logo;
 
                 $remove_file = $file_name;
 
@@ -178,8 +178,22 @@ class Setting extends Controller
                         $remove_file
                     ]
                 );
+                $app_setting = [
+                    "company_name" => $request->company_name,
+                    "phone"=>$request->phone,
+                    "email"=>$request->email,
+                    "address_ar" => $request->address_ar,
+                    "address_en" => $request->address_en,
+                    "about_ar" => $request->about_ar,
+                    "about_en" => $request->about_en,
+                    "twitter" => $request->twitter,
+                    "insta" => $request->insta,
+                    
+                    "company_logo" => $file_name,
+                    "updated_by" => $request->logged_user_id
+                ];
             }
-
+else{
             $app_setting = [
                 "company_name" => $request->company_name,
                 "phone"=>$request->phone,
@@ -191,9 +205,10 @@ class Setting extends Controller
                 "twitter" => $request->twitter,
                 "insta" => $request->insta,
                 
-                "company_logo" => $file_name,
+                
                 "updated_by" => $request->logged_user_id
             ];
+        }
 
             $action_response = SettingAppModel::create($app_setting)->id;
 

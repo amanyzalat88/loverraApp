@@ -6,9 +6,9 @@
                     <div class="mr-auto">
                         <span class="text-title">Select Store</span>
                     </div>
-                    <div class="">
+                    <!--<div class="">
                         <a href="/add_store" class="btn btn-primary" v-if="stores.length == 0 && is_super_admin"> New Store</a>
-                    </div>
+                    </div>-->
                 </div>
                 <p v-html="server_errors" v-bind:class="[error_class]"></p>
                 <div class="store-list border-top border-bottom">

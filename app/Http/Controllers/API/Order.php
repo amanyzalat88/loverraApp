@@ -84,7 +84,7 @@ class Order extends Controller
                 $item_array[$key][] = view('common.status', ['status_data' => ['label' => $order['status']['label'], "color" => $order['status']['color']]])->render();
                 $item_array[$key][] = $order['created_at_label'];
                 $item_array[$key][] = $order['updated_at_label'];
-                $item_array[$key][] = (isset($order['created_by']) && $order['created_by']['fullname'] != '')?$order['created_by']['fullname']:'-';
+              //  $item_array[$key][] = (isset($order['created_by']) && $order['created_by']['fullname'] != '')?$order['created_by']['fullname']:'-';
                 $item_array[$key][] = view('order.layouts.order_actions', ['order' => $order])->render();
 
             }

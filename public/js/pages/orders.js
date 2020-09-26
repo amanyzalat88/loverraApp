@@ -17,11 +17,11 @@ class Orders{
                 { name: 'master_status.label' },
                 { name: 'orders.created_at' },
                 { name: 'orders.updated_at' },
-                { name: 'user_created.fullname' },
+              
             ],
-            order: [[ 6, "desc" ]],
+            order: [[ 5, "desc" ]],
             columnDefs: [
-                { "orderable": false, "targets": [8] },
+                { "orderable": false, "targets": [7] },
                 {
                     "targets": [3],
                     "className": 'text-right'
