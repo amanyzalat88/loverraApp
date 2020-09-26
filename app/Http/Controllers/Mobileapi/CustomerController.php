@@ -124,8 +124,9 @@ class CustomerController extends Controller
                     {
                         Cart::where('customer_id',$request->guest_id)->update(array('customer_id'=>$item->id)); 
                     }
-                 $itemObj = $item;
-                   unset($itemObj->password);
+                // $itemObj = $item;
+                  // unset($itemObj->password);
+                   $itemObj=ApiCustomerResource::collection($item);
                 return response()->json(['status'=>true,'msg' => $mess,'data'=>$itemObj], $this->successStatus);
             
         } else {
@@ -160,7 +161,8 @@ class CustomerController extends Controller
         
         if ($this->guard()->attempt($credentials)) {
             $item = $this->guard()->user();
-              unset($item->password);
+            $item=ApiCustomerResource::collection($item);
+             // unset($item->password);
             return response()->json(['status'=>true,'msg' => $message,'data'=>$item], $this->successStatus);
         } else {
             $message = "Email or password doesn't exist";
@@ -248,7 +250,7 @@ class CustomerController extends Controller
         $itemObj =Customer::where('email',$request->email)->count();
         if ($itemObj>0) {
 
-            
+
 			$itemObj="send email";
 			return response()->json(['status'=>true,'msg' => $mess,'data'=>$itemObj], 200);
            
