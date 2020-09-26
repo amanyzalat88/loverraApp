@@ -58,7 +58,8 @@ class OrderController extends Controller
 			}
 		 
 		  $product= Order::where('customer_id',$request->user()->id)->paginate($count);
-		 
+         var_dump($product);
+         die();
         if ($product->count()>0) {
 			 $result=ApiOrderResource::collection($product);
              $data= [
