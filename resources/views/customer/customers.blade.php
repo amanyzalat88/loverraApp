@@ -24,9 +24,7 @@
                         <th>Email</th>
                         <th>Phone</th>
                         <th>Status</th>
-                        <th>Created On</th>
-                        <th>Updated On</th>
-                        <th>Created By</th>
+                       
                         <th>Action</th>
                     </tr>
                 </thead>

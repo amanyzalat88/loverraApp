@@ -16,7 +16,7 @@ html,body{
   -webkit-text-size-adjust: 100%;
 }
 .dataTables_scrollBody{
-  height: 100px;
+  min-height: 100px;
 }
 .wrapper {
   display: flex;

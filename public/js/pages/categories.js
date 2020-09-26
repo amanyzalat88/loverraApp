@@ -10,7 +10,7 @@ class Categories{
                 }
             },
             columns: [
-                { name: 'category.label' },
+                { name: 'category.label_en' },
                 { name: 'category.label_ar' },
                 { name: 'category.category_code' },
                 { name: 'master_status.label' },

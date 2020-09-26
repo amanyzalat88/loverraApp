@@ -199,9 +199,9 @@ class Ads extends Controller
     {
         try {
 
-            if(!check_access(['A_EDIT_ADS'], true)){
+          /*  if(!check_access(['A_EDIT_ADS'], true)){
                 throw new Exception("Invalid request", 400);
-            }
+            }*/
 
             $this->validate_request($request);
 

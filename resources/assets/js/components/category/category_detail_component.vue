@@ -25,7 +25,11 @@
                 </div>
                 <div class="form-group col-md-3">
                     <label for="label">Name</label>
-                    <p>{{ category.label }}</p>
+                    <p>{{ category.label_en }}</p>
+                </div>
+                 <div class="form-group col-md-3">
+                    <label for="label">الاسم</label>
+                    <p>{{ category.label_ar }}</p>
                 </div>
                 <div class="form-group col-md-3">
                     <label for="created_by">Created By</label>
@@ -47,8 +51,12 @@
 
             <div class="form-row mb-2">
                 <div class="form-group col-md-6">
-                    <label for="description">Description</label>
-                    <p>{{ category.description }}</p>
+                    <label for="description">Description Ar</label>
+                    <p>{{ category.description_ar }}</p>
+                </div>
+                 <div class="form-group col-md-6">
+                    <label for="description">Description En</label>
+                    <p>{{ category.description_en }}</p>
                 </div>
             </div>
 

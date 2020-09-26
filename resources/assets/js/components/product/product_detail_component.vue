@@ -24,8 +24,12 @@
                     <p>{{ product.product_code }}</p>
                 </div>
                 <div class="form-group col-md-3">
+                    <label for="name">الاسم</label>
+                    <p>{{ product.name_ar }}</p>
+                </div>
+                <div class="form-group col-md-3">
                     <label for="name">Name</label>
-                    <p>{{ product.name }}</p>
+                    <p>{{ product.name_en }}</p>
                 </div>
                 <div class="form-group col-md-3">
                     <label for="email">Supplier</label>
@@ -132,7 +136,7 @@
                     </div>
                     <div class="form-group col-md-3">
                         <label for="discount_code_label">Discount Name</label>
-                        <p>{{ product.discount_code.label }}</p>
+                        <p>{{ product.discount_code.label_en }}</p>
                     </div>
                     <div class="form-group col-md-3">
                         <label for="discount_code_description">Discount Description</label>
@@ -144,8 +148,12 @@
 
             <div class="form-row mb-2">
                 <div class="form-group col-md-6">
-                    <label for="description">Product Description</label>
-                    <p>{{ product.description }}</p>
+                    <label for="description">Product Description en</label>
+                    <p>{{ product.description_en }}</p>
+                </div>
+                 <div class="form-group col-md-6">
+                    <label for="description">Product Description ar</label>
+                    <p>{{ product.description_ar }}</p>
                 </div>
             </div>
 
