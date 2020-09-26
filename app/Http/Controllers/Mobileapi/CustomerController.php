@@ -12,6 +12,8 @@ use File;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Mobile\Cart;
+use App\Http\Resources\ApiCustomerResource;
+
 class CustomerController extends Controller
 {
     public $successStatus = 200;
