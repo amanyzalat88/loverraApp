@@ -12,7 +12,7 @@ use File;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Mobile\Cart;
-use App\Http\Resources\ApiCustomerResource;
+
 
 class CustomerController extends Controller
 {
@@ -78,6 +78,8 @@ class CustomerController extends Controller
             }
             if ($item->save()) {
                 $itemObj = $item;
+                $itemObj->gender=(int)$item->gender;
+                 $itemObj->county=(int)$item->county;
                   unset($itemObj->password);
                 return response()->json(['status'=>true,'msg' => $mess,'data'=>$itemObj], $this->successStatus);
             
@@ -126,9 +128,11 @@ class CustomerController extends Controller
                     {
                         Cart::where('customer_id',$request->guest_id)->update(array('customer_id'=>$item->id)); 
                     }
-                // $itemObj = $item;
-                  // unset($itemObj->password);
-                   $itemObj=ApiCustomerResource::collection($item);
+                 $itemObj = $item;
+                 $itemObj->gender=(int)$item->gender;
+                 $itemObj->county=(int)$item->county;
+                   unset($itemObj->password);
+                  // $itemObj=ApiCustomerResource::collection($item);
                 return response()->json(['status'=>true,'msg' => $mess,'data'=>$itemObj], $this->successStatus);
             
         } else {
@@ -163,8 +167,8 @@ class CustomerController extends Controller
         
         if ($this->guard()->attempt($credentials)) {
             $item = $this->guard()->user();
-            $item=ApiCustomerResource::collection($item);
-             // unset($item->password);
+            //$item=ApiCustomerResource::collection($item);
+             unset($item->password);
             return response()->json(['status'=>true,'msg' => $message,'data'=>$item], $this->successStatus);
         } else {
             $message = "Email or password doesn't exist";
