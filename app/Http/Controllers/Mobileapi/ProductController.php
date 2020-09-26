@@ -111,7 +111,7 @@ class ProductController extends Controller
            if($pro)
            {
             
-		     $product= Product::where('category_id',$pro->category_id)->where('status',1)->random($count)->get();  
+		     $product= Product::where('category_id',$pro->category_id)->where('status',1)->inRandomOrder()->limit($count)->get();  
             
         if ($product->count()>0) {
 			 $result=ApiProductResource::collection($product);
