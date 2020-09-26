@@ -154,7 +154,7 @@ class OrderController extends Controller
         
        $dicount_id= $discount->id;
        $discount_discount_code=$discount->discount_code;
-       $discount_discount_percentage=$discount->discount_percentage;
+       $discount_discount_percentage=(double)$discount->discount_percentage;
 			}
     }
      
@@ -164,11 +164,11 @@ class OrderController extends Controller
       else
       $shipping=$shipping->shipping;
 
-      $result["total"]=$tot+$tot_discount;
-      $result["total_after_discount"]=$tot;
-      $result["total_discount"]=$tot_discount;
-      $result["shipping"]=$shipping;
-      $result["all"]=$tot+$shipping;
+      $result["total"]=(double)$tot+$tot_discount;
+      $result["total_after_discount"]=(double)$tot;
+      $result["total_discount"]=(double)$tot_discount;
+      $result["shipping"]=(double)$shipping;
+      $result["all"]=(double)$tot+$shipping;
       $result['discount_id']=$dicount_id;  
       $result['discount_code']=$discount_discount_code;
       $result['discount_percentage']=$discount_discount_percentage;
