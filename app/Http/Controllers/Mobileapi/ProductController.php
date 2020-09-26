@@ -98,6 +98,44 @@ class ProductController extends Controller
             return response()->json(['status'=>false,'msg' => $message,'data'=>$data], $this->successStatus);
         }
     }
+    public function related(Request $request)
+    {
+         $data=null;
+		 $message='';
+		  $count=5;
+			if($request->items_num)
+			{
+				$count=$request->items_num; 
+            }
+           $pro= Product::find($request->id);
+           if($pro)
+           {
+            
+		     $product= Product::where('category_id',$pro->category_id)->where('status',1)->random($count)->get();  
+            
+        if ($product->count()>0) {
+			 $result=ApiProductResource::collection($product);
+             $data= [
+                    'total' => $product->total(),
+                    'count' => $product->count(),
+                    'per_page' => intval($product->perPage()),
+                    'current_page' => $product->currentPage(),
+                    'total_pages' => $product->lastPage(),
+                    'items' =>$result,
+            ];
+       			  
+            return response()->json(['status'=>true,'msg' => $message,'data'=>$data], $this->successStatus);
+        } else {
+            $message = "Not Products yet ";
+			
+            return response()->json(['status'=>false,'msg' => $message,'data'=>$data], $this->successStatus);
+        }
+    } else {
+        $message = "Not Product yet ";
+        
+        return response()->json(['status'=>false,'msg' => $message,'data'=>$data], $this->successStatus);
+    }
+    }
    public function latest(Request $request)
     {
          $data=null;

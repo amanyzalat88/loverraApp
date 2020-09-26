@@ -40,7 +40,8 @@ Route::group(['namespace' => 'Mobileapi'], function () {
 	    Route::GET('/latest', 'ProductController@latest');
 	    Route::GET('/offers', 'ProductController@offers');
 		Route::GET('/soldout', 'ProductController@soldout');
-	    Route::GET('/bestsale', 'ProductController@best_sales');
+		Route::GET('/bestsale', 'ProductController@best_sales');
+		Route::GET('/related', 'ProductController@related');
 		
 	// Slider
 	    Route::GET('/slider', 'SliderController@index');
