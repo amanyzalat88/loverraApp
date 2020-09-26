@@ -14,7 +14,7 @@ class ApiCountryResource extends Resource
      */
    
     public function NullablePhoto($value){
-        return $value ==  NULL ? url('public/images/4.jpg') :  $value ;
+        return $value == NULL ? url('public/images/4.jpg') : $value;
     }
 
     public function toArray($request)
@@ -24,7 +24,8 @@ class ApiCountryResource extends Resource
        
         return [
             'id'=>$this->id,
-            'name'=>$name
+            'name'=>$name,
+            'icon'=>$this->NullablePhoto($this->icon),
         ];
     }
 }

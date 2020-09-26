@@ -20,7 +20,8 @@ class CountryController extends Controller
          $data=null;
          $message='';
          
-           $item =Country::whereIn('id',['115','18','176','191','163'])->get();
+         //  $item =Country::whereIn('id',['115','18','176','191','163'])->get();
+         $item =Country::whereIn('id',['115'])->get();
         
        if ($item->count()>0) {
             $result=ApiCountryResource::collection($item);

@@ -64,7 +64,8 @@ class ApiOrderResource extends Resource
         }else{*/
             return [
                 'id'=>$this->id,
-                'order_number '=>$this->order_number,
+                'order_number'=>$this->order_number,
+                'created_at'=>$this->created_at,
                 'payment_method' => $this->payment_method,
                 'status' =>$this->Status($this->order_status_id,$lang),
                 'total_order_amount' => $price,

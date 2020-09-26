@@ -247,6 +247,8 @@ class CustomerController extends Controller
         }
         $itemObj =Customer::where('email',$request->email)->count();
         if ($itemObj>0) {
+
+            
 			$itemObj="send email";
 			return response()->json(['status'=>true,'msg' => $mess,'data'=>$itemObj], 200);
            

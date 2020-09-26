@@ -188,9 +188,11 @@ class CartController extends Controller
                     }
                 }
                         $item =Cart::where('customer_id',$request->user()->id)->get(); 
-                        $result=ApiCartResource::collection($item);                 
-                    return response()->json(['status'=>true,'msg' => $message,'data'=>$result], $this->successStatus);
-               
+                        $result=ApiCartResource::collection($item); 
+                        if($message&&!$result)                
+                    return response()->json(['status'=>false,'msg' => $message,'data'=>$result], $this->successStatus);
+               else
+               return response()->json(['status'=>true,'msg' => $message,'data'=>$result], $this->successStatus);
             }
             else{
                 $message='الطلب او العضو غير موجودين';
