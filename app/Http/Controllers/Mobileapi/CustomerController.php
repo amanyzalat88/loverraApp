@@ -79,7 +79,7 @@ class CustomerController extends Controller
             if ($item->save()) {
                 $itemObj = $item;
                 $itemObj->gender=(int)$item->gender;
-                 $itemObj->county=(int)$item->county;
+                 $itemObj->country=(int)$item->country;
                   unset($itemObj->password);
                 return response()->json(['status'=>true,'msg' => $mess,'data'=>$itemObj], $this->successStatus);
             
@@ -130,7 +130,7 @@ class CustomerController extends Controller
                     }
                  $itemObj = $item;
                  $itemObj->gender=(int)$item->gender;
-                 $itemObj->county=(int)$item->county;
+                 $itemObj->country=(int)$item->country;
                    unset($itemObj->password);
                   // $itemObj=ApiCustomerResource::collection($item);
                 return response()->json(['status'=>true,'msg' => $mess,'data'=>$itemObj], $this->successStatus);
