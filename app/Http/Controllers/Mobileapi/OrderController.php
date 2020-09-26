@@ -302,9 +302,9 @@ class OrderController extends Controller
                         $updateTotal->total_order_amount=$total_after_discount;
                         $updateTotal->save();
                         $total=$total_after_discount;
-                        $itemObj["total"]=$total_after_discount;
-                        $itemObj["total_after_discount"]=$total_after_discount;
-                        $itemObj["total_discount"]=$total_discount;
+                        $itemObj["total"]=(double)$total_after_discount;
+                        $itemObj["total_after_discount"]=(double)$total_after_discount;
+                        $itemObj["total_discount"]=(double)$total_discount;
                     }
 						}
 						}else{
@@ -319,9 +319,9 @@ class OrderController extends Controller
                         $updateTotal->total_order_amount=$total_after_discount;
                         $updateTotal->save();
                         $total=$total_after_discount;
-                        $itemObj["total"]=$total_after_discount;
-                        $itemObj["total_after_discount"]=$total_after_discount;
-                        $itemObj["total_discount"]=0;
+                        $itemObj["total"]=(double)$total_after_discount;
+                        $itemObj["total_after_discount"]=(double)$total_after_discount;
+                        $itemObj["total_discount"]=0.00;
 						
 						}
                    
@@ -361,11 +361,11 @@ class OrderController extends Controller
 				{
             $itemObj['discount_id']=$discountTotal->id;  
             $itemObj['discount_code']=$discountTotal->discount_code;
-            $itemObj['discount_percentage']=$discountTotal->discount_percentage;
+            $itemObj['discount_percentage']=(double)$discountTotal->discount_percentage;
 				}else{
 					 $itemObj['discount_id']=0;  
-            $itemObj['discount_code']=0;
-            $itemObj['discount_percentage']=0;
+            $itemObj['discount_code']="0";
+            $itemObj['discount_percentage']=0.00;
 				}
 
                 return response()->json(['status'=>true,'msg' => $mess,'data'=>$itemObj], $this->successStatus);
@@ -465,8 +465,8 @@ class OrderController extends Controller
                         $updateTotal->total_after_discount=$tot;
                         $updateTotal->total_order_amount=$tot;
                         $updateTotal->save();
-                        $itemObj["total"]=$tot;
-                        $itemObj["total_after_discount"]=$tot;
+                        $itemObj["total"]=(double)$tot;
+                        $itemObj["total_after_discount"]=(double)$tot;
                         $itemObj["total_discount"]=number_format($total-$tot,2);
                         $total=$tot;
                     }
@@ -483,9 +483,9 @@ class OrderController extends Controller
                         $updateTotal->total_order_amount=$total_after_discount;
                         $updateTotal->save();
                         $total=$total_after_discount;
-                        $itemObj["total"]=$total_after_discount;
-                        $itemObj["total_after_discount"]=$total_after_discount;
-                        $itemObj["total_discount"]=$total_discount;
+                        $itemObj["total"]=(double)$total_after_discount;
+                        $itemObj["total_after_discount"]=(double)$total_after_discount;
+                        $itemObj["total_discount"]=(double)$total_discount;
                     }
 							}else{
 							$updateTotal =Order::find($item->id);
@@ -499,9 +499,9 @@ class OrderController extends Controller
                         $updateTotal->total_order_amount=$total_after_discount;
                         $updateTotal->save();
                         $total=$total_after_discount;
-                        $itemObj["total"]=$total_after_discount;
-                        $itemObj["total_after_discount"]=$total_after_discount;
-                        $itemObj["total_discount"]=0;
+                        $itemObj["total"]=(double)$total_after_discount;
+                        $itemObj["total_after_discount"]=(double)$total_after_discount;
+                        $itemObj["total_discount"]=0.00;
 							}
 						}
                     
@@ -543,11 +543,11 @@ class OrderController extends Controller
 						{
             $itemObj['discount_id']=$discountTotal->id;  
             $itemObj['discount_code']=$discountTotal->discount_code;
-            $itemObj['discount_percentage']=$discountTotal->discount_percentage;
+            $itemObj['discount_percentage']=(double)$discountTotal->discount_percentage;
 				}else{
 					  $itemObj['discount_id']=0;  
-            $itemObj['discount_code']=0;
-            $itemObj['discount_percentage']=0;
+            $itemObj['discount_code']="0";
+            $itemObj['discount_percentage']=0.00;
 				}
 
                 return response()->json(['status'=>true,'msg' => $mess,'data'=>$itemObj], $this->successStatus);
