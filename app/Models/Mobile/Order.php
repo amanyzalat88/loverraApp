@@ -23,6 +23,8 @@ class Order extends Model {
         ->join('products', 'products.id', '=', 'order_products.product_id')->where('order_products.order_id',$id)->get();
         return    ApiProductOrderResource::Collection($products); 
     }
-    
+    public function parseDate($date){
+        return ($date != null)?Carbon::parse($date)->format(config("app.date_time_format")):null;
+    }
    
 }
