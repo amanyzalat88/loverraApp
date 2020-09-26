@@ -61,8 +61,7 @@ class OrderController extends Controller
         
         if ($product->count()>0) {
              $result=ApiOrderResource::collection($product);
-             var_dump($result);
-             die();
+             
              $data= [
                 'total' => $product->total(),
                 'count' => $product->count(),
@@ -71,7 +70,7 @@ class OrderController extends Controller
                 'total_pages' => $product->lastPage(),
                 'items' =>$result
             ];
-       			  
+             	  
             return response()->json(['status'=>true,'msg' => $message,'data'=>$data], $this->successStatus);
         } else {
             $message = "Not Order Detial yet ";
