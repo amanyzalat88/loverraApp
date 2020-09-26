@@ -22,7 +22,7 @@ class PaymentController extends Controller
         if ($item >0 ) {
         $rules = [
             
-            'price' => 'required|int',
+            'price' => 'required|regex:/^\d+(\.\d{1,2})?$/',
             'type' => 'required|in:bookeey,knet,credit',
             
         ];
@@ -30,7 +30,7 @@ class PaymentController extends Controller
         $messages = [
              
             'price.required' => 400,
-            'price.int' => 405,
+            'price.regex' => 405,
 
             'type.required' => 400,
             'type.in' => 405,
