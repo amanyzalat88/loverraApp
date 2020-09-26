@@ -24,7 +24,7 @@ class Order extends Model {
         return    ApiProductOrderResource::Collection($products); 
     }
     public function parseDate($date){
-        return ($date != null)?Carbon::parse($date)->format(config("app.date_time_format")):null;
+        return ($date != null)?Carbon::parse($date)->format('d-m-Y  H:i:s'):null;
     }
    
 }
