@@ -189,7 +189,7 @@ class CartController extends Controller
                 }
                         $item =Cart::where('customer_id',$request->user()->id)->get(); 
                         $result=ApiCartResource::collection($item); 
-                        if($message&&!$result)                
+                        if($message&&$item->count()==0)                
                     return response()->json(['status'=>false,'msg' => $message,'data'=>$result], $this->successStatus);
                else
                return response()->json(['status'=>true,'msg' => $message,'data'=>$result], $this->successStatus);
