@@ -203,6 +203,9 @@ class OrderController extends Controller
 		  $products =Cart::where('customer_id',$request->user()->id)->get(); 
 		if($products->count()>0)
 		{
+            $Hcountry=  $request->header('country');
+            if(!$Hcountry)
+            $Hcountry=115;
 			 $itemObj=null;
             $mess=null;
         if($request->payment_id==1)
@@ -225,7 +228,7 @@ class OrderController extends Controller
             $item->payment_method_id=$request->payment_id;
             $item->customer_email=$Customer->email;
             $item->customer_phone=$Customer->phone;
-            $item->country_id= $request->header('country');
+            $item->country_id= $Hcountry;
             if ($item->save()) {
                 $itemObj = $item;
                  foreach($products as $product)
@@ -405,7 +408,7 @@ class OrderController extends Controller
             $item->payment_method_id=$request->payment_id;
             $item->customer_email=$Customer->email;
             $item->customer_phone=$Customer->phone;
-            $item->country_id= $request->header('country');
+            $item->country_id= $Hcountry;
             if ($item->save()) {
                 $itemObj = $item;
                  foreach($products as $product)
