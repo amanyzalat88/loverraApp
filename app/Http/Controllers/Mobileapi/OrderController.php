@@ -137,7 +137,7 @@ class OrderController extends Controller
   {
     $tot=$total+$totals;
     $dicount_id= 0;
-    $discount_discount_code=0;
+    $discount_discount_code="0";
     $discount_discount_percentage=0;
       if($request->discount_id)
       {
