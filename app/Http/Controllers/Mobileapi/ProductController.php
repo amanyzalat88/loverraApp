@@ -115,16 +115,16 @@ class ProductController extends Controller
             
         if ($product->count()>0) {
 			 $result=ApiProductResource::collection($product);
-             $data= [
+        /* $data= [
                     'total' => $product->total(),
                     'count' => $product->count(),
                     'per_page' => intval($product->perPage()),
                     'current_page' => $product->currentPage(),
                     'total_pages' => $product->lastPage(),
                     'items' =>$result,
-            ];
+            ];*/
        			  
-            return response()->json(['status'=>true,'msg' => $message,'data'=>$data], $this->successStatus);
+            return response()->json(['status'=>true,'msg' => $message,'data'=>$result], $this->successStatus);
         } else {
             $message = "Not Products yet ";
 			
