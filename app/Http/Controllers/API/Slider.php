@@ -228,6 +228,10 @@ class Slider extends Controller
                     "photo_en" => 'uploads/slider/'.$photo_en,
                     "created_by" => $request->logged_user_id
                 ];
+                $action_response = SliderModel::where('slack', $slack)
+            ->update($slider);
+
+            DB::commit();
             }
          else  if ($request->hasFile('photo_ar')) {
                 $slider = [
@@ -236,6 +240,10 @@ class Slider extends Controller
                     
                     "created_by" => $request->logged_user_id
                 ];
+                $action_response = SliderModel::where('slack', $slack)
+            ->update($slider);
+
+            DB::commit();
             }else if($request->hasFile('photo_en')){
 
                 $slider = [
@@ -244,7 +252,7 @@ class Slider extends Controller
                     
                     "created_by" => $request->logged_user_id
                 ];
-            }
+          
                  
            
 
@@ -252,6 +260,7 @@ class Slider extends Controller
             ->update($slider);
 
             DB::commit();
+        }
 
             return response()->json($this->generate_response(
                 array(
