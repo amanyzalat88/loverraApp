@@ -178,19 +178,36 @@ class CartGuestController extends Controller
          $j=0;
         if ($item->count()>0 ) {
             $j=1;
+            $lang=  $request->header('lang');
+            if(!$lang)
+                $lang='ar';
             $products=ApiCartResource::collection($item);
             $Finalproducts=json_decode((json_encode($products)));
             foreach($Finalproducts as $i)
             {
-                if($i->sale)
-                $total+=$i->quantity*$i->sale;
-                else
-                $total+=$i->quantity*$i->price;
+                $proQuantity=product::find($i->id);
+                    if($proQuantity->quantity>=$i->quantity)
+                    {
+                        
+                        if($i->sale)
+                            $total+=$i->quantity*$i->sale;
+                        else
+                            $total+=$i->quantity*$i->price;
+
+                    }else{
+
+                        if($i->sale)
+                            $total+=$proQuantity->quantity*$i->sale;
+                        else
+                            $total+=$proQuantity->quantity*$i->price;
+                            $i->quantity=(double)$proQuantity->quantity;
+                            $message.=$lang=='ar'?'قفط الكمية  '.$proQuantity->quantity.' من المنتج '.$proQuantity->name_ar.' متاحة ' :'Only '.$proQuantity->quantity .' quantity of  product '.$proQuantity->name_en.' is available  ';
+                    }
             }
 
            
           
-            $result["products"]=$products;
+            $result["products"]=$Finalproducts;
             
          
        }
