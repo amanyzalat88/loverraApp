@@ -186,6 +186,10 @@ class CartGuestController extends Controller
             foreach($Finalproducts as $i)
             {
                 $proQuantity=product::find($i->id);
+                if($proQuantity->quantity==0)
+                {
+                    $message.=$lang=='ar'?'المنتج '.$proQuantity->name_ar.' غير متوفر حاليا ' :'Product '.$proQuantity->name_en.' is  not available now';
+                }else{
                     if($proQuantity->quantity>=$i->quantity)
                     {
                         
@@ -203,6 +207,7 @@ class CartGuestController extends Controller
                             $i->quantity=(double)$proQuantity->quantity;
                             $message.=$lang=='ar'?'قفط الكمية  '.$proQuantity->quantity.' من المنتج '.$proQuantity->name_ar.' متاحة ' :'Only '.$proQuantity->quantity .' quantity of  product '.$proQuantity->name_en.' is available  ';
                     }
+                }
             }
 
            

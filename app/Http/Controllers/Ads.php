@@ -30,7 +30,8 @@ class Ads extends Controller
         check_access(array($data['action_key']));
 
         $data['statuses'] = MasterStatus::select('value', 'label')->filterByKey('CATEGORY_STATUS')->active()->sortValueAsc()->get();
-        $data['categories'] = CategoryModel::select('id as value', 'label_en')->whereIn('id',[7,13,15,12])->sortLabelAsc()->active()->get();
+        $data['categories'] = CategoryModel::select('id as value', 'label_en')->whereIn('parent_id',0)->sortLabelAsc()->active()->get();
+        //whereIn('parent_id',[7,13,15,12])
         
       
         $data['ads_data'] = null;

@@ -50,7 +50,7 @@
                         </select>
                         <span v-bind:class="{ 'error' : errors.has('status') }">{{ errors.first('status') }}</span> 
                     </div>
-                    <!--  <div class="form-group col-md-3">
+                      <div class="form-group col-md-3">
                         <label for="category">Category</label>
                         <select name="category" v-model="category_id" v-validate="'required'" class="form-control form-control-custom custom-select">
                             <option value="">Choose Category..</option>
@@ -60,7 +60,7 @@
                            
                         </select>
                         <span v-bind:class="{ 'error' : errors.has('category') }">{{ errors.first('category') }}</span> 
-                    </div>-->
+                    </div>
                 </div>
                 
                 <div class="form-row mb-2">
